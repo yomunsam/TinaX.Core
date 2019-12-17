@@ -1,18 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
-public class XCore : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+namespace TinaX
+{
+    public class XCore : IXCore
     {
-        
+        public Task RunAsync()
+        {
+
+
+
+
+            Debug.Log("TinaX Framework.");
+            return Task.CompletedTask;
+        }
     }
 }
+
