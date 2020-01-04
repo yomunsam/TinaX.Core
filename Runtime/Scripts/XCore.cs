@@ -8,6 +8,8 @@ namespace TinaX
 {
     public class XCore : IXCore
     {
+        
+
         public Task RunAsync()
         {
 
