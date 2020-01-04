@@ -14,5 +14,8 @@
     "email": "yomunsam@gmail.com",
     "url": "https://yomunchan.moe"
   },
-  "type": "library"
+  "type": "library",
+  "dependencies": {
+    "com.neuecc.unirx": "7.1.0"
+  }
 }
