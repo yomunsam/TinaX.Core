@@ -10,8 +10,24 @@ namespace TinaX
     /// </summary>
     public interface IXServiceProvider
     {
-        Task OnInit();
-        Task OnStart();
+        string ServiceName { get; }
+
+        /// <summary>
+        /// after "OnInit" and before "OnStart" 
+        /// </summary>
+        void OnServiceRegister();
+
+        /// <summary>
+        /// before "OnServiceRegister" and "OnStart"
+        /// </summary>
+        /// <returns>if return false , framework services start workflow will break. </returns>
+        Task<bool> OnInit();
+
+        /// <summary>
+        /// after "OnInit" and "OnServiceRegister"
+        /// </summary>
+        /// <returns>if return false , framework services start workflow will break. </returns>
+        Task<bool> OnStart();
         Task OnClose();
         Task OnRestart();
     }

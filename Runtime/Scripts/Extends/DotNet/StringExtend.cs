@@ -198,5 +198,11 @@ namespace TinaX
             return Regex.Escape(str).Replace(@"\*", ".*?");
         }
 
+        public static void LogConsole(this string str)
+        {
+            UnityEngine.Debug.Log(str);
+        }
+
+
     }
 }
