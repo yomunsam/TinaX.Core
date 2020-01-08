@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 
-namespace TinaX
+namespace TinaX.Services
 {
     /// <summary>
     /// TinaX Service Provider 服务提供者

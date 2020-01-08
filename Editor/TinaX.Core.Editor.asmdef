@@ -1,9 +1,11 @@
 {
-    "name": "TinaX.Core",
+    "name": "TinaX.Core.Editor",
     "references": [
-        "GUID:560b04d1a97f54a4e82edc0cbbb69285"
+        "GUID:4e58fd8b44ff4c14f917ce28647bad94"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

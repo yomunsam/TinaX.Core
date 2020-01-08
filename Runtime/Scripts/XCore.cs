@@ -67,7 +67,7 @@ namespace TinaX
 
         public static string LocalStorage_App => UnityEngine.Application.persistentDataPath + "/" + FrameworkConst.Framework_LocalStorage_App;
 
-
+        public bool IsRunning { get; private set; } = false;
 
         private bool mInited = false;
         private CatLib.Application mCatApp;
@@ -76,7 +76,7 @@ namespace TinaX
 
         private List<IXBootstrap> mList_XBootstrap = new List<IXBootstrap>();
 
-        #region 依赖注入
+        #region Dependency Injection | 依赖注入
 
         public IXCore RegisterServiceProvider(IXServiceProvider provider)
         {
@@ -91,14 +91,14 @@ namespace TinaX
             App.Bind<TService, TConcrete>();
         }
 
-        public void BindSingletonService<TService, TConcrete>()
+        public IBindData BindSingletonService<TService, TConcrete>()
         {
-            App.Singleton<TService, TConcrete>();
+            return App.Singleton<TService, TConcrete>();
         }
 
-        public void BindSingletonService<TService,TBuiltInInterface, TConcrete>() where TBuiltInInterface : IBuiltInService
+        public IBindData BindSingletonService<TService,TBuiltInInterface, TConcrete>() where TBuiltInInterface : IBuiltInService
         {
-            App.Singleton<TService, TConcrete>().Alias<TBuiltInInterface>();
+            return App.Singleton<TService, TConcrete>().Alias<TBuiltInInterface>();
         }
 
         public bool TryGetBuiltinService<TBuiltInInterface>(out TBuiltInInterface service) where TBuiltInInterface: IBuiltInService
@@ -135,7 +135,7 @@ namespace TinaX
 
             //catlib
             //mCatApp?.Init();
-
+            
             //------------------触发Init阶段--------------------------------------------------------------
             //IXBootstrap获取启动引导
             var _b_type = typeof(IXBootstrap);
@@ -158,11 +158,14 @@ namespace TinaX
                 if (!b) return;
             }
 
+
             //----------------------------------------------------------------------------------------------
 
             //Invoke Service "Register"
             foreach(var provider in mList_XServiceProviders)
                 provider.OnServiceRegister();
+
+            
 
             //------------------触发Start阶段----------------------------------------------------------------
 
@@ -175,7 +178,11 @@ namespace TinaX
                     return;
             }
 
+            //------------------------------------------------------------------------------------------------
+
             Debug.Log("[TinaX] Framework startup finish.");
+            IsRunning = true;
+
 
             //Invoke XBootstrap "Start"
             foreach (var xbs in mList_XBootstrap)
@@ -193,11 +200,15 @@ namespace TinaX
                 xbs.OnQuit();
 
             //Invoke Services "OnClose"
+            List<Task> task_close = new List<Task>();
             foreach (var provider in mList_XServiceProviders)
-                await provider.OnClose();
+                task_close.Add(provider.OnClose());
+
+            await Task.WhenAll(task_close);
 
             App.Terminate();
 
+            IsRunning = false;
         } 
     
     }

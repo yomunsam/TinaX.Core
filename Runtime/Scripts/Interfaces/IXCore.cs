@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using CatLib.Container;
 using System.Threading.Tasks;
 using TinaX.Services;
 using UnityEngine;
@@ -17,11 +14,12 @@ namespace TinaX
         string LocalStoragePath_TinaX { get; }
         string LocalStoragePath_App { get; }
         string FrameworkVersionName { get; }
+        bool IsRunning { get; }
 
         #endregion
 
 
-        #region 依赖注入
+        #region Dependency Injection | 依赖注入
 
         /// <summary>
         ///Get Service |  获取服务
@@ -51,7 +49,7 @@ namespace TinaX
         /// </summary>
         /// <typeparam name="TService"></typeparam>
         /// <typeparam name="TConcrete"></typeparam>
-        void BindSingletonService<TService, TConcrete>();
+        IBindData BindSingletonService<TService, TConcrete>();
 
         /// <summary>
         /// Bind a global singleton Service , and implementation of framework built-in interface. | 绑定全局单例服务，并实现框架内置服务接口。
@@ -59,7 +57,7 @@ namespace TinaX
         /// <typeparam name="TService"></typeparam>
         /// <typeparam name="TBuiltInInterface"></typeparam>
         /// <typeparam name="TConcrete"></typeparam>
-        void BindSingletonService<TService, TBuiltInInterface, TConcrete>() where TBuiltInInterface : IBuiltInService;
+        IBindData BindSingletonService<TService, TBuiltInInterface, TConcrete>() where TBuiltInInterface : IBuiltInService;
 
         bool TryGetBuiltinService<TBuiltInInterface>(out TBuiltInInterface service) where TBuiltInInterface : IBuiltInService;
 
