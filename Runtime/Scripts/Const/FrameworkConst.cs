@@ -16,5 +16,8 @@ namespace TinaX.Const
         public const string Framework_LocalStorage_TinaX = "tinaxCache";
         public const string Framework_LocalStorage_App = "appCache";
 
+
+        public const string Framework_Configs_Folder_Path = "TinaX";
+
     }
 }
