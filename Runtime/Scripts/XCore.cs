@@ -76,6 +76,7 @@ namespace TinaX
 
         private List<IXBootstrap> mList_XBootstrap = new List<IXBootstrap>();
 
+
         #region Dependency Injection | 依赖注入
 
         public IXCore RegisterServiceProvider(IXServiceProvider provider)
@@ -121,7 +122,7 @@ namespace TinaX
 
         #endregion
 
-        public async Task RunAsync()
+        public async Task RunAsync(System.Action finishCallback = null)
         {
             if (mInited) return;
 
@@ -191,6 +192,7 @@ namespace TinaX
 
 
             Debug.Log("[TinaX] App startup finish.");
+            finishCallback?.Invoke();
         }
     
         public async Task CloseAsync()

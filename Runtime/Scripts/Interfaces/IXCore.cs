@@ -71,7 +71,7 @@ namespace TinaX
 
         #endregion
 
-        Task RunAsync();
+        Task RunAsync(System.Action finishCallback = null);
 
         Task CloseAsync();
     }

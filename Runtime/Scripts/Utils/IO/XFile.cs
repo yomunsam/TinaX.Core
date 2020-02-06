@@ -28,5 +28,7 @@ namespace TinaX.IO
                 throw new Exception("GetMD5() fail,error:" + ex.Message);
             }
         }
+    
+    
     }
 }
