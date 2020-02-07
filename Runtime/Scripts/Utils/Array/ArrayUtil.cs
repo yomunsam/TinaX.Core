@@ -26,7 +26,7 @@ namespace TinaX
                 return arr1;
 
             Array.Resize(ref arr1, arr1.Length + arr2.Length);
-            Array.Copy(arr1, 0, arr1, arr1.Length - arr2.Length, arr2.Length);
+            Array.Copy(arr2, 0, arr1, arr1.Length - arr2.Length, arr2.Length);
             return arr1;
         }
 
@@ -44,7 +44,7 @@ namespace TinaX
                 return;
 
             Array.Resize(ref arr1, arr1.Length + arr2.Length);
-            Array.Copy(arr1, 0, arr1, arr1.Length - arr2.Length, arr2.Length);
+            Array.Copy(arr2, 0, arr1, arr1.Length - arr2.Length, arr2.Length);
         }
 
     }
