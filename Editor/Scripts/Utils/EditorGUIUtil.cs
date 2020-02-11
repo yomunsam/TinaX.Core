@@ -30,7 +30,7 @@ namespace TinaXEditor.Utils
             get
             {
                 if (_lineColor == null)
-                    _lineColor = TinaX.Internal.XEditorColorDefine.Color_Normal;
+                    _lineColor = TinaX.Internal.XEditorColorDefine.Color_Normal_Pure;
 
                 return _lineColor;
             }

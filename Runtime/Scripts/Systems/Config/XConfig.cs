@@ -143,7 +143,7 @@ namespace TinaX
                     final_asset = UnityEditor.AssetDatabase.LoadAssetAtPath(uPath,type);
                 }
 #else
-                final_asset = Resources.Load<T>(RemoveExtNameIfExists(configPath));
+                final_asset = Resources.Load(RemoveExtNameIfExists(configPath),type);
 #endif
             }
             else if (loadType == AssetLoadType.VFS)
