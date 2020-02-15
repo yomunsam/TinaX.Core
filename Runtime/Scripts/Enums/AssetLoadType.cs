@@ -15,6 +15,10 @@ namespace TinaX
         /// <summary>
         /// TinaX VFS
         /// </summary>
-        VFS
+        VFS,
+        /// <summary>
+        /// System I/O, eg: System.IO.File.LoadFile(xxxx)
+        /// </summary>
+        SystemIO,
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 
 namespace TinaX.IO
 {
@@ -33,5 +28,13 @@ namespace TinaX.IO
 
             }
         }
+
+        public static bool IsFolder(string path)
+        {
+            var system_path = Path.GetFullPath(path);
+            return Directory.Exists(system_path);
+        }
+
+
     }
 }
