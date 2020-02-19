@@ -137,7 +137,8 @@ namespace TinaXEditor.ProjectSetting
                         }
 
                         //添加
-                        EditorGUIUtil.HorizontalLine();
+                        EditorGUILayout.Space();
+                        //EditorGUIUtil.HorizontalLine();
                         EditorGUILayout.Space();
                         EditorGUILayout.BeginHorizontal();
                         EditorGUILayout.LabelField(i18n_profiles_detail_label_new,GUILayout.Width(126) );
@@ -164,6 +165,7 @@ namespace TinaXEditor.ProjectSetting
                         }
                         EditorGUILayout.EndHorizontal();
 
+                        GUILayout.Space(8);
                         EditorGUIUtil.HorizontalLine();
                     }
                     #endregion

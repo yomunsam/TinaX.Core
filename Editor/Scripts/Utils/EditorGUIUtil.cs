@@ -30,14 +30,19 @@ namespace TinaXEditor.Utils
             get
             {
                 if (_lineColor == null)
-                    _lineColor = TinaX.Internal.XEditorColorDefine.Color_Normal_Pure;
+                    _lineColor = TinaX.Internal.XEditorColorDefine.Color_Normal;
 
-                return _lineColor;
+                return _lineColor.Value;
             }
         }
 
-        private static Color _lineColor;
+        private static Color? _lineColor;
 
+        /// <summary>
+        /// 横线
+        /// </summary>
+        /// <param name="height"></param>
+        /// <param name="color"></param>
         public static void HorizontalLine(int height , Color color)
         {
             Rect rect = EditorGUILayout.GetControlRect(false, height);
@@ -45,6 +50,10 @@ namespace TinaXEditor.Utils
             EditorGUI.DrawRect(rect, color);
         }
 
+        /// <summary>
+        /// 横线
+        /// </summary>
+        /// <param name="height"></param>
         public static void HorizontalLine(int height = 1)
         {
             HorizontalLine(height, mLineColor);
