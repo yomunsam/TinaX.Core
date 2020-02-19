@@ -86,19 +86,7 @@ namespace TinaXEditor.ProjectSetting
                     GUILayout.BeginHorizontal();
                     if (xprofiles == null)
                     {
-                        xprofiles = XCoreEditor.GetXProfiles();
-                        //get cur index 
-                        int cur_index = 0;
-                        string cur_name = XCoreEditor.GetCurrentActiveXProfileName();
-                        for(var i = 0; i < xprofiles.Length; i++)
-                        {
-                            if (xprofiles[i] == cur_name)
-                            {
-                                cur_index = i;
-                                break;
-                            }
-                        }
-                        select_xprofile = cur_index;
+                        refreshXprofilesCacheData();
                     }
                     GUILayout.Label(i18n_label_cur_active_profile,GUILayout.MaxWidth(140));
                     select_xprofile = EditorGUILayout.Popup(select_xprofile, xprofiles,GUILayout.MaxWidth(290));
@@ -135,8 +123,10 @@ namespace TinaXEditor.ProjectSetting
                                     {
                                         if (GUILayout.Button(i18n_profiles_detail_remove, GUILayout.Width(50)))
                                         {
+                                            
                                             XCoreEditor.RemoveXProfile(name);
-                                            xprofiles = XCoreEditor.GetXProfiles();
+                                            refreshXprofilesCacheData();
+
                                             break;
                                         }
                                     }
@@ -185,7 +175,22 @@ namespace TinaXEditor.ProjectSetting
             };
         }
 
-
+        static void refreshXprofilesCacheData()
+        {
+            xprofiles = XCoreEditor.GetXProfiles();
+            //get cur index 
+            int cur_index = 0;
+            string cur_name = XCoreEditor.GetCurrentActiveXProfileName();
+            for (var i = 0; i < xprofiles.Length; i++)
+            {
+                if (xprofiles[i] == cur_name)
+                {
+                    cur_index = i;
+                    break;
+                }
+            }
+            select_xprofile = cur_index;
+        }
 
 
         #region I18N
