@@ -17,5 +17,14 @@ namespace TinaXEditor.Const
                 return Path.Combine(Directory.GetCurrentDirectory(), "ProjectSettings", "TinaX");
             }
         }
+
+        public static string EditorXProfilePath => Path.Combine(EditorProjectSettingRootFolder, "xProfiles.json");
+
+
+        public static string ProjectSettingRootName = "TinaX Framework";
+
+        public static string ProjectSetting_CorePath = ProjectSettingRootName + "/Core";
+
+        internal static string DefaultProfileName = "Default";
     }
 }

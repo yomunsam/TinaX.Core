@@ -15,7 +15,7 @@ namespace TinaX.Internal
     public static class XEditorColorDefine
     {
         /// <summary>
-        /// 通常颜色
+        /// 纯色（纯白、纯黑）
         /// </summary>
         public static Color Color_Normal_Pure
         {
@@ -33,7 +33,9 @@ namespace TinaX.Internal
             }
         }
 
-
+        /// <summary>
+        /// 通常色
+        /// </summary>
         public static Color Color_Normal
         {
             get
@@ -56,6 +58,9 @@ namespace TinaX.Internal
             }
         }
 
+        /// <summary>
+        /// 警告色
+        /// </summary>
         public static Color Color_Warning
         {
             get
@@ -91,6 +96,9 @@ namespace TinaX.Internal
             }
         }
 
+        /// <summary>
+        /// 安全色
+        /// </summary>
         public static Color Color_Safe
         {
             get
@@ -107,6 +115,9 @@ namespace TinaX.Internal
             }
         }
 
+        /// <summary>
+        /// 着重色
+        /// </summary>
         public static Color Color_Emphasize
         {
             get
