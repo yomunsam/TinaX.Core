@@ -243,7 +243,7 @@ namespace TinaX
             }
             else if(loadType == AssetLoadType.SystemIO)
             {
-                var json_text = System.IO.File.ReadAllText(jsonPath);
+                var json_text = System.IO.File.ReadAllText(jsonPath, Encoding.UTF8);
                 final_asset = JsonUtility.FromJson<T>(json_text);
             }
             else
@@ -296,7 +296,7 @@ namespace TinaX
                 System.IO.File.Delete(system_path) ;
             }
             var json_text = JsonUtility.ToJson(jsonContent);
-            System.IO.File.WriteAllText(system_path, json_text);
+            System.IO.File.WriteAllText(system_path, json_text, Encoding.UTF8);
         }
 
 

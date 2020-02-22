@@ -59,10 +59,41 @@ namespace TinaXEditor.ProjectSetting
             }
         }
 
+        private static GUIStyle _style_txt_blue;
+        private static GUIStyle style_txt_blue
+        {
+            get
+            {
+                if (_style_txt_blue == null)
+                {
+                    _style_txt_blue = new GUIStyle(EditorStyles.label);
+                    _style_txt_blue.normal.textColor = XEditorColorDefine.Color_Emphasize;
+                }
+                return _style_txt_blue;
+            }
+        }
+
+        private static GUIStyle _style_txt_warning;
+        private static GUIStyle style_txt_warning
+        {
+            get
+            {
+                if (_style_txt_warning == null)
+                {
+                    _style_txt_warning = new GUIStyle(EditorStyles.label);
+                    _style_txt_warning.normal.textColor = XEditorColorDefine.Color_Warning;
+                }
+                return _style_txt_warning;
+            }
+        }
+
         private static string[] xprofiles;
         private static int select_xprofile;
         private static bool b_flodout_show_xprofiles_detail;
         private static string input_new_profile_name;
+
+        private static bool? cache_isDevelopMode;
+        private static string cached_developMode_profile; //上面这个变量是哪个profile的信息
 
         [SettingsProvider]
         public static SettingsProvider CoreSettingPage()
@@ -80,7 +111,7 @@ namespace TinaXEditor.ProjectSetting
                     EditorGUILayout.Space();
 
                     #region TinaX Profile
-                    GUILayout.Label("TinaX Profile",style_txt_h2);
+                    GUILayout.Label("TinaX Profile", style_txt_h2);
                     GUILayout.Space(2);
 
                     GUILayout.BeginHorizontal();
@@ -88,19 +119,43 @@ namespace TinaXEditor.ProjectSetting
                     {
                         refreshXprofilesCacheData();
                     }
-                    GUILayout.Label(i18n_label_cur_active_profile,GUILayout.MaxWidth(140));
-                    select_xprofile = EditorGUILayout.Popup(select_xprofile, xprofiles,GUILayout.MaxWidth(290));
-                    if(xprofiles[select_xprofile] != XCoreEditor.GetCurrentActiveXProfileName())
+
+                    GUILayout.Label(i18n_label_cur_active_profile, GUILayout.MaxWidth(140));
+                    select_xprofile = EditorGUILayout.Popup(select_xprofile, xprofiles, GUILayout.MaxWidth(290));
+
+                    if (xprofiles[select_xprofile] != XCoreEditor.GetCurrentActiveXProfileName())
                     {
-                        if (GUILayout.Button(i18n_btn_switch_active_profile,GUILayout.MaxWidth(80)))
+                        if (GUILayout.Button(i18n_btn_switch_active_profile, GUILayout.MaxWidth(80)))
                         {
                             if (!XCoreEditor.SetActiveXProfile(xprofiles[select_xprofile]))
                             {
-                                EditorUtility.DisplayDialog("Error", "Set active profile failed, please check the details in the console","Okey");
+                                EditorUtility.DisplayDialog("Error", "Set active profile failed, please check the details in the console", "Okey");
                             }
                         }
                     }
                     GUILayout.EndHorizontal();
+
+                    #region 是否为开发模式
+                    //数据
+                    if (cached_developMode_profile.IsNullOrEmpty() || cache_isDevelopMode == null || cached_developMode_profile != xprofiles[select_xprofile])
+                    {
+                        cache_isDevelopMode = XCoreEditor.IsXProfileDevelopMode(xprofiles[select_xprofile]);
+                        cached_developMode_profile = xprofiles[select_xprofile];
+                    }
+                    GUILayout.Space(5);
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(IsChinese ? "开发模式：" : "Develop Mode : ", GUILayout.Width(80));
+                    GUILayout.Label(cache_isDevelopMode.Value ? (IsChinese ? "[已启用]" : "[Enabled]") : (IsChinese ? "[未启用]" : "[Disabled]"), (cache_isDevelopMode.Value ? style_txt_warning : style_txt_blue), GUILayout.Width(50));
+                    if (GUILayout.Button(cache_isDevelopMode.Value ? (IsChinese ? "关闭" : "Disable") : (IsChinese ? "启用" : "Enable"),GUILayout.Width(50)))
+                    {
+                        XCoreEditor.SetXProfileDevelopMode(xprofiles[select_xprofile], !cache_isDevelopMode.Value);
+                        cache_isDevelopMode = null;
+                        cached_developMode_profile = string.Empty;
+                        XCoreEditor.SaveXProfiles();
+                    }
+                    GUILayout.EndHorizontal();
+
+                    #endregion
 
                     b_flodout_show_xprofiles_detail = EditorGUILayout.Foldout(b_flodout_show_xprofiles_detail, i18n_profiles_detail);
                     if (b_flodout_show_xprofiles_detail)
@@ -160,7 +215,7 @@ namespace TinaXEditor.ProjectSetting
                             {
                                 input_new_profile_name = string.Empty;
                                 XCoreEditor.SaveXProfiles();
-                                xprofiles = XCoreEditor.GetXProfiles();
+                                xprofiles = XCoreEditor.GetXProfileNames();
                             }
                         }
                         EditorGUILayout.EndHorizontal();
@@ -179,7 +234,7 @@ namespace TinaXEditor.ProjectSetting
 
         static void refreshXprofilesCacheData()
         {
-            xprofiles = XCoreEditor.GetXProfiles();
+            xprofiles = XCoreEditor.GetXProfileNames();
             //get cur index 
             int cur_index = 0;
             string cur_name = XCoreEditor.GetCurrentActiveXProfileName();
@@ -191,7 +246,7 @@ namespace TinaXEditor.ProjectSetting
                     break;
                 }
             }
-            select_xprofile = cur_index;
+            select_xprofile = cur_index; 
         }
 
 
