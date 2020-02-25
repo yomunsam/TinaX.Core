@@ -16,6 +16,11 @@ namespace TinaX.IO
             }
         }
 
+        public static void DeleteIfExists(string path, bool recursive = true)
+        {
+            if (Directory.Exists(path))
+                Directory.Delete(path, recursive);
+        }
 
         public static void CopyDir(string fromDir, string toDir)
         {

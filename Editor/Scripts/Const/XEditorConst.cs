@@ -26,5 +26,15 @@ namespace TinaXEditor.Const
         public static string ProjectSetting_CorePath = ProjectSettingRootName + "/Core";
 
         internal static string DefaultProfileName = "Default";
+
+
+        public static string TinaXProjectRootFolderPath
+        {
+            get
+            {
+                return Path.Combine(Directory.GetCurrentDirectory(), "TinaX");
+            }
+        }
+
     }
 }

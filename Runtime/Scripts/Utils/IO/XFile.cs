@@ -28,7 +28,12 @@ namespace TinaX.IO
                 throw new Exception("GetMD5() fail,error:" + ex.Message);
             }
         }
-    
+        
+        public static void DeleteIfExists(string path)
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
     
     }
 }

@@ -1,49 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TinaX
+﻿namespace TinaX
 {
     public enum XRuntimePlatform
     {
         /// <summary>
         /// Microsoft Windows (Desktop)
         /// </summary>
-        Windows,
+        Windows                                     = 0,
         /// <summary>
         /// Microsoft Universal Windows Platform (UWP)
         /// </summary>
-        UniversalWindowsPlatform,
+        UniversalWindowsPlatform                    = 1,
         /// <summary>
         /// GNU Linux
         /// </summary>
-        Linux,
+        Linux                                       = 2,
         /// <summary>
         /// Apple OSX
         /// </summary>
-        OSX,
+        OSX                                         = 3,
         /// <summary>
         /// Apple iOS
         /// </summary>
-        iOS,
+        iOS                                         = 4,
         /// <summary>
         /// Google Android
         /// </summary>
-        Android,
+        Android                                     = 5,
         /// <summary>
         /// Microsoft xbox
         /// </summary>
-        XBox,
+        XBox                                        = 6,
         /// <summary>
         /// Sony Playstation 4
         /// </summary>
-        PS4,
+        PS4                                         = 7,
         /// <summary>
         /// Nintendo Switch
         /// </summary>
-        NSwitch
+        NSwitch                                     = 8,
+        Windows32                                   = 9,
 
     }
 }
