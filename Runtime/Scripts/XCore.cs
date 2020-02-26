@@ -76,6 +76,14 @@ namespace TinaX
 
         private List<IXBootstrap> mList_XBootstrap = new List<IXBootstrap>();
 
+        /// <summary>
+        /// 服务初始化失败的事件注册, string:service name 
+        /// </summary>
+        private Action<string, XException> mServicesInitExceptionAction;
+        /// <summary>
+        /// 服务启动失败的事件注册, string:service name 
+        /// </summary>
+        private Action<string, XException> mServicesStartExceptionAction;
 
         #region Dependency Injection | 依赖注入
 
@@ -117,8 +125,23 @@ namespace TinaX
         public bool IsBuiltInServicesImplementationed<TBuiltInInterface>() where TBuiltInInterface : IBuiltInService => App.IsAlias<TBuiltInInterface>();
 
         public TService GetService<TService>(params object[] userParams) => App.Make<TService>(userParams);
-        
 
+
+
+        #endregion
+
+        #region Exceptions | 异常处理
+        public IXCore OnServicesInitException(Action<string,XException> callback)
+        {
+            mServicesInitExceptionAction += callback;
+            return this;
+        }
+
+        public IXCore OnServicesStartException(Action<string, XException> callback)
+        {
+            mServicesStartExceptionAction += callback;
+            return this;
+        }
 
         #endregion
 
@@ -156,7 +179,15 @@ namespace TinaX
             {
                 Debug.Log("    [XService Init]:" + provider.ServiceName);
                 var b = await provider.OnInit();
-                if (!b) return;
+                if (!b)
+                {
+                    var e = provider.GetInitException();
+                    if (mServicesInitExceptionAction != null)
+                        mServicesInitExceptionAction.Invoke(provider.ServiceName, e);
+                    else
+                        throw e;
+
+                }
             }
 
 
@@ -176,7 +207,13 @@ namespace TinaX
                 Debug.Log("    [XService Start]:" + p.ServiceName);
                 var b = await p.OnStart();
                 if (!b)
-                    return;
+                {
+                    var e = p.GetStartException();
+                    if (mServicesStartExceptionAction != null)
+                        mServicesStartExceptionAction.Invoke(p.ServiceName, e);
+                    else
+                        throw e;
+                }
             }
 
             //------------------------------------------------------------------------------------------------

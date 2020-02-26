@@ -11,7 +11,7 @@ namespace TinaX
         /// <param name="content"></param>
         /// <param name="lower">Result is lowercase | 返回小写字母MD5</param>
         /// <returns></returns>
-        public static string GetMD5(string content, bool lower = true)
+        public static string GetMD5(string content, bool lower = true, bool shortMD5 = false)
         {
             MD5 md5Hash = MD5.Create();
             var data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(content));
@@ -20,7 +20,7 @@ namespace TinaX
             {
                 str.Append(data[i].ToString(lower? "x2": "X2"));
             }
-            return str.ToString();
+            return shortMD5 ? str.ToString().Substring(8, 16) : str.ToString();
         }
     }
 }

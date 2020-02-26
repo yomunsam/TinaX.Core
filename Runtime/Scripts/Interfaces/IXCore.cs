@@ -1,4 +1,5 @@
 ﻿using CatLib.Container;
+using System;
 using System.Threading.Tasks;
 using TinaX.Services;
 using UnityEngine;
@@ -71,8 +72,15 @@ namespace TinaX
 
         #endregion
 
+        #region Exceptions | 异常处理
+        IXCore OnServicesInitException(Action<string, XException> callback);
+        IXCore OnServicesStartException(Action<string, XException> callback);
+
+        #endregion
+
         Task RunAsync(System.Action finishCallback = null);
 
         Task CloseAsync();
+        
     }
 }

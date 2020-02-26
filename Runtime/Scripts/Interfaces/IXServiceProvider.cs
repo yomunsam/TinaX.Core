@@ -28,6 +28,11 @@ namespace TinaX.Services
         /// </summary>
         /// <returns>if return false , framework services start workflow will break. </returns>
         Task<bool> OnStart();
+
+        XException GetInitException();
+
+        XException GetStartException();
+
         Task OnClose();
         Task OnRestart();
     }

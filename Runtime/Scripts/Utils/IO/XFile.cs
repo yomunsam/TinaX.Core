@@ -7,7 +7,13 @@ namespace TinaX.IO
 {
     public static class XFile
     {
-        public static string GetMD5(string fileName)
+        /// <summary>
+        /// Get MD5
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="shortMd5">if true, return 16 bit md5</param>
+        /// <returns></returns>
+        public static string GetMD5(string fileName, bool shortMd5 = false)
         {
             try
             {
@@ -21,7 +27,7 @@ namespace TinaX.IO
                     sb.Append(retVal[i].ToString("x2"));
                 }
                 md5.Dispose();
-                return sb.ToString();
+                return shortMd5 ? sb.ToString().Substring(8, 16) : sb.ToString();
             }
             catch (Exception ex)
             {

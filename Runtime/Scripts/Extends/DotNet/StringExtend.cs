@@ -151,9 +151,9 @@ namespace TinaX
             }
         }
 
-        public static string GetMD5(this string str,bool lower = true)
+        public static string GetMD5(this string str,bool lower = true,bool shortMD5 = false)
         {
-            return EncryUtil.GetMD5(str, lower);
+            return EncryUtil.GetMD5(str, lower, shortMD5);
         }
 
         /// <summary>
