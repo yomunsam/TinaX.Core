@@ -60,6 +60,17 @@ namespace TinaX
         }
 
         /// <summary>
+        /// Whitout dot | 没有"."号
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool IsValidFileName(this string str)
+        {
+            if (str.IsNullOrEmpty()) return false;
+            return !Regex.IsMatch(str, @"\W+");
+        }
+
+        /// <summary>
         /// Reverse specified string. | 反转字符串
         /// </summary>
         /// <param name="str"></param>
