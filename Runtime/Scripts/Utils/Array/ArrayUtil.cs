@@ -47,5 +47,10 @@ namespace TinaX
             Array.Copy(arr2, 0, arr1, arr1.Length - arr2.Length, arr2.Length);
         }
 
+        public static void RemoveDuplicationElements<T>(ref T[] arr)
+        {
+            arr = arr.Distinct().ToArray();
+        }
+
     }
 }
