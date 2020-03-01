@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
+using System;
+using TinaXEditor.Internal.Utils;
 
 namespace TinaXEditor.Utils
 {
@@ -57,6 +58,31 @@ namespace TinaXEditor.Utils
         public static void HorizontalLine(int height = 1)
         {
             HorizontalLine(height, mLineColor);
+        }
+
+        /// <summary>
+        /// prompt | 输入框
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="callback"></param>
+        /// <param name="defaultContent"></param>
+        public static void Prompt(string title, Action<bool,string> callback, string defaultContent = null)
+        {
+            Prompt(callback, title: title, defaultContent: defaultContent);
+        }
+
+        public static void Prompt(Action<bool, string> callback, string title = "Message:", string message = ">", string defaultContent = null, string comfirn_btn_text = "Confirm", string cancel_btn_text = null)
+        {
+            if (PromptIMGUI.IsActive) return;
+            ScriptableSingleton<PromptParam>.instance.ClearData();
+            ScriptableSingleton<PromptParam>.instance.callback = callback;
+            ScriptableSingleton<PromptParam>.instance.defaultContent = defaultContent;
+            ScriptableSingleton<PromptParam>.instance.messageContent = message;
+            ScriptableSingleton<PromptParam>.instance.title = new GUIContent(title);
+            ScriptableSingleton<PromptParam>.instance.confirm_text = comfirn_btn_text;
+            ScriptableSingleton<PromptParam>.instance.cancel_text = cancel_btn_text;
+
+            PromptIMGUI.OpenUI();
         }
 
     }
