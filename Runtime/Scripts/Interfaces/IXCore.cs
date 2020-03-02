@@ -81,6 +81,5 @@ namespace TinaX
         Task RunAsync(System.Action finishCallback = null);
 
         Task CloseAsync();
-        
     }
 }

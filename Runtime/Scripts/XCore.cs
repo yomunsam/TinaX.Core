@@ -104,6 +104,8 @@ namespace TinaX
         {
             return App.Singleton<TService, TConcrete>();
         }
+        
+
 
         public IBindData BindSingletonService<TService,TBuiltInInterface, TConcrete>() where TBuiltInInterface : IBuiltInService
         {
@@ -149,7 +151,7 @@ namespace TinaX
         {
             if (mInited) return;
 
-            Debug.Log("[TinaX Framework] TinaX - v." + FrameworkVersionName + "    | Nekonya Studio | Corala.Space Project | Powerd by yomunsam - www.yomunchan.moe");
+            Debug.Log("[TinaX Framework] TinaX - v." + FrameworkVersionName + "    | Nekonya Studio\nhttps://github.com/yomunsam/tinax\nCorala.Space Project \n Powerd by yomunsam: https://yomunchan.moe | https://github.com/yomunsam");
 
             //在Scene创建一个全局的base gameobject
             //TODO: 如果在ECS模式，应该是不需要这么个东西的

@@ -9,9 +9,10 @@ namespace TinaX
 {
     public static class XConfig
     {
-#if UNITY_EDITOR
-        public static string ConfigResourcesPath { get; set; } = $"Assets/Resources/XConfig";
-#endif
+        public static string ConfigResourcesPath { get;} = $"Assets/Resources/{ConfigRootFolderInResource}";
+
+        public const string ConfigRootFolderInResource = "XConfig"; //以Resources.Load视角下的ResourcesPath;
+
 
         //private static List<>
         private const string mPathHeadText_LoadByResources = "ures:";
@@ -39,7 +40,6 @@ namespace TinaX
         {
             bool cache_flag = false;
             string cache_key = ((loadType == AssetLoadType.Resources) ? mPathHeadText_LoadByResources : mPathHeadText_LoadByVFS) + configPath;
-
             if (cachePrior && UnityEngine.Application.isPlaying)
             {
                 //检查缓存
@@ -54,23 +54,34 @@ namespace TinaX
             if(loadType == AssetLoadType.Resources)
             {
 #if UNITY_EDITOR
-                //在编辑器下应该使用AssetDatabase加载
-                if(configPath.IndexOf("Resources") != -1 && configPath.StartsWith("Assets/"))
+                if (Application.isPlaying)
                 {
-                    //本来给定的就是unity asset path, 直接加载
-                    final_asset = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(configPath);
+                    string _final_path = (configPath.StartsWith("/") ? ConfigRootFolderInResource + configPath : ConfigRootFolderInResource + "/" + configPath);
+                    _final_path = RemoveExtNameIfExists(_final_path);
+                    final_asset = Resources.Load<T>(_final_path);
                 }
                 else
                 {
-                    //本来的路径是Resources的路径，要还原成Unity的路径
-                    string uPath = ConfigResourcesPath + "/" + configPath;
-                    if (!uPath.EndsWith(".asset"))
-                        uPath = uPath + ".asset";
+                    //在编辑器下应该使用AssetDatabase加载
+                    if (configPath.IndexOf("Resources") != -1 && configPath.StartsWith("Assets/"))
+                    {
+                        //本来给定的就是unity asset path, 直接加载
+                        final_asset = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(configPath);
+                    }
+                    else
+                    {
+                        //本来的路径是Resources的路径，要还原成Unity的路径
+                        string uPath = ConfigResourcesPath + "/" + configPath;
+                        if (!uPath.EndsWith(".asset"))
+                            uPath = uPath + ".asset";
 
-                    final_asset = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(uPath);
+                        final_asset = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(uPath);
+                    }
                 }
 #else
-                final_asset = Resources.Load<T>(RemoveExtNameIfExists(configPath));
+                string _final_path = (configPath.StartsWith("/") ? ConfigRootFolderInResource + configPath : ConfigRootFolderInResource + "/" + configPath);
+                _final_path = RemoveExtNameIfExists(_final_path);
+                final_asset = Resources.Load<T>(_final_path);
 #endif
             }
             else if(loadType == AssetLoadType.VFS)
@@ -128,23 +139,35 @@ namespace TinaX
             if (loadType == AssetLoadType.Resources)
             {
 #if UNITY_EDITOR
-                //在编辑器下应该使用AssetDatabase加载
-                if (configPath.IndexOf("Resources") != -1 && configPath.StartsWith("Assets/"))
+                if (Application.isPlaying)
                 {
-                    //本来给定的就是unity asset path, 直接加载
-                    final_asset = UnityEditor.AssetDatabase.LoadAssetAtPath(configPath,type);
+                    string _final_path = (configPath.StartsWith("/") ? ConfigRootFolderInResource + configPath : ConfigRootFolderInResource + "/" + configPath);
+                    _final_path = RemoveExtNameIfExists(_final_path);
+                    final_asset = Resources.Load(_final_path, type);
                 }
                 else
                 {
-                    //本来的路径是Resources的路径，要还原成Unity的路径
-                    string uPath = ConfigResourcesPath + "/" + configPath;
-                    if (!uPath.EndsWith(".asset"))
-                        uPath += ".asset";
+                    //在编辑器下应该使用AssetDatabase加载
+                    if (configPath.IndexOf("Resources") != -1 && configPath.StartsWith("Assets/"))
+                    {
+                        //本来给定的就是unity asset path, 直接加载
+                        final_asset = UnityEditor.AssetDatabase.LoadAssetAtPath(configPath, type);
+                    }
+                    else
+                    {
+                        //本来的路径是Resources的路径，要还原成Unity的路径
+                        string uPath = ConfigResourcesPath + "/" + configPath;
+                        if (!uPath.EndsWith(".asset"))
+                            uPath += ".asset";
 
-                    final_asset = UnityEditor.AssetDatabase.LoadAssetAtPath(uPath,type);
+                        final_asset = UnityEditor.AssetDatabase.LoadAssetAtPath(uPath, type);
+                    }
                 }
+                
 #else
-                final_asset = Resources.Load(RemoveExtNameIfExists(configPath),type);
+                string _final_path = (configPath.StartsWith("/") ? ConfigRootFolderInResource + configPath : ConfigRootFolderInResource + "/" + configPath);
+                _final_path = RemoveExtNameIfExists(_final_path);
+                final_asset = Resources.Load(_final_path, type);
 #endif
             }
             else if (loadType == AssetLoadType.VFS)
