@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TinaX;
+using UnityEngine;
 
 namespace TinaX.Utils
 {
@@ -39,5 +40,40 @@ namespace TinaX.Utils
 
         }
     
+        public static XRuntimePlatform GetXRuntimePlatform(RuntimePlatform platform)
+        {
+            switch (platform)
+            {
+                default:
+                case RuntimePlatform.WindowsEditor:
+                case RuntimePlatform.WindowsPlayer:
+                    return XRuntimePlatform.Windows;
+
+                case RuntimePlatform.OSXEditor:
+                case RuntimePlatform.OSXPlayer:
+                    return XRuntimePlatform.OSX;
+
+                case RuntimePlatform.WSAPlayerARM:
+                case RuntimePlatform.WSAPlayerX64:
+                case RuntimePlatform.WSAPlayerX86:
+                    return XRuntimePlatform.UniversalWindowsPlatform;
+
+                case RuntimePlatform.LinuxEditor:
+                case RuntimePlatform.LinuxPlayer:
+                    return XRuntimePlatform.Linux;
+
+                case RuntimePlatform.IPhonePlayer:
+                    return XRuntimePlatform.iOS;
+
+                case RuntimePlatform.Android:
+                    return XRuntimePlatform.Android;
+
+                case RuntimePlatform.XboxOne:
+                    return XRuntimePlatform.XBox;
+
+                case RuntimePlatform.Switch:
+                    return XRuntimePlatform.NSwitch;
+            }
+        }
     }
 }
