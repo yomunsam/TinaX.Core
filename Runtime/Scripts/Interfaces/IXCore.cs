@@ -16,6 +16,8 @@ namespace TinaX
         string LocalStoragePath_App { get; }
         string FrameworkVersionName { get; }
         bool IsRunning { get; }
+        string ProfileName { get; }
+        bool DevelopMode { get; }
 
         #endregion
 
