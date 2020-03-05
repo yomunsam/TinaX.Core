@@ -16,7 +16,7 @@ namespace TinaXEditor.Internal
             if (!name.IsNullOrEmpty() && !name.IsNullOrWhiteSpace())
                 item.ProfileName = name;
             else
-                item.ProfileName = TinaXEditor.Const.XEditorConst.DefaultProfileName;
+                item.ProfileName = TinaX.Const.FrameworkConst.DefaultProfileName;
 
             return item;
         }

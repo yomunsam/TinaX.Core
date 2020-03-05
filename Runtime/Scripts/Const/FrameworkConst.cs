@@ -19,5 +19,10 @@ namespace TinaX.Const
 
         public const string Framework_Configs_Folder_Path = "TinaX";
 
+        public const string XProfile_Config_Path = "TinaX/XProfile";
+
+        public const string DefaultProfileName = "Default";
+
+
     }
 }

@@ -25,7 +25,7 @@ namespace TinaXEditor
         }
 
         private static XProfileModel mProfileModel;
-
+        private static TinaX.Internal.XProfileConfig mProfileRuntimeConfig;
 
         public static string[] GetXProfileNames()
         {
@@ -34,7 +34,7 @@ namespace TinaXEditor
 
         public static void RefreshXProfile()
         {
-            if(mProfileModel == null)
+            if (mProfileModel == null)
             {
                 //load or new
                 bool create = false;
@@ -61,17 +61,30 @@ namespace TinaXEditor
                 }
 
             }
+
+            if (mProfileRuntimeConfig == null)
+            {
+                mProfileRuntimeConfig = XConfig.CreateConfigIfNotExists<TinaX.Internal.XProfileConfig>(TinaX.Const.FrameworkConst.XProfile_Config_Path, AssetLoadType.Resources);
+                if (mProfileRuntimeConfig.ActiveProfileName.IsNullOrEmpty())
+                    mProfileRuntimeConfig.ActiveProfileName = mProfileModel.CurrentProfileName;
+                mProfileRuntimeConfig.DevelopMode = mProfileModel.IsDevelopMode(mProfileRuntimeConfig.ActiveProfileName);
+            }
         }
 
         public static void SaveXProfiles()
         {
-            if(mProfileModel == null)
+            if(mProfileModel == null || mProfileRuntimeConfig == null)
             {
                 RefreshXProfile();
             }
 
             mProfileModel.ReadySave();
             XConfig.SaveJson(mProfileModel, XEditorConst.EditorXProfilePath, AssetLoadType.SystemIO);
+
+            mProfileRuntimeConfig.ActiveProfileName = mProfileModel.CurrentProfileName;
+            mProfileRuntimeConfig.DevelopMode = mProfileModel.IsDevelopMode(mProfileModel.CurrentProfileName);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
         public static bool AddXProfile(string profileName)

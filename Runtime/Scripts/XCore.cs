@@ -69,6 +69,9 @@ namespace TinaX
 
         public bool IsRunning { get; private set; } = false;
 
+        public string ProfileName { get; private set; } = FrameworkConst.DefaultProfileName;
+        public bool DevelopMode { get; private set; } = false;
+
         private bool mInited = false;
         private CatLib.Application mCatApp;
 
@@ -158,6 +161,14 @@ namespace TinaX
             BaseGameObject = GameObjectHelper.FindOrCreateGo(FrameworkConst.Frameowrk_Base_GameObject_Name)
                 .DontKillMe()
                 .SetPosition(new Vector3(-6000, -6000, -6000));
+
+            //Profile
+            var profile = XConfig.GetConfig<TinaX.Internal.XProfileConfig>(FrameworkConst.XProfile_Config_Path);
+            if(profile != null)
+            {
+                this.ProfileName = profile.ActiveProfileName;
+                this.DevelopMode = profile.DevelopMode;
+            }
 
             //catlib
             //mCatApp?.Init();
