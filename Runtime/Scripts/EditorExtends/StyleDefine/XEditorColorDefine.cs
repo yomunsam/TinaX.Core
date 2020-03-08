@@ -33,6 +33,8 @@ namespace TinaX.Internal
             }
         }
 
+        public static string Color_Normal_Pure_16 => ColorUtility.ToHtmlStringRGBA(Color_Normal_Pure);
+
         /// <summary>
         /// 通常色
         /// </summary>
@@ -57,6 +59,7 @@ namespace TinaX.Internal
 #endif
             }
         }
+        public static string Color_Normal_16 => ColorUtility.ToHtmlStringRGBA(Color_Normal);
 
         /// <summary>
         /// 警告色
@@ -79,6 +82,7 @@ namespace TinaX.Internal
 #endif
             }
         }
+        public static string Color_Warning_16 => ColorUtility.ToHtmlStringRGBA(Color_Warning);
 
         public static Color Color_Error
         {
@@ -95,6 +99,7 @@ namespace TinaX.Internal
 #endif
             }
         }
+        public static string Color_Error_16 => ColorUtility.ToHtmlStringRGBA(Color_Error);
 
         /// <summary>
         /// 安全色
@@ -114,6 +119,7 @@ namespace TinaX.Internal
 #endif
             }
         }
+        public static string Color_Safe_16 => ColorUtility.ToHtmlStringRGBA(Color_Safe);
 
         /// <summary>
         /// 着重色
@@ -133,6 +139,7 @@ namespace TinaX.Internal
 #endif
             }
         }
+        public static string Color_Emphasize_16 => ColorUtility.ToHtmlStringRGBA(Color_Emphasize);
 
     }
 }
