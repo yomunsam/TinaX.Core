@@ -319,6 +319,7 @@ namespace TinaX
                 System.IO.File.Delete(system_path) ;
             }
             var json_text = JsonUtility.ToJson(jsonContent);
+            TinaX.IO.XDirectory.CreateIfNotExists(System.IO.Path.GetDirectoryName(system_path));
             System.IO.File.WriteAllText(system_path, json_text, Encoding.UTF8);
         }
 

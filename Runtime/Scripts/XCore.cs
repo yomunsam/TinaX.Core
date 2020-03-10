@@ -188,20 +188,43 @@ namespace TinaX
 
 
             //Invoke Services "Init"
-            foreach (var provider in mList_XServiceProviders)
+            Task<bool>[] arr_init_task = new Task<bool>[mList_XServiceProviders.Count];
+            for(int i = 0; i< mList_XServiceProviders.Count; i++)
             {
-                Debug.Log("    [XService Init]:" + provider.ServiceName);
-                var b = await provider.OnInit();
-                if (!b)
+                Debug.Log("    [XService Init]:" + mList_XServiceProviders[i].ServiceName);
+                arr_init_task[i] = mList_XServiceProviders[i].OnInit();
+            }
+            await Task.WhenAll(arr_init_task);
+            for(int i = 0; i < mList_XServiceProviders.Count; i++)
+            {
+                if(!arr_init_task[i].Result)
                 {
-                    var e = provider.GetInitException();
-                    if (mServicesInitExceptionAction != null)
-                        mServicesInitExceptionAction.Invoke(provider.ServiceName, e);
+                    var e = mList_XServiceProviders[i].GetInitException();
+                    if (mServicesInitExceptionAction != null && mServicesInitExceptionAction.GetInvocationList().Length > 0)
+                        mServicesInitExceptionAction?.Invoke(mList_XServiceProviders[i].ServiceName, e);
                     else
+                    {
+                        Debug.LogError($"[TinaX.Core] Exception when init xserver \"{mList_XServiceProviders[i].ServiceName}\"");
                         throw e;
-
+                    }
                 }
             }
+
+            //试试看下面这个和上面这个实际跑起来哪个快
+            //foreach (var provider in mList_XServiceProviders)
+            //{
+            //    Debug.Log("    [XService Init]:" + provider.ServiceName);
+            //    var b = await provider.OnInit();
+            //    if (!b)
+            //    {
+            //        var e = provider.GetInitException();
+            //        if (mServicesInitExceptionAction != null)
+            //            mServicesInitExceptionAction.Invoke(provider.ServiceName, e);
+            //        else
+            //            throw e;
+
+            //    }
+            //}
 
 
             //----------------------------------------------------------------------------------------------
@@ -222,7 +245,7 @@ namespace TinaX
                 if (!b)
                 {
                     var e = p.GetStartException();
-                    if (mServicesStartExceptionAction != null)
+                    if (mServicesStartExceptionAction != null && mServicesInitExceptionAction.GetInvocationList().Length > 0)
                         mServicesStartExceptionAction.Invoke(p.ServiceName, e);
                     else
                         throw e;
