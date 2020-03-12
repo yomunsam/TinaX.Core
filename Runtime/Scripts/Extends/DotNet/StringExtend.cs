@@ -214,6 +214,14 @@ namespace TinaX
             UnityEngine.Debug.Log(str);
         }
 
+        public static string RemoveUTF8DOM(this string str)
+        {
+            var bytes = str.GetBytes();
+            if (StringHelper.HaveUTF8BOM(ref bytes))
+                return Encoding.UTF8.GetString(bytes, 3, bytes.Length - 3);
+            else
+                return str;
+        }
 
     }
 }

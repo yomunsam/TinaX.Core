@@ -59,6 +59,33 @@ namespace TinaX
             return str;
         }
 
+
+        private static byte[] UTF8_BOM = new byte[3] { 239, 187, 191 };
+
+        public static bool HaveUTF8BOM(ref byte[] data)
+        {
+            if (data != null && data.Length > 3)
+                return data[0] == UTF8_BOM[0] && data[1] == UTF8_BOM[1] && data[2] == UTF8_BOM[2];
+            else
+                return false;
+        }
+
+        public static bool HaveUTF8BOM(byte[] data)
+        {
+            if (data != null && data.Length > 3)
+                return data[0] == UTF8_BOM[0] && data[1] == UTF8_BOM[1] && data[2] == UTF8_BOM[2];
+            else
+                return false;
+        }
+
+        public static string RemoveUTF8BOM(byte[] data)
+        {
+            if (HaveUTF8BOM(ref data))
+                return Encoding.UTF8.GetString(data, 3, data.Length - 3);
+            else
+                return Encoding.UTF8.GetString(data);
+        }
+
         private static Random MakeRandom(int? seed = null)
         {
             return new Random(seed.GetValueOrDefault(MakeSeed()));
