@@ -6,7 +6,7 @@
     public interface IXBootstrap
     {
         /// <summary>
-        /// Invoke before framework's services init and start.
+        /// Invoke after framework's services init/register , and brfore framework's services start.
         /// </summary>
         void OnInit();
 

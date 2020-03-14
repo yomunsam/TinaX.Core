@@ -23,6 +23,7 @@ namespace TinaX.Utils
         /// <param name="callback">string arg: file name</param>
         public static void ZipDirectory(string directory, string output_filename, Action<string> callback) //带数据回调
         {
+            TinaX.IO.XFile.DeleteIfExists(output_filename);
             FastZipEvents events = new FastZipEvents();
             events.ProcessFile = (sender, args) =>
             {

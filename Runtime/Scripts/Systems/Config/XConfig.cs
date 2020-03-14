@@ -285,6 +285,14 @@ namespace TinaX
             return final_asset;
         }
 
+        public static void SaveJson(object jsonContent,string json_path)
+        {
+            var json = JsonUtility.ToJson(jsonContent);
+            TinaX.IO.XDirectory.CreateIfNotExists(System.IO.Path.GetDirectoryName(json_path));
+            TinaX.IO.XFile.DeleteIfExists(json_path);
+            System.IO.File.WriteAllText(json_path, json, Encoding.UTF8);
+        }
+
 #if UNITY_EDITOR
 
         public static T CreateConfigIfNotExists<T>(string configPath, AssetLoadType pathType = AssetLoadType.Resources) where T: ScriptableObject
@@ -309,7 +317,7 @@ namespace TinaX
         }
 
 
-        public static void SaveJson(object jsonContent, string jsonPath, AssetLoadType pathType = AssetLoadType.Resources)
+        public static void SaveJson(object jsonContent, string jsonPath, AssetLoadType pathType)
         {
             //检查路径
             var final_unity_path = (pathType == AssetLoadType.Resources) ? (ConfigResourcesPath + "/" + jsonPath + ".json") : jsonPath;

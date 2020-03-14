@@ -182,9 +182,7 @@ namespace TinaX
             foreach(var type in types)
                 mList_XBootstrap.Add((IXBootstrap)Activator.CreateInstance(type));
 
-            //Invoke IXBootstrap "Init"
-            foreach(var item in mList_XBootstrap)
-                item.OnInit();
+            
 
 
             //Invoke Services "Init"
@@ -226,14 +224,18 @@ namespace TinaX
             //    }
             //}
 
+            
 
             //----------------------------------------------------------------------------------------------
 
             //Invoke Service "Register"
-            foreach(var provider in mList_XServiceProviders)
+            foreach (var provider in mList_XServiceProviders)
                 provider.OnServiceRegister();
 
-            
+            //--------------------------------------------------------------------------------------------------
+            //Invoke IXBootstrap "Init"
+            foreach (var item in mList_XBootstrap)
+                item.OnInit();
 
             //------------------触发Start阶段----------------------------------------------------------------
 
@@ -245,10 +247,10 @@ namespace TinaX
                 if (!b)
                 {
                     var e = p.GetStartException();
-                    if (mServicesStartExceptionAction != null && mServicesInitExceptionAction.GetInvocationList().Length > 0)
-                        mServicesStartExceptionAction.Invoke(p.ServiceName, e);
-                    else
-                        throw e;
+                    mServicesStartExceptionAction?.Invoke(p.ServiceName, e);
+#if UNITY_EDITOR
+                    Debug.LogException(e);
+#endif
                 }
             }
 
