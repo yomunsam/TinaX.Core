@@ -203,7 +203,7 @@ namespace TinaX
             return final_asset;
         }
 
-        public static T GetJson<T>(string jsonPath, AssetLoadType loadType = AssetLoadType.Resources, bool cachePrior = true)
+        public static T GetJson<T>(string jsonPath, AssetLoadType loadType = AssetLoadType.SystemIO, bool cachePrior = false)
         {
             bool cache_flag = false;
             string cache_key = jsonPath.ToLower();

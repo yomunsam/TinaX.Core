@@ -32,5 +32,12 @@ namespace TinaX.Utils
             var fastzip = new FastZip(events);
             fastzip.CreateZip(output_filename, directory, true, "");
         }
+    
+        public static void UnZip(string zip_path,string target_dir)
+        {
+            FastZip fastzip = new FastZip();
+            fastzip.ExtractZip(zip_path, target_dir, null);
+        }
+    
     }
 }
