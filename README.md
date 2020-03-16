@@ -9,6 +9,7 @@
 This is the core package of the new TinaX Framework, which is still under development.
 
 您可以使用Unity Package Manager来安装使用该包。
+
 You can use the Unity Package Manager to install and use this package.
 
 ```
