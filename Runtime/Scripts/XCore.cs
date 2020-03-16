@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -131,7 +132,61 @@ namespace TinaX
 
         public TService GetService<TService>(params object[] userParams) => App.Make<TService>(userParams);
 
+        /// <summary>
+        /// 对传入的类进行依赖注入
+        /// </summary>
+        /// <param name="obj"></param>
+        public void InjectObject(object obj)
+        {
+            Type obj_type = obj.GetType();
+            foreach(var field in obj_type.GetRuntimeFields())
+            {
+                var attr = field.GetCustomAttribute<InjectAttribute>(true);
+                if (attr == null)
+                    continue;
+                var service_name = mCatApp.Type2Service(field.FieldType);
+                if(mCatApp.IsStatic(service_name))
+                {
+                    field.SetValue(obj, mCatApp.Make(service_name));
+                    continue;
+                }
 
+                if (mCatApp.IsAlias(service_name))
+                {
+                    field.SetValue(obj, mCatApp.Make(service_name));
+                    continue;
+                }
+
+                if (attr.Nullable)
+                    continue;
+                else
+                    throw new ServiceNotFoundException(field.FieldType); //抛异常
+            }
+
+            foreach(var property in obj_type.GetRuntimeProperties())
+            {
+                var attr = property.GetCustomAttribute<InjectAttribute>(true);
+                if (attr == null)
+                    continue;
+                var service_name = mCatApp.Type2Service(property.PropertyType);
+                if (mCatApp.IsStatic(service_name))
+                {
+                    property.SetValue(obj, mCatApp.Make(service_name));
+                    continue;
+                }
+
+                if (mCatApp.IsAlias(service_name))
+                {
+                    property.SetValue(obj, mCatApp.Make(service_name));
+                    continue;
+                }
+
+                if (attr.Nullable)
+                    continue;
+                else
+                    throw new ServiceNotFoundException(property.PropertyType); //抛异常
+            }
+        }
 
         #endregion
 
@@ -147,6 +202,17 @@ namespace TinaX
             mServicesStartExceptionAction += callback;
             return this;
         }
+
+        #endregion
+
+        #region Domains
+
+        public object CreateInstance(Type type, params object[] args)
+        {
+            return Activator.CreateInstance(type, args);
+        }
+
+        
 
         #endregion
 

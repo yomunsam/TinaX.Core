@@ -71,6 +71,7 @@ namespace TinaX
         /// <returns></returns>
         bool IsBuiltInServicesImplementationed<TBuiltInInterface>() where TBuiltInInterface : IBuiltInService;
 
+        void InjectObject(object obj);
 
         #endregion
 
@@ -78,6 +79,10 @@ namespace TinaX
         IXCore OnServicesInitException(Action<string, XException> callback);
         IXCore OnServicesStartException(Action<string, XException> callback);
 
+        #endregion
+
+        #region Domain
+        object CreateInstance(Type type, params object[] args);
         #endregion
 
         Task RunAsync(System.Action finishCallback = null);
