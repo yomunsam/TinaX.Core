@@ -7,7 +7,7 @@
 这是尚在开发阶段的新TinaX Framework的核心包。
 
 This is the core package of the new TinaX Framework, which is still under development.
-
+<br><br><br>
 您可以使用Unity Package Manager来安装使用该包。
 
 You can use the Unity Package Manager to install and use this package.
@@ -16,8 +16,10 @@ You can use the Unity Package Manager to install and use this package.
 git://github.com/yomunsam/TinaX.Core.git
 ```
 
+
 package name: `io.nekonya.tinax.core`
 
+<br><br>
 ------
 
 ## Dependencies
@@ -28,6 +30,8 @@ Before setup `TinaX.Core`, please ensure the following dependencies are installe
 
 - [com.neuecc.unirx](https://github.com/yomunsam/UniRx.UPM) :`git://github.com/yomunsam/UniRx.UPM.git`
 - [com.cysharp.unitask](https://github.com/yomunsam/UniTask.UPM) :`git://github.com/yomunsam/UniTask.UPM.git`
+
+<br><br>
 
 ------
 
