@@ -8,6 +8,7 @@ namespace TinaX.Services
 {
     public interface IAppDomain : IBuiltInService
     {
+        
 
     }
 }

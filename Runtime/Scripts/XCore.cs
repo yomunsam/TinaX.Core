@@ -46,6 +46,12 @@ namespace TinaX
             }
 
             mCatApp = CatLib.Application.New();
+            UnityEngine.Application.quitting += OnUnityQuit;
+        }
+
+        ~XCore()
+        {
+            UnityEngine.Application.quitting -= OnUnityQuit;
         }
 
         public GameObject BaseGameObject { get; private set; }
@@ -212,7 +218,7 @@ namespace TinaX
             return Activator.CreateInstance(type, args);
         }
 
-        
+
 
         #endregion
 
@@ -313,10 +319,16 @@ namespace TinaX
                 if (!b)
                 {
                     var e = p.GetStartException();
-                    mServicesStartExceptionAction?.Invoke(p.ServiceName, e);
+                    if (e == null)
+                        mServicesInitExceptionAction?.Invoke(p.ServiceName, null);
+                    else
+                    {
+                        mServicesStartExceptionAction?.Invoke(p.ServiceName, e);
 #if UNITY_EDITOR
-                    Debug.LogException(e);
+                        Debug.LogException(e);
 #endif
+                    }
+
                 }
             }
 
@@ -343,17 +355,35 @@ namespace TinaX
                 xbs.OnQuit();
 
             //Invoke Services "OnClose"
-            List<Task> task_close = new List<Task>();
             foreach (var provider in mList_XServiceProviders)
-                task_close.Add(provider.OnClose());
+                provider.OnQuit();
 
-            await Task.WhenAll(task_close);
+            mList_XBootstrap.Clear();
+            mList_XServiceProviders.Clear();
 
             App.Terminate();
-
             IsRunning = false;
+            await Task.Yield();
         } 
     
+
+
+        private void OnUnityQuit()
+        {
+            if(mList_XBootstrap != null && mList_XBootstrap.Count > 0)
+            {
+                foreach(var item in mList_XBootstrap)
+                    item.OnQuit();
+            }
+            mList_XBootstrap.Clear();
+
+            if (mList_XServiceProviders!= null && mList_XServiceProviders.Count > 0)
+            {
+                foreach(var item in mList_XServiceProviders)
+                    item.OnQuit();
+            }
+            mList_XServiceProviders.Clear();
+        }
     }
 }
 

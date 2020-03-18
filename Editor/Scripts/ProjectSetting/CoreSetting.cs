@@ -105,7 +105,7 @@ namespace TinaXEditor.ProjectSetting
                 {
                     XCoreEditor.RefreshXProfile();
                 },
-                guiHandler = (searchContext) =>
+                guiHandler = (searchContent) =>
                 {
                     EditorGUILayout.Space();
                     EditorGUILayout.Space();

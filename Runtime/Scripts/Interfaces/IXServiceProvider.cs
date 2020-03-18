@@ -33,7 +33,7 @@ namespace TinaX.Services
 
         XException GetStartException();
 
-        Task OnClose();
+        void OnQuit();
         Task OnRestart();
     }
 
