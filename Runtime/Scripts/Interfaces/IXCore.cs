@@ -71,6 +71,9 @@ namespace TinaX
         /// <returns></returns>
         bool IsBuiltInServicesImplementationed<TBuiltInInterface>() where TBuiltInInterface : IBuiltInService;
 
+        object GetService(Type type, params object[] userParams);
+
+
         void InjectObject(object obj);
 
         #endregion
@@ -88,5 +91,6 @@ namespace TinaX
         Task RunAsync(System.Action finishCallback = null);
 
         Task CloseAsync();
+        bool TryGetService<TService>(out TService service, params object[] userParams);
     }
 }

@@ -18,7 +18,7 @@ namespace TinaX
 
         private static XCore _MainInstance;
         private static object _lock_obj = new object();
-        public static XCore MainInstance => _MainInstance;
+        public static IXCore MainInstance => _MainInstance;
         public static IXCore New()
         {
             if (_MainInstance == null)
@@ -137,6 +137,32 @@ namespace TinaX
         public bool IsBuiltInServicesImplementationed<TBuiltInInterface>() where TBuiltInInterface : IBuiltInService => App.IsAlias<TBuiltInInterface>();
 
         public TService GetService<TService>(params object[] userParams) => App.Make<TService>(userParams);
+
+        public object GetService(Type type, params object[] userParams)
+        {
+            string service_name = mCatApp.Type2Service(type);
+            if (mCatApp.IsStatic(service_name))
+                return mCatApp.Make(service_name, userParams);
+            if (mCatApp.IsAlias(service_name))
+                return mCatApp.Make(service_name, userParams);
+            return null;
+        }
+
+        public bool TryGetService<TService>(out TService service, params object[] userParams)
+        {
+            if (mCatApp.IsStatic<TService>())
+            {
+                service = mCatApp.Make<TService>(userParams);
+                return true;
+            }
+            if (mCatApp.IsAlias<TService>())
+            {
+                service = mCatApp.Make<TService>(userParams);
+                return true;
+            }
+            service = default;
+            return false;
+        }
 
         /// <summary>
         /// 对传入的类进行依赖注入

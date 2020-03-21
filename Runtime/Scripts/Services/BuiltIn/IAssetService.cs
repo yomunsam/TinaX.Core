@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
 
 namespace TinaX.Services
@@ -18,7 +14,9 @@ namespace TinaX.Services
 
         Task<T> LoadAsync<T>(string assetPath) where T : UnityEngine.Object;
 
-        
+        void LoadAsync(string assetPath, Type type, Action<UnityEngine.Object, XException> callback);
+
+        void Release(UnityEngine.Object asset);
         #endregion
     }
 }
