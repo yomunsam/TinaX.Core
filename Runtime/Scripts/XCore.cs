@@ -256,7 +256,7 @@ namespace TinaX
 
             //在Scene创建一个全局的base gameobject
             //TODO: 如果在ECS模式，应该是不需要这么个东西的
-            BaseGameObject = GameObjectHelper.FindOrCreateGo(FrameworkConst.Frameowrk_Base_GameObject_Name)
+            BaseGameObject = GameObjectHelper.FindOrCreateGameObject(FrameworkConst.Frameowrk_Base_GameObject_Name)
                 .DontKillMe()
                 .SetPosition(new Vector3(-6000, -6000, -6000));
 
@@ -268,9 +268,20 @@ namespace TinaX
                 this.DevelopMode = profile.DevelopMode;
             }
 
-            //catlib
-            //mCatApp?.Init();
             
+            //对Service进行排序
+            int getServiceProviderOrder(ref IXServiceProvider provider)
+            {
+                Type p_type = provider.GetType();
+                var attr = p_type.GetCustomAttribute<XServiceProviderOrderAttribute>();
+                if (attr != null)
+                    return attr.Order;
+                else
+                    return 100;
+            }
+
+            mList_XServiceProviders.Sort((x, y) => getServiceProviderOrder(ref x).CompareTo(getServiceProviderOrder(ref y)));
+
             //------------------触发Init阶段--------------------------------------------------------------
             //IXBootstrap获取启动引导
             var _b_type = typeof(IXBootstrap);
