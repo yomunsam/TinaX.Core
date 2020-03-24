@@ -8,24 +8,9 @@ namespace TinaX
 {
     public static class GameObjectExtends
     {
-        public static void DestroySelf(this GameObject selfObj)
+        public static void Destroy(this GameObject selfObj)
         {
             GameObject.Destroy(selfObj);
-        }
-
-        public static void DestroyMe(this GameObject selfObj)
-        {
-            GameObject.Destroy(selfObj);
-        }
-
-        /// <summary>
-        /// Destroy self, with delay time
-        /// </summary>
-        /// <param name="selfObj"></param>
-        /// <param name="t">delay time </param>
-        public static void DestroySelf(this GameObject selfObj, float t)
-        {
-            GameObject.Destroy(selfObj, t);
         }
 
 
@@ -34,10 +19,12 @@ namespace TinaX
         /// </summary>
         /// <param name="selfObj"></param>
         /// <param name="t">delay time </param>
-        public static void DestroyMe(this GameObject selfObj, float t)
+        public static void Destroy(this GameObject selfObj, float t)
         {
             GameObject.Destroy(selfObj, t);
         }
+
+
 
 
         /// <summary>
