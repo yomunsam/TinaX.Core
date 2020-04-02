@@ -47,3 +47,4 @@ The following excellent third-party libraries are used in this project:
 - **[UniRx](https://github.com/neuecc/UniRx)** : Reactive Extensions for Unity
 - **[UniTask](https://github.com/Cysharp/UniTask)** : Provides an efficient async/await integration to Unity.
 - **[SharpZipLib](https://github.com/icsharpcode/SharpZipLib)** : a Zip, GZip, Tar and BZip2 library written entirely in C# for the .NET platform. 
+- **[unity-toolbar-extender](https://github.com/marijnz/unity-toolbar-extender)** : Extend the Unity Toolbar with your own Editor UI code.

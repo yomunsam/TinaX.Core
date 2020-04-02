@@ -23,6 +23,7 @@ namespace TinaX.Const
 
         public const string DefaultProfileName = "Default";
 
+        public const string FrameworkEventGroupName = "TinaX";
 
     }
 }

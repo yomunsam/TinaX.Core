@@ -8,7 +8,7 @@ namespace TinaX.Services
 {
     public interface IEventTicket
     {
-
+        void Unregister();
     }
 
     public struct EventTicket : IEventTicket
@@ -16,5 +16,10 @@ namespace TinaX.Services
         public Action<object> handler;
         public string group;
         public string name;
+
+        public void Unregister()
+        {
+            XEvent.Remove(handler, name, group);
+        }
     }
 }

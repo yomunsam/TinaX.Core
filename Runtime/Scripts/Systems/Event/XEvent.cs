@@ -9,7 +9,7 @@ namespace TinaX
 {
     public class XEvent
     {
-
+        private const string DefaultGroup= "default";
         private struct EventRecord
         {
             public string name;
@@ -30,12 +30,12 @@ namespace TinaX
         }
 
         #region static
-        public static IEventTicket Register(string EventName, Action<object> handler, string EventGroup = "default")
+        public static IEventTicket Register(string EventName, Action<object> handler, string EventGroup = DefaultGroup)
         {
             return instance.RegisterEvent(EventName, handler, EventGroup);
         }
 
-        public static void Call(string eventName, object param = null, string eventGroup = "default")
+        public static void Call(string eventName, object param = null, string eventGroup = DefaultGroup)
         {
             instance.CallEvent(eventName, param, eventGroup);
         }
@@ -45,7 +45,7 @@ namespace TinaX
             instance.RemoveEvent(handler);
         }
 
-        public static void Remove(Action<object> handler, string eventName, string eventGroup = "default")
+        public static void Remove(Action<object> handler, string eventName, string eventGroup = DefaultGroup)
         {
             instance.RemoveEvent(handler, eventName, eventGroup);
         }
@@ -62,7 +62,7 @@ namespace TinaX
         {
         }
 
-        public IEventTicket RegisterEvent(string EventName, Action<object> handler, string EventGroup = "default")
+        public IEventTicket RegisterEvent(string EventName, Action<object> handler, string EventGroup = DefaultGroup)
         {
             //是否已存在？
             if (mDict_Infos.ContainsKey(handler))
@@ -91,7 +91,7 @@ namespace TinaX
             return new EventTicket() { name = EventName, group = EventGroup, handler = handler };
         }
 
-        public void CallEvent(string eventName, object param = null, string eventGroup = "default")
+        public void CallEvent(string eventName, object param = null, string eventGroup = DefaultGroup)
         {
             if(mDict_Handlers.TryGetValue(eventGroup,out var h_n))
             {
@@ -131,7 +131,7 @@ namespace TinaX
             }
         }
 
-        public void RemoveEvent(Action<object> handler, string eventName, string eventGroup = "default")
+        public void RemoveEvent(Action<object> handler, string eventName, string eventGroup = DefaultGroup)
         {
             if (mDict_Handlers.TryGetValue(eventGroup, out var h_n))
             {
