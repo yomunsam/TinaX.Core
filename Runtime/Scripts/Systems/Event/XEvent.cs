@@ -9,7 +9,7 @@ namespace TinaX
 {
     public class XEvent
     {
-        private const string DefaultGroup= "default";
+        public const string DefaultGroup= "default";
         private struct EventRecord
         {
             public string name;

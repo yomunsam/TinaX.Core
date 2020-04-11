@@ -33,6 +33,18 @@ namespace TinaX
         TService GetService<TService>(params object[] userParams);
 
         /// <summary>
+        /// Get Service | 获取服务
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="userParams"></param>
+        /// <returns></returns>
+        object GetService(Type type, params object[] userParams);
+
+        bool TryGetService<TService>(out TService service, params object[] userParams);
+
+        bool TryGetService(Type type, out object service, params object[] userParams);
+
+        /// <summary>
         /// Register a "TinaX Service Provider".
         /// 注册 TinaX 服务提供者
         /// </summary>
@@ -71,8 +83,7 @@ namespace TinaX
         /// <returns></returns>
         bool IsBuiltInServicesImplementationed<TBuiltInInterface>() where TBuiltInInterface : IBuiltInService;
 
-        object GetService(Type type, params object[] userParams);
-
+        
 
         void InjectObject(object obj);
 
@@ -88,9 +99,9 @@ namespace TinaX
         object CreateInstance(Type type, params object[] args);
         #endregion
 
-        Task RunAsync(System.Action finishCallback = null);
-
+        Task RunAsync();
+        void RunAsync(Action<Exception> finishCallback);
         Task CloseAsync();
-        bool TryGetService<TService>(out TService service, params object[] userParams);
+        
     }
 }

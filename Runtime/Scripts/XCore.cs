@@ -9,6 +9,7 @@ using CatLib;
 using CatLib.Container;
 using TinaX.Services;
 using TinaX.Const;
+using UniRx;
 
 namespace TinaX
 {
@@ -164,6 +165,18 @@ namespace TinaX
             return false;
         }
 
+        public bool TryGetService(Type type, out object service, params object[] userParams)
+        {
+            string service_name = mCatApp.Type2Service(type);
+            if(mCatApp.IsStatic(service_name) || mCatApp.IsAlias(service_name))
+            {
+                service = mCatApp.Make(service_name, userParams);
+                return true;
+            }
+            service = default;
+            return false;
+        }
+
         /// <summary>
         /// 对传入的类进行依赖注入
         /// </summary>
@@ -248,7 +261,7 @@ namespace TinaX
 
         #endregion
 
-        public async Task RunAsync(System.Action finishCallback = null)
+        public async Task RunAsync()
         {
             if (mInited) return;
 
@@ -382,9 +395,24 @@ namespace TinaX
 
 
             Debug.Log("[TinaX] App startup finish.");
-            finishCallback?.Invoke();
         }
     
+        public void RunAsync(Action<Exception> finishCallback)
+        {
+            this.RunAsync()
+                .ToObservable()
+                .ObserveOnMainThread()
+                .Subscribe(unit =>
+                {
+                    finishCallback?.Invoke(null);
+                },
+                e =>
+                {
+                    Debug.LogException(e);
+                    finishCallback?.Invoke(e);
+                });
+        }
+
         public async Task CloseAsync()
         {
             //Invoke XBootstrap "OnClose"
