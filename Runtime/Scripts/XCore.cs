@@ -96,6 +96,9 @@ namespace TinaX
         /// </summary>
         private Action<string, XException> mServicesStartExceptionAction;
 
+        private bool mTryGetAppDomainServiced = false;
+        private IAppDomain mAppDomainService;
+
         #region Dependency Injection | 依赖注入
 
         public IXCore RegisterServiceProvider(IXServiceProvider provider)
@@ -254,9 +257,17 @@ namespace TinaX
 
         public object CreateInstance(Type type, params object[] args)
         {
-            return Activator.CreateInstance(type, args);
-        }
+            if (!mTryGetAppDomainServiced)
+            {
+                this.TryGetBuiltinService<IAppDomain>(out mAppDomainService);
+                mTryGetAppDomainServiced = true;
+            }
 
+            if (mAppDomainService != null)
+                return mAppDomainService.CreateInstance(type, args);
+            else
+                return Activator.CreateInstance(type, args);
+        }
 
 
         #endregion

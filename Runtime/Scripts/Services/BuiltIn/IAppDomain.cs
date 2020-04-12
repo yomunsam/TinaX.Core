@@ -8,7 +8,6 @@ namespace TinaX.Services
 {
     public interface IAppDomain : IBuiltInService
     {
-        
-
+        object CreateInstance(Type type, params object[] args);
     }
 }
