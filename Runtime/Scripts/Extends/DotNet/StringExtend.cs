@@ -121,19 +121,8 @@ namespace TinaX
         /// <returns></returns>
         public static string EncodeBase64(this string str)
         {
-            try
-            {
-                var bytes = Encoding.UTF8.GetBytes(str);
-                return Convert.ToBase64String(bytes);
-            }
-            catch (EncoderFallbackException e)
-            {
-                throw e;
-            }
-            catch (ArgumentNullException e)
-            {
-                throw e;
-            }
+            var bytes = Encoding.UTF8.GetBytes(str);
+            return Convert.ToBase64String(bytes);
         }
 
         /// <summary>
@@ -143,23 +132,8 @@ namespace TinaX
         /// <returns></returns>
         public static string DecodeBase64(this string base64_str)
         {
-            try
-            {
-                var b = Convert.FromBase64String(base64_str);
-                return Encoding.UTF8.GetString(b);
-            }
-            catch (FormatException e)
-            {
-                throw e;
-            }
-            catch (EncoderFallbackException e)
-            {
-                throw e;
-            }
-            catch (ArgumentNullException e)
-            {
-                throw e;
-            }
+            var b = Convert.FromBase64String(base64_str);
+            return Encoding.UTF8.GetString(b);
         }
 
         public static string GetMD5(this string str,bool lower = true,bool shortMD5 = false)

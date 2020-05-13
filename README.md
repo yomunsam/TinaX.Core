@@ -30,8 +30,8 @@ package name: `io.nekonya.tinax.core`
 
 Before setup `TinaX.Core`, please ensure the following dependencies are installed by `Unity Package Manager`:
 
-- [com.neuecc.unirx](https://github.com/yomunsam/UniRx.UPM) :`git://github.com/yomunsam/UniRx.UPM.git`
-- [com.cysharp.unitask](https://github.com/yomunsam/UniTask.UPM) :`git://github.com/yomunsam/UniTask.UPM.git`
+- [com.neuecc.unirx](https://github.com/neuecc/UniRx#upm-package) :`https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts`
+- [com.cysharp.unitask](https://github.com/Cysharp/UniTask#upm-package) :`https://github.com/Cysharp/UniTask.git?path=Assets/UniRx.Async`
 
 <br><br>
 

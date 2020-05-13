@@ -13,8 +13,10 @@
     "email": "yomunsam@gmail.com",
     "url": "https://yomunchan.moe"
   },
+  "license":"AGPLv3",
   "type": "library",
   "dependencies": {
-    "com.neuecc.unirx": "7.1.0"
+    "com.neuecc.unirx": "7.1.0",
+    "com.cysharp.unitask":"1.3.1"
   }
 }
