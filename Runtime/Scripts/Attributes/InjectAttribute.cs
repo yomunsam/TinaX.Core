@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TinaX
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field)]
-    public class InjectAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field, Inherited = true)]
+    public class InjectAttribute : CatLib.Container.InjectAttribute
     {
         public bool Nullable = false;
         public InjectAttribute() { }

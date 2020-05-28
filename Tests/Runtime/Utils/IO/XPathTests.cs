@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using TinaX.IO;
+using System.Linq;
 
 namespace TinaX.Tests.Core
 {
@@ -19,14 +20,8 @@ namespace TinaX.Tests.Core
             if (path.IsNullOrEmpty() || Expect.IsNullOrEmpty()) return;
             var result = XPath.GetExtension(path, Multiple);
             TestContext.Out.WriteLine($"Path: {path}, multiple:{Multiple.ToString()} , result: {result}");
-            if(result == Expect)
-            {
-                Assert.IsTrue(true);
-            }
-            else
-            {
-                Assert.IsFalse(true);
-            }
+            Assert.AreEqual(result, Expect);
+            
         }
 
         //// A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
