@@ -10,16 +10,61 @@
 
 This is the core package of the new TinaX Framework, which is still under development.
 <br><br><br>
-您可以使用Unity Package Manager来安装使用该包。
 
-You can use the Unity Package Manager to install and use this package.
+package name: `io.nekonya.tinax.core`
+
+## Install this package
+
+### Install via openupm
+
+``` bash
+# Install openupm-cli if not installed.
+npm install -g openupm-cli
+# OR yarn global add openupm-cli
+
+#run install in your project root folder
+openupm add io.nekonya.tinax.core
+```
+
+<br>
+
+### Install via npm (UPM)
+
+Modify `Packages/manifest.json` file in your project, and add the following code before "dependencies" node of this file:
+
+``` json
+"scopedRegistries": [
+    {
+        "name": "TinaX",
+        "url": "https://registry.npmjs.org",
+        "scopes": [
+            "io.nekonya"
+        ]
+    },
+    {
+        "name": "package.openupm.com",
+        "url": "https://package.openupm.com",
+        "scopes": [
+            "com.cysharp.unitask",
+            "com.neuecc.unirx"
+        ]
+    }
+],
+```
+
+<br>
+
+### Install via git UPM:
+
+You can use the following to install and use this package in UPM GUI.  
 
 ```
 git://github.com/yomunsam/TinaX.Core.git
 ```
 
+If you want to set a target version, you can use release tag like `#6.6.0-preview`. for detail you can see this page: [https://github.com/yomunsam/TinaX.Core/releases](https://github.com/yomunsam/TinaX.Core/releases)
 
-package name: `io.nekonya.tinax.core`
+
 
 <br><br>
 ------
@@ -32,6 +77,10 @@ Before setup `TinaX.Core`, please ensure the following dependencies are installe
 
 - [com.neuecc.unirx](https://github.com/neuecc/UniRx#upm-package) :`https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts`
 - [com.cysharp.unitask](https://github.com/Cysharp/UniTask#install-via-git-url) :`https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask`
+
+> if you install packages by git UPM， You need to install the dependencies manually. Or dependencies will installed automatically by NPM / OpenUPM
+>
+> 如果您通过Git方式安装Package，那么您需要手动确保所有依赖项已被安装。如果使用NPM/OpenUPM安装本Package，则所有依赖都将自动被安装。 
 
 <br><br>
 
