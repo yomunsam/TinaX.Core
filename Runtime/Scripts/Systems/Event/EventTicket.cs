@@ -2,7 +2,7 @@
 
 namespace TinaX.Systems
 {
-    public interface IEventTicket
+    public interface IEventTicket : IDisposable
     {
         void Unregister();
     }
@@ -13,9 +13,15 @@ namespace TinaX.Systems
         public string group;
         public string name;
 
+        public void Dispose()
+        {
+            this.Unregister();
+        }
+
         public void Unregister()
         {
             XEvent.Remove(handler, name, group);
         }
+
     }
 }
