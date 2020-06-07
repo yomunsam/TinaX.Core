@@ -11,13 +11,13 @@ namespace TinaX.Utils
 
         
 
-        public DisposableGroup Register(IDisposable obj, bool InvokeOnceDisposeIfExist = false)
+        public DisposableGroup Register(IDisposable obj, bool InvokeDisposeOnceIfExist = false)
         {
             lock (this)
             {
                 if (RegisteredDisposables.Contains(obj))
                 {
-                    if (InvokeOnceDisposeIfExist)
+                    if (InvokeDisposeOnceIfExist)
                         obj.Dispose();
                 }
                 else
