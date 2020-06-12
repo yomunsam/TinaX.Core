@@ -112,6 +112,12 @@ git://github.com/yomunsam/TinaX.Core.git
 
 ------
 
+## Learn TinaX
+
+您可以访问TinaX的[文档页面](https://tinax.corala.space/#/cmn-hans)来学习了解各个功能的使用
+
+------
+
 ## Third-Party
 
 本项目中使用了以下优秀的第三方库：
