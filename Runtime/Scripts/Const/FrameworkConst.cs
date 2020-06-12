@@ -10,7 +10,7 @@ namespace TinaX.Const
     {
         public const string Frameowrk_Base_GameObject_Name = "TinaX";
 
-        public const string Framework_VersionName = "6.6.0";
+        public const string Framework_VersionName = "6.6.6";
         public const int FrameworkVersionCode = 6;
 
         public const string Framework_LocalStorage_TinaX = "tinaxCache";

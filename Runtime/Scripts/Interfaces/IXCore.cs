@@ -1,6 +1,7 @@
 ﻿using CatLib.Container;
 using System;
 using System.Threading.Tasks;
+using TinaX.Const;
 using TinaX.Services;
 using UnityEngine;
 
@@ -18,9 +19,18 @@ namespace TinaX
         bool IsRunning { get; }
         string ProfileName { get; }
         bool DevelopMode { get; }
+        IServiceContainer Services { get; }
 
         #endregion
 
+
+        /// <summary>
+        /// Register a "TinaX Service Provider".
+        /// 注册 TinaX 服务提供者
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        IXCore RegisterServiceProvider(IXServiceProvider provider);
 
         #region Dependency Injection | 依赖注入
 
@@ -44,13 +54,7 @@ namespace TinaX
 
         bool TryGetService(Type type, out object service, params object[] userParams);
 
-        /// <summary>
-        /// Register a "TinaX Service Provider".
-        /// 注册 TinaX 服务提供者
-        /// </summary>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        IXCore RegisterServiceProvider(IXServiceProvider provider);
+        
 
         /// <summary>
         /// Bind Service. | 绑定服务
@@ -64,26 +68,14 @@ namespace TinaX
         /// </summary>
         /// <typeparam name="TService"></typeparam>
         /// <typeparam name="TConcrete"></typeparam>
-        IBindData BindSingletonService<TService, TConcrete>();
-
-        /// <summary>
-        /// Bind a global singleton Service , and implementation of framework built-in interface. | 绑定全局单例服务，并实现框架内置服务接口。
-        /// </summary>
-        /// <typeparam name="TService"></typeparam>
-        /// <typeparam name="TBuiltInInterface"></typeparam>
-        /// <typeparam name="TConcrete"></typeparam>
-        IBindData BindSingletonService<TService, TBuiltInInterface, TConcrete>() where TBuiltInInterface : IBuiltInService;
+        void BindSingletonService<TService, TConcrete>();
 
         bool TryGetBuiltinService<TBuiltInInterface>(out TBuiltInInterface service) where TBuiltInInterface : IBuiltInService;
 
-        /// <summary>
-        /// 内置服务接口是否被实现
-        /// </summary>
-        /// <typeparam name="TBuiltInInterface"></typeparam>
-        /// <returns></returns>
-        bool IsBuiltInServicesImplementationed<TBuiltInInterface>() where TBuiltInInterface : IBuiltInService;
 
-        
+        IXCore ConfigureServices(Action<IServiceContainer> options);
+
+
 
         void InjectObject(object obj);
 
@@ -102,6 +94,5 @@ namespace TinaX
         Task RunAsync();
         void RunAsync(Action<Exception> finishCallback);
         Task CloseAsync();
-        
     }
 }

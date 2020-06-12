@@ -4,9 +4,10 @@ namespace TinaX
 {
     public static class CatLibExtends
     {
-        public static void SetAlias<Tlias>(this IBindData bindData)
+        public static IBindData SetAlias<TAlias>(this IBindData bindData)
         {
-            bindData.Alias<Tlias>();
+            bindData.Alias<TAlias>();
+            return bindData;
         }
     }
 }

@@ -15,23 +15,20 @@ namespace TinaX.Services
         /// <summary>
         /// after "OnInit" and before "OnStart" 
         /// </summary>
-        void OnServiceRegister();
+        void OnServiceRegister(IXCore core);
 
         /// <summary>
         /// before "OnServiceRegister" and "OnStart"
         /// </summary>
-        /// <returns>if return false , framework services start workflow will break. </returns>
-        Task<bool> OnInit();
+        /// <returns>if return not null , framework services initialization workflow will break. </returns>
+        Task<XException> OnInit(IXCore core);
 
         /// <summary>
         /// after "OnInit" and "OnServiceRegister"
         /// </summary>
-        /// <returns>if return false , framework services start workflow will break. </returns>
-        Task<bool> OnStart();
+        /// <returns>if return not null , framework services start workflow will break. </returns>
+        Task<XException> OnStart(IXCore core);
 
-        XException GetInitException();
-
-        XException GetStartException();
 
         void OnQuit();
         Task OnRestart();

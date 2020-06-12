@@ -10,6 +10,7 @@ using CatLib.Container;
 using TinaX.Services;
 using TinaX.Const;
 using UniRx;
+using TinaX.Container;
 
 namespace TinaX
 {
@@ -35,25 +36,7 @@ namespace TinaX
 
         #endregion
 
-        public XCore()
-        {
-            if (_MainInstance == null)
-            {
-                lock (_lock_obj)
-                {
-                    if (_MainInstance == null)
-                        _MainInstance = this;
-                }
-            }
-
-            mCatApp = CatLib.Application.New();
-            UnityEngine.Application.quitting += OnUnityQuit;
-        }
-
-        ~XCore()
-        {
-            UnityEngine.Application.quitting -= OnUnityQuit;
-        }
+        
 
         public GameObject BaseGameObject { get; private set; }
 
@@ -80,174 +63,112 @@ namespace TinaX
         public string ProfileName { get; private set; } = FrameworkConst.DefaultProfileName;
         public bool DevelopMode { get; private set; } = false;
 
-        private bool mInited = false;
-        private CatLib.Application mCatApp;
+        public IServiceContainer Services => m_ServiceContainer;
 
-        private List<IXServiceProvider> mList_XServiceProviders = new List<IXServiceProvider>();
+        
 
-        private List<IXBootstrap> mList_XBootstrap = new List<IXBootstrap>();
+        private bool m_Inited = false;
+        //private CatLib.Application mCatApp;
+
+        private List<IXServiceProvider> m_XServiceProvidersList = new List<IXServiceProvider>();
+
+        private List<IXBootstrap> m_XBootstrapList = new List<IXBootstrap>();
 
         /// <summary>
         /// 服务初始化失败的事件注册, string:service name 
         /// </summary>
-        private Action<string, XException> mServicesInitExceptionAction;
+        private Action<string, XException> m_ServicesInitExceptionAction;
         /// <summary>
         /// 服务启动失败的事件注册, string:service name 
         /// </summary>
-        private Action<string, XException> mServicesStartExceptionAction;
+        private Action<string, XException> m_ServicesStartExceptionAction;
 
-        private bool mTryGetAppDomainServiced = false;
-        private IAppDomain mAppDomainService;
+        private ServiceContainer m_ServiceContainer;
+
+        public XCore()
+        {
+            if (_MainInstance == null)
+            {
+                lock (_lock_obj)
+                {
+                    if (_MainInstance == null)
+                        _MainInstance = this;
+                }
+            }
+
+            //mCatApp = CatLib.Application.New();
+            m_ServiceContainer = new ServiceContainer();
+            UnityEngine.Application.quitting += OnUnityQuit;
+        }
+
+        ~XCore()
+        {
+            UnityEngine.Application.quitting -= OnUnityQuit;
+        }
+
 
         #region Dependency Injection | 依赖注入
 
         public IXCore RegisterServiceProvider(IXServiceProvider provider)
         {
-            if (!mList_XServiceProviders.Contains(provider))
-                mList_XServiceProviders.Add(provider);
+            if (!m_XServiceProvidersList.Contains(provider))
+                m_XServiceProvidersList.Add(provider);
 
             return this;
         }
 
         public void BindService<TService, TConcrete>()
         {
-            App.Bind<TService, TConcrete>();
+            m_ServiceContainer.Bind<TService, TConcrete>();
         }
 
-        public IBindData BindSingletonService<TService, TConcrete>()
+        public void BindSingletonService<TService, TConcrete>()
         {
-            return App.Singleton<TService, TConcrete>();
+            m_ServiceContainer.Singleton<TService,TConcrete>();
         }
         
-
-
-        public IBindData BindSingletonService<TService,TBuiltInInterface, TConcrete>() where TBuiltInInterface : IBuiltInService
-        {
-            return App.Singleton<TService, TConcrete>().Alias<TBuiltInInterface>();
-        }
+        
 
         public bool TryGetBuiltinService<TBuiltInInterface>(out TBuiltInInterface service) where TBuiltInInterface: IBuiltInService
-        {
-            if (App.IsAlias<TBuiltInInterface>())
-            {
-                service =  App.Make<TBuiltInInterface>();
-                return true;
-            }
+            => m_ServiceContainer.TryGetBuildInService(out service);
 
-            service = default;
-            return false;
-        }
-
-        public bool IsBuiltInServicesImplementationed<TBuiltInInterface>() where TBuiltInInterface : IBuiltInService => App.IsAlias<TBuiltInInterface>();
-
-        public TService GetService<TService>(params object[] userParams) => App.Make<TService>(userParams);
+        public TService GetService<TService>(params object[] userParams) 
+            => m_ServiceContainer.Get<TService>(userParams);
 
         public object GetService(Type type, params object[] userParams)
-        {
-            string service_name = mCatApp.Type2Service(type);
-            if (mCatApp.IsStatic(service_name))
-                return mCatApp.Make(service_name, userParams);
-            if (mCatApp.IsAlias(service_name))
-                return mCatApp.Make(service_name, userParams);
-            return null;
-        }
+            => m_ServiceContainer.Get(type, userParams);
 
         public bool TryGetService<TService>(out TService service, params object[] userParams)
-        {
-            if (mCatApp.IsStatic<TService>())
-            {
-                service = mCatApp.Make<TService>(userParams);
-                return true;
-            }
-            if (mCatApp.IsAlias<TService>())
-            {
-                service = mCatApp.Make<TService>(userParams);
-                return true;
-            }
-            service = default;
-            return false;
-        }
+            => m_ServiceContainer.TryGet<TService>(out service, userParams);
 
         public bool TryGetService(Type type, out object service, params object[] userParams)
+            => m_ServiceContainer.TryGet(type, out service,userParams);
+
+        public IXCore ConfigureServices(Action<IServiceContainer> options)
         {
-            string service_name = mCatApp.Type2Service(type);
-            if(mCatApp.IsStatic(service_name) || mCatApp.IsAlias(service_name))
-            {
-                service = mCatApp.Make(service_name, userParams);
-                return true;
-            }
-            service = default;
-            return false;
+            options?.Invoke(m_ServiceContainer);
+            return this;
         }
 
         /// <summary>
         /// 对传入的类进行依赖注入
         /// </summary>
-        /// <param name="obj"></param>
-        public void InjectObject(object obj)
-        {
-            Type obj_type = obj.GetType();
-            foreach(var field in obj_type.GetRuntimeFields())
-            {
-                var attr = field.GetCustomAttribute<InjectAttribute>(true);
-                if (attr == null)
-                    continue;
-                var service_name = mCatApp.Type2Service(field.FieldType);
-                if(mCatApp.IsStatic(service_name))
-                {
-                    field.SetValue(obj, mCatApp.Make(service_name));
-                    continue;
-                }
-
-                if (mCatApp.IsAlias(service_name))
-                {
-                    field.SetValue(obj, mCatApp.Make(service_name));
-                    continue;
-                }
-
-                if (attr.Nullable)
-                    continue;
-                else
-                    throw new ServiceNotFoundException(field.FieldType); //抛异常
-            }
-
-            foreach(var property in obj_type.GetRuntimeProperties())
-            {
-                var attr = property.GetCustomAttribute<InjectAttribute>(true);
-                if (attr == null)
-                    continue;
-                var service_name = mCatApp.Type2Service(property.PropertyType);
-                if (mCatApp.IsStatic(service_name))
-                {
-                    property.SetValue(obj, mCatApp.Make(service_name));
-                    continue;
-                }
-
-                if (mCatApp.IsAlias(service_name))
-                {
-                    property.SetValue(obj, mCatApp.Make(service_name));
-                    continue;
-                }
-
-                if (attr.Nullable)
-                    continue;
-                else
-                    throw new ServiceNotFoundException(property.PropertyType); //抛异常
-            }
-        }
+        /// <param name="target"></param>
+        public void InjectObject(object target)
+            => m_ServiceContainer.Inject(target);
 
         #endregion
 
         #region Exceptions | 异常处理
         public IXCore OnServicesInitException(Action<string,XException> callback)
         {
-            mServicesInitExceptionAction += callback;
+            m_ServicesInitExceptionAction += callback;
             return this;
         }
 
         public IXCore OnServicesStartException(Action<string, XException> callback)
         {
-            mServicesStartExceptionAction += callback;
+            m_ServicesStartExceptionAction += callback;
             return this;
         }
 
@@ -256,25 +177,14 @@ namespace TinaX
         #region Domains
 
         public object CreateInstance(Type type, params object[] args)
-        {
-            if (!mTryGetAppDomainServiced)
-            {
-                this.TryGetBuiltinService<IAppDomain>(out mAppDomainService);
-                mTryGetAppDomainServiced = true;
-            }
-
-            if (mAppDomainService != null)
-                return mAppDomainService.CreateInstance(type, args);
-            else
-                return Activator.CreateInstance(type, args);
-        }
+            => Activator.CreateInstance(type, args);
 
 
         #endregion
 
         public async Task RunAsync()
         {
-            if (mInited) return;
+            if (m_Inited) return;
 
             Debug.Log("[TinaX Framework] TinaX - v." + FrameworkVersionName + "    | Nekonya Studio\nhttps://github.com/yomunsam/tinax\nCorala.Space Project \n Powerd by yomunsam: https://yomunchan.moe | https://github.com/yomunsam");
 
@@ -304,7 +214,7 @@ namespace TinaX
                     return 100;
             }
 
-            mList_XServiceProviders.Sort((x, y) => getServiceProviderOrder(ref x).CompareTo(getServiceProviderOrder(ref y)));
+            m_XServiceProvidersList.Sort((x, y) => getServiceProviderOrder(ref x).CompareTo(getServiceProviderOrder(ref y)));
 
             //------------------触发Init阶段--------------------------------------------------------------
             //IXBootstrap获取启动引导
@@ -313,30 +223,30 @@ namespace TinaX
                 .SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(_b_type)))
                 .ToArray();
             foreach(var type in types)
-                mList_XBootstrap.Add((IXBootstrap)Activator.CreateInstance(type));
+                m_XBootstrapList.Add((IXBootstrap)Activator.CreateInstance(type));
 
             
 
 
             //Invoke Services "Init"
-            Task<bool>[] arr_init_task = new Task<bool>[mList_XServiceProviders.Count];
-            for(int i = 0; i< mList_XServiceProviders.Count; i++)
+            Task<XException>[] arr_init_task = new Task<XException>[m_XServiceProvidersList.Count];
+            for(int i = 0; i< m_XServiceProvidersList.Count; i++)
             {
-                Debug.Log("    [XService Init]:" + mList_XServiceProviders[i].ServiceName);
-                arr_init_task[i] = mList_XServiceProviders[i].OnInit();
+                Debug.Log("    [XService Init]:" + m_XServiceProvidersList[i].ServiceName);
+                arr_init_task[i] = m_XServiceProvidersList[i].OnInit(this);
             }
             await Task.WhenAll(arr_init_task);
-            for(int i = 0; i < mList_XServiceProviders.Count; i++)
+            for(int i = 0; i < m_XServiceProvidersList.Count; i++)
             {
-                if(!arr_init_task[i].Result)
+                var exception = arr_init_task[i].Result;
+                if (exception != null)
                 {
-                    var e = mList_XServiceProviders[i].GetInitException();
-                    if (mServicesInitExceptionAction != null && mServicesInitExceptionAction.GetInvocationList().Length > 0)
-                        mServicesInitExceptionAction?.Invoke(mList_XServiceProviders[i].ServiceName, e);
+                    if (m_ServicesInitExceptionAction != null && m_ServicesInitExceptionAction.GetInvocationList().Length > 0)
+                        m_ServicesInitExceptionAction?.Invoke(m_XServiceProvidersList[i].ServiceName, exception);
                     else
                     {
-                        Debug.LogError($"[TinaX.Core] Exception when init xserver \"{mList_XServiceProviders[i].ServiceName}\"");
-                        throw e;
+                        Debug.LogError($"[TinaX.Core] Exception when init xserver \"{m_XServiceProvidersList[i].ServiceName}\"");
+                        throw exception;
                     }
                 }
             }
@@ -362,31 +272,31 @@ namespace TinaX
             //----------------------------------------------------------------------------------------------
 
             //Invoke Service "Register"
-            foreach (var provider in mList_XServiceProviders)
-                provider.OnServiceRegister();
+            foreach (var provider in m_XServiceProvidersList)
+                provider.OnServiceRegister(this);
 
             //--------------------------------------------------------------------------------------------------
             //Invoke IXBootstrap "Init"
-            foreach (var item in mList_XBootstrap)
-                item.OnInit();
+            foreach (var item in m_XBootstrapList)
+                item.OnInit(this);
 
             //------------------触发Start阶段----------------------------------------------------------------
 
             //Invoke Services "Start"
-            foreach (var p in mList_XServiceProviders)
+            foreach (var p in m_XServiceProvidersList)
             {
                 Debug.Log("    [XService Start]:" + p.ServiceName);
-                var b = await p.OnStart();
-                if (!b)
+                var exception = await p.OnStart(this);
+                if (exception != null)
                 {
-                    var e = p.GetStartException();
-                    if (e == null)
-                        mServicesInitExceptionAction?.Invoke(p.ServiceName, null);
+                    
+                    if (exception == null)
+                        m_ServicesInitExceptionAction?.Invoke(p.ServiceName, null);
                     else
                     {
-                        mServicesStartExceptionAction?.Invoke(p.ServiceName, e);
+                        m_ServicesStartExceptionAction?.Invoke(p.ServiceName, exception);
 #if UNITY_EDITOR
-                        Debug.LogException(e);
+                        Debug.LogError($"Serivce provider \"{p.ServiceName}\" start exception: " + exception.Message);
 #endif
                     }
 
@@ -400,8 +310,8 @@ namespace TinaX
 
 
             //Invoke XBootstrap "Start"
-            foreach (var xbs in mList_XBootstrap)
-                xbs.OnStart();
+            foreach (var xbs in m_XBootstrapList)
+                xbs.OnStart(this);
             
 
 
@@ -427,15 +337,15 @@ namespace TinaX
         public async Task CloseAsync()
         {
             //Invoke XBootstrap "OnClose"
-            foreach (var xbs in mList_XBootstrap)
+            foreach (var xbs in m_XBootstrapList)
                 xbs.OnQuit();
 
             //Invoke Services "OnClose"
-            foreach (var provider in mList_XServiceProviders)
+            foreach (var provider in m_XServiceProvidersList)
                 provider.OnQuit();
 
-            mList_XBootstrap.Clear();
-            mList_XServiceProviders.Clear();
+            m_XBootstrapList.Clear();
+            m_XServiceProvidersList.Clear();
 
             App.Terminate();
             IsRunning = false;
@@ -446,19 +356,19 @@ namespace TinaX
 
         private void OnUnityQuit()
         {
-            if(mList_XBootstrap != null && mList_XBootstrap.Count > 0)
+            if(m_XBootstrapList != null && m_XBootstrapList.Count > 0)
             {
-                foreach(var item in mList_XBootstrap)
+                foreach(var item in m_XBootstrapList)
                     item.OnQuit();
             }
-            mList_XBootstrap.Clear();
+            m_XBootstrapList.Clear();
 
-            if (mList_XServiceProviders!= null && mList_XServiceProviders.Count > 0)
+            if (m_XServiceProvidersList!= null && m_XServiceProvidersList.Count > 0)
             {
-                foreach(var item in mList_XServiceProviders)
+                foreach(var item in m_XServiceProvidersList)
                     item.OnQuit();
             }
-            mList_XServiceProviders.Clear();
+            m_XServiceProvidersList.Clear();
         }
     }
 }

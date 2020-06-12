@@ -8,12 +8,12 @@
         /// <summary>
         /// Invoke after framework's services init/register , and brfore framework's services start.
         /// </summary>
-        void OnInit();
+        void OnInit(IXCore core);
 
         /// <summary>
         /// Invoke after framework's services start.
         /// </summary>
-        void OnStart();
+        void OnStart(IXCore core);
 
         void OnQuit();
 

@@ -1,9 +1,9 @@
 {
   "name": "io.nekonya.tinax.core",
-  "version": "6.6.2-preview",
+  "version": "6.6.3",
   "displayName": "TinaX.Core",
   "description": "TinaX Framework.",
-  "unity": "2019.3",
+  "unity": "2019.4",
   "keywords": [
     "TinaX",
     "TinaX Framework"
@@ -13,7 +13,7 @@
     "email": "yomunsam@gmail.com",
     "url": "https://yomunchan.moe"
   },
-  "license":"AGPLv3",
+  "license":"MIT",
   "type": "library",
   "dependencies": {
     "com.neuecc.unirx": "7.1.0",
