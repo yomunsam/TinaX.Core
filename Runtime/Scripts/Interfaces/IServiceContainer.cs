@@ -1,4 +1,5 @@
-﻿using CatLib.Container;
+﻿using CatLib;
+using CatLib.Container;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using TinaX.Services;
 
-namespace TinaX.Const
+namespace TinaX.Container
 {
     public interface IServiceContainer
     {
-        
+        Application CatApplication { get; }
+
 
         #region Get Services
 
@@ -32,6 +34,7 @@ namespace TinaX.Const
         
         bool TryGet<TService>(out TService service, params object[] userParams);
         bool TryGet(Type type, out object service, params object[] userParams);
+        bool TryGet(string serviceName, out object service, params object[] userParams);
         
         bool TryGetBuildInService<TBuiltInService>(out TBuiltInService service) where TBuiltInService : IBuiltInService;
         bool TryGetBuildInService(Type type, out object service);

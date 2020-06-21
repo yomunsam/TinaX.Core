@@ -62,6 +62,21 @@ namespace TinaX.Container
             return false;
         }
 
+        public bool TryGet(string service_name, out object service, params object[] userParams)
+        {
+            if (CatApplication.IsStatic(service_name)
+                || CatApplication.IsAlias(service_name)
+                || CatApplication.HasBind(service_name)
+                || CatApplication.HasInstance(service_name))
+            {
+                service = CatApplication.Make(service_name, userParams);
+                return true;
+            }
+
+            service = default;
+            return false;
+        }
+
         public bool TryGetBuildInService<TBuiltInService>(out TBuiltInService service) where TBuiltInService : TinaX.Services.IBuiltInService
         {
             if (CatApplication.IsAlias<TBuiltInService>()

@@ -1,7 +1,6 @@
-﻿using CatLib.Container;
-using System;
+﻿using System;
 using System.Threading.Tasks;
-using TinaX.Const;
+using TinaX.Container;
 using TinaX.Services;
 using UnityEngine;
 
@@ -19,9 +18,10 @@ namespace TinaX
         bool IsRunning { get; }
         string ProfileName { get; }
         bool DevelopMode { get; }
-        IServiceContainer Services { get; }
 
         #endregion
+
+        IServiceContainer Services { get; }
 
 
         /// <summary>

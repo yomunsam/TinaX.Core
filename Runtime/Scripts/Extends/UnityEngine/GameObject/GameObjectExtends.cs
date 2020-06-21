@@ -196,6 +196,17 @@ namespace TinaX
             return obj;
         }
 
+        public static bool TryGetComponent(this GameObject obj , string typeName, out object component)
+        {
+            var c = obj.GetComponent(typeName);
+            if(c != null)
+            {
+                component = c;
+                return true;
+            }
+            component = null;
+            return false;
+        }
 
 
         /// <summary>
