@@ -9,5 +9,11 @@ namespace TinaX
             bindData.Alias<TAlias>();
             return bindData;
         }
+
+        public static IBindData SetAlias(this IBindData bindData, string alias)
+        {
+            bindData.Alias(alias);
+            return bindData;
+        }
     }
 }

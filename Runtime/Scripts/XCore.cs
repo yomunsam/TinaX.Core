@@ -85,6 +85,12 @@ namespace TinaX
 
         private ServiceContainer m_ServiceContainer;
 
+        /// <summary>
+        /// 是否尝试获取过IAppDomain
+        /// </summary>
+        internal bool m_TryGetIAppDomain = false;
+        private IAppDomain m_IAppDomain;
+
         public XCore()
         {
             if (_MainInstance == null)
@@ -97,7 +103,7 @@ namespace TinaX
             }
 
             //mCatApp = CatLib.Application.New();
-            m_ServiceContainer = new ServiceContainer();
+            m_ServiceContainer = new ServiceContainer(this);
             UnityEngine.Application.quitting += OnUnityQuit;
         }
 
@@ -177,7 +183,45 @@ namespace TinaX
         #region Domains
 
         public object CreateInstance(Type type, params object[] args)
-            => Activator.CreateInstance(type, args);
+        {
+            if (m_Inited)
+            {
+                if (!m_TryGetIAppDomain)
+                {
+                    Services.TryGetBuildInService(out m_IAppDomain);
+                    m_TryGetIAppDomain = true;
+                }
+
+                if (m_IAppDomain != null)
+                    return m_IAppDomain.CreateInstance(type, args);
+            }
+
+            return Activator.CreateInstance(type, args);
+        }
+
+        /// <summary>
+        /// 仅供XCatApplication使用
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        internal string GetServiceName(Type type)
+        {
+            if (m_Inited)
+            {
+                if (!m_TryGetIAppDomain)
+                {
+                    Services.TryGetBuildInService(out m_IAppDomain);
+                    m_TryGetIAppDomain = true;
+                }
+
+                if (m_IAppDomain != null)
+                {
+                    if (m_IAppDomain.TryGetServiceName(type, out var _name))
+                        return _name;
+                }
+            }
+            return Services.Type2ServiceName(type);
+        }
 
 
         #endregion
@@ -307,13 +351,11 @@ namespace TinaX
 
             Debug.Log("[TinaX] Framework startup finish.");
             IsRunning = true;
-
+            m_Inited = true;
 
             //Invoke XBootstrap "Start"
             foreach (var xbs in m_XBootstrapList)
                 xbs.OnStart(this);
-            
-
 
             Debug.Log("[TinaX] App startup finish.");
         }
