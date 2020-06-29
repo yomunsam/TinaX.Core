@@ -199,6 +199,54 @@ namespace TinaX
             return Activator.CreateInstance(type, args);
         }
 
+        public object CreateInstanceAndInject(Type type)
+        {
+            if (m_Inited)
+            {
+                if (!m_TryGetIAppDomain)
+                {
+                    Services.TryGetBuildInService(out m_IAppDomain);
+                    m_TryGetIAppDomain = true;
+                }
+
+                if (m_IAppDomain != null)
+                    return m_IAppDomain.CreateInstanceAndInject(type);
+            }
+
+            return createInstanceAndInject(type);
+        }
+
+        private object createInstanceAndInject(Type type)
+        {
+            var ctors = type.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+            //找到可注入的ctor
+            foreach(var ctor in ctors)
+            {
+                var ctor_params = ctor.GetParameters();
+                List<object> param_objs = new List<object>();
+                bool flag = true;
+                foreach(var param in ctor_params)
+                {
+                    if (this.m_ServiceContainer.TryGet(param.ParameterType, out var _service))
+                        param_objs.Add(_service);
+                    else
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+
+                if (flag) //有可用的构造函数
+                {
+                    //this.CreateInstance(type, param_objs);
+                    var result =  ctor.Invoke(param_objs.ToArray());
+                    this.m_ServiceContainer.Inject(result);
+                    return result;
+                }
+            }
+            throw new XException("[TinaX.Core] Create instance failed: No valid constructors, Type:" + type.FullName);
+        }
+
         /// <summary>
         /// 仅供XCatApplication使用
         /// </summary>

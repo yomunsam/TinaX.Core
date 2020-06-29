@@ -94,5 +94,6 @@ namespace TinaX
         Task RunAsync();
         void RunAsync(Action<Exception> finishCallback);
         Task CloseAsync();
+        object CreateInstanceAndInject(Type type);
     }
 }
