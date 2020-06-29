@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using TinaX.Services;
+using UnityEngine;
 
 namespace TinaX.Core.Localization
 {
@@ -14,7 +15,9 @@ namespace TinaX.Core.Localization
                 return langs.Any(l => l == UnityEngine.SystemLanguage.Chinese || l == UnityEngine.SystemLanguage.ChineseSimplified);
             }
             else
-                return false;
+            {
+                return (Application.systemLanguage == SystemLanguage.Chinese || Application.systemLanguage == SystemLanguage.ChineseSimplified);
+            }
         }
     }
 }
