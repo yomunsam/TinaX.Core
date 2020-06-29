@@ -85,6 +85,41 @@ namespace TinaXEditor.Utils
             PromptIMGUI.OpenUI();
         }
 
+
+        private static bool? _isHans;
+
+        /// <summary>
+        /// 系统是否为国语汉语
+        /// cmn - 国语（普通话）
+        /// hans - 汉语
+        /// </summary>
+        public static bool IsCmnHans
+        {
+            get
+            {
+                if (_isHans == null)
+                {
+                    _isHans = (Application.systemLanguage == SystemLanguage.Chinese || Application.systemLanguage == SystemLanguage.ChineseSimplified);
+                }
+                return _isHans.Value;
+            }
+        }
+
+        private static bool? _isJapanese;
+
+        /// <summary>
+        /// システムが日本語かどうか
+        /// </summary>
+        public static bool IsJapanese
+        {
+            get
+            {
+                if (_isJapanese == null)
+                    _isJapanese = (Application.systemLanguage == SystemLanguage.Japanese);
+                return _isJapanese.Value;
+            }
+        }
+
     }
 }
 
