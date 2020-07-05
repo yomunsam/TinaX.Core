@@ -335,7 +335,7 @@ namespace TinaX
             TinaX.IO.XDirectory.CreateIfNotExists(
                 System.IO.Path.Combine(
                     System.IO.Directory.GetCurrentDirectory(), 
-                    System.IO.Path.GetDirectoryName(unityPath.Replace("/", "\\"))
+                    System.IO.Path.GetDirectoryName(unityPath)
                     )
                 );
         }
