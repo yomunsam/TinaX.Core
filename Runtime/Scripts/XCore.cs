@@ -11,6 +11,7 @@ using TinaX.Services;
 using TinaX.Const;
 using UniRx;
 using TinaX.Container;
+using System.Text;
 
 namespace TinaX
 {
@@ -280,6 +281,12 @@ namespace TinaX
 
             Debug.Log("[TinaX Framework] TinaX - v." + FrameworkVersionName + "    | Nekonya Studio\nhttps://github.com/yomunsam/tinax\nCorala.Space Project \n Powerd by yomunsam: https://yomunchan.moe | https://github.com/yomunsam");
 
+            //Command Line Args
+            #region Command Line Args
+            string[] Args = this.GetCommandLine();
+
+            #endregion
+
             //在Scene创建一个全局的base gameobject
             //TODO: 如果在ECS模式，应该是不需要这么个东西的
             BaseGameObject = GameObjectHelper.FindOrCreateGameObject(FrameworkConst.Frameowrk_Base_GameObject_Name)
@@ -460,6 +467,18 @@ namespace TinaX
             }
             m_XServiceProvidersList.Clear();
         }
+
+        /// <summary>
+        /// 获取命令行启动参数
+        /// </summary>
+        /// <returns></returns>
+        private string[] GetCommandLine() => Environment.GetCommandLineArgs();
+
+        private void ParseArgs(ref string[] args)
+        {
+
+        }
+
     }
 }
 
