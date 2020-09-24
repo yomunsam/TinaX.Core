@@ -99,6 +99,7 @@ namespace TinaXEditor.ProjectSetting
         /// Debug 调试命令行设置
         /// </summary>
         private static string m_DebugCommandLineArgs;
+        private static bool m_loadedDebugCommandLineArgs; //是否加载过一次debug命令行参数
 
         [SettingsProvider]
         public static SettingsProvider CoreSettingPage()
@@ -110,6 +111,7 @@ namespace TinaXEditor.ProjectSetting
                 {
                     XCoreEditor.RefreshXProfile();
                     m_DebugCommandLineArgs = XCoreEditor.GetDebugCommandLineArgs();
+                    m_loadedDebugCommandLineArgs = true;
                 },
                 guiHandler = (searchContent) =>
                 {
@@ -243,7 +245,8 @@ namespace TinaXEditor.ProjectSetting
                 deactivateHandler = () =>
                 {
                     XCoreEditor.SaveXProfiles();
-                    XCoreEditor.SaveDebugCommandLineArgs(m_DebugCommandLineArgs);
+                    if (m_loadedDebugCommandLineArgs)
+                        XCoreEditor.SaveDebugCommandLineArgs(m_DebugCommandLineArgs);
                 }
             };
         }
