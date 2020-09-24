@@ -95,6 +95,11 @@ namespace TinaXEditor.ProjectSetting
         private static bool? cache_isDevelopMode;
         private static string cached_developMode_profile; //上面这个变量是哪个profile的信息
 
+        /// <summary>
+        /// Debug 调试命令行设置
+        /// </summary>
+        private static string m_DebugCommandLineArgs;
+
         [SettingsProvider]
         public static SettingsProvider CoreSettingPage()
         {
@@ -104,6 +109,7 @@ namespace TinaXEditor.ProjectSetting
                 activateHandler = (searchContent,uielementRoot) =>
                 {
                     XCoreEditor.RefreshXProfile();
+                    m_DebugCommandLineArgs = XCoreEditor.GetDebugCommandLineArgs();
                 },
                 guiHandler = (searchContent) =>
                 {
@@ -224,10 +230,20 @@ namespace TinaXEditor.ProjectSetting
                         EditorGUIUtil.HorizontalLine();
                     }
                     #endregion
+
+                    GUILayout.Space(20);
+                    EditorGUIUtil.HorizontalLine();
+                    EditorGUILayout.Space();
+                    #region Debug Command Line
+                    EditorGUILayout.LabelField(i18n_debug_command_line_args);
+                    m_DebugCommandLineArgs = EditorGUILayout.TextArea(m_DebugCommandLineArgs);
+
+                    #endregion
                 },
                 deactivateHandler = () =>
                 {
                     XCoreEditor.SaveXProfiles();
+                    XCoreEditor.SaveDebugCommandLineArgs(m_DebugCommandLineArgs);
                 }
             };
         }
@@ -334,6 +350,16 @@ namespace TinaXEditor.ProjectSetting
             }
         }
 
+
+        private static string i18n_debug_command_line_args
+        {
+            get
+            {
+                if (IsChinese)
+                    return "调试启动命令行：";
+                return "Debug Command Line Args: ";
+            }
+        }
         #endregion
 
     }

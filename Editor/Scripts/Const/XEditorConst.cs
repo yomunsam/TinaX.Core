@@ -23,6 +23,7 @@ namespace TinaXEditor.Const
 
         public static string EditorXProfilePath => Path.Combine(EditorProjectSettingRootFolder, "xProfiles.json");
 
+        public static string LaunchSettingsFilePath => Path.Combine(EditorProjectSettingRootFolder, "launchSettings.json");
 
         public static string ProjectSettingRootName = "TinaX Framework";
 

@@ -12,6 +12,7 @@ using TinaX.Const;
 using UniRx;
 using TinaX.Container;
 using System.Text;
+using TinaX.Internal;
 
 namespace TinaX
 {
@@ -66,7 +67,10 @@ namespace TinaX
 
         public IServiceContainer Services => m_ServiceContainer;
 
-        
+        /// <summary>
+        /// Get game command line args.
+        /// </summary>
+        public ICommandLineArgs CommandLineArgs => m_ArgsManager;
 
         private bool m_Inited = false;
         //private CatLib.Application mCatApp;
@@ -92,6 +96,8 @@ namespace TinaX
         internal bool m_TryGetIAppDomain = false;
         private IAppDomain m_IAppDomain;
 
+        private ArgsManager m_ArgsManager;
+
         public XCore()
         {
             if (_MainInstance == null)
@@ -106,6 +112,7 @@ namespace TinaX
             //mCatApp = CatLib.Application.New();
             m_ServiceContainer = new ServiceContainer(this);
             UnityEngine.Application.quitting += OnUnityQuit;
+            m_ArgsManager = new ArgsManager();
         }
 
         ~XCore()
@@ -283,7 +290,19 @@ namespace TinaX
 
             //Command Line Args
             #region Command Line Args
-            string[] Args = this.GetCommandLine();
+            string[] Args = this.GetCommandLineArgs();
+            m_ArgsManager.AddArgs(Args);
+            m_ServiceContainer.CatApplication.Instance<ICommandLineArgs>(m_ArgsManager);    //将Args接口注册进依赖注入容器
+
+            //编辑器下，使用Debug命令行配置覆盖真实参数
+#if UNITY_EDITOR
+            string debug_args_str = this.GetDebugCommandLineArgs();
+            if (!debug_args_str.IsNullOrEmpty())
+            {
+                string[] debug_args = ArgsUtil.ParseArgsText(debug_args_str).ToArray();
+                m_ArgsManager.AddArgs(debug_args);
+            }
+#endif
 
             #endregion
 
@@ -472,12 +491,38 @@ namespace TinaX
         /// 获取命令行启动参数
         /// </summary>
         /// <returns></returns>
-        private string[] GetCommandLine() => Environment.GetCommandLineArgs();
+        private string[] GetCommandLineArgs() => Environment.GetCommandLineArgs();
 
-        private void ParseArgs(ref string[] args)
+        /// <summary>
+        /// 编辑器下，获取Debug命令行参数
+        /// </summary>
+        /// <returns></returns>
+        private string GetDebugCommandLineArgs()
         {
-
+#if UNITY_EDITOR
+            //为了不污染引用关系，我们尝试通过反射来调用Editor程序集里的方法来加载获取Debug命令行参数
+            try
+            {
+                var xcore_editor_assembly = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(asm => asm.GetName().Name.Equals("TinaX.Core.Editor"))
+                .SingleOrDefault();
+                Type xcore_editor_type = xcore_editor_assembly.GetType("TinaXEditor.XCoreEditor");
+                var get_method = xcore_editor_type.GetMethod("GetDebugCommandLineArgs");
+                string result = (string)get_method.Invoke(null, null);
+                return result;
+            }
+            catch(Exception e)
+            {
+                Debug.LogError("[TinaX.Core] (Runtime) XCore load debug command line args failed : " + e.Message);
+                return string.Empty;
+            }
+#else
+            //非编辑器下直接返回空，该功能是编辑器下独有的
+            return string.Empty;
+#endif
         }
+
+        
 
     }
 }

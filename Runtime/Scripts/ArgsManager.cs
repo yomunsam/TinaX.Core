@@ -24,7 +24,7 @@ namespace TinaX.Internal
     /// 用于处理命令行启动参数
     /// Used to process command line startup parameters
     /// </summary>
-    public class ArgsManager
+    public class ArgsManager : ICommandLineArgs
     {
         /// <summary>
         /// 存放以key-value形式传入的参数
@@ -87,6 +87,16 @@ namespace TinaX.Internal
             {
                 if (!kv_index.Contains(i))
                 {
+                    var arg = args[i];
+                    if (arg.StartsWith("-"))
+                    {
+                        if (arg.StartsWith("--"))
+                            m_ArgsSingle.AddIfNotExist(arg.Substring(2, arg.Length - 2));
+                        else
+                            m_ArgsSingle.AddIfNotExist(arg.Substring(1, arg.Length - 1));
+
+                        continue;
+                    }
                     m_ArgsSingle.AddIfNotExist(args[i]);
                 }
             }
@@ -95,9 +105,30 @@ namespace TinaX.Internal
 
         public bool TryGetValue(string key, out string value) => m_ArgsKeyValue.TryGetValue(key, out value);
 
+        public string GetValue(string key, string defaultValue = null)
+        {
+            if (this.TryGetValue(key, out var v))
+                return v;
+            else
+                return defaultValue;
+        }
+
         public bool IsExistKey(string key) => m_ArgsKeyValue.ContainsKey(key);
 
         public bool IsExistSingle(string name) => m_ArgsSingle.Contains(name);
+
+
+        public bool GetBool(string key)
+        {
+            if (m_ArgsKeyValue.TryGetValue(key, out var _v))
+            {
+                if (bool.TryParse(_v, out bool _b))
+                    return _b;
+            }
+            if (m_ArgsSingle.Contains(key))
+                return true;
+            return false;
+        }
 
         /// <summary>
         /// key-value在同一个数组item里，eg: --name="yui" | -name="Azusa"

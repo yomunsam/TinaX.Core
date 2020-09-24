@@ -73,7 +73,7 @@ namespace TinaXEditor
 
         public static void SaveXProfiles()
         {
-            if(mProfileModel == null || mProfileRuntimeConfig == null)
+            if (mProfileModel == null || mProfileRuntimeConfig == null)
             {
                 RefreshXProfile();
             }
@@ -123,7 +123,7 @@ namespace TinaXEditor
 
         public static bool SetActiveXProfile(string profileName)
         {
-            
+
 
             if (profileName.IsNullOrEmpty() || profileName.IsNullOrWhiteSpace())
             {
@@ -141,7 +141,7 @@ namespace TinaXEditor
             return true;
         }
 
-        public static void SetXProfileDevelopMode(string profileName,bool isDevelopMode)
+        public static void SetXProfileDevelopMode(string profileName, bool isDevelopMode)
         {
             mProfileModel.SetDevelopMode(profileName, isDevelopMode);
         }
@@ -149,6 +149,71 @@ namespace TinaXEditor
         public static bool IsXProfileDevelopMode(string profileName)
         {
             return mProfileModel.IsDevelopMode(profileName);
+        }
+
+        //不要轻易修改它的名字，它在XCore中被反射
+        public static string GetDebugCommandLineArgs()
+        {
+            string filePath = XEditorConst.LaunchSettingsFilePath;
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    string json_str = File.ReadAllText(filePath, Encoding.UTF8);
+                    EditorLaunchSettingModel model = JsonUtility.FromJson<EditorLaunchSettingModel>(json_str);
+                    return model.DebugCommandLineArgs;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning("[TinaX.Core]" + (TinaXEditor.Utils.EditorGUIUtil.IsCmnHans
+                        ? "编辑器获取Debug命令行启动参数失败."
+                        : "Editor load debug command line args failed.")
+                        + "\n:" + e.Message);
+                    return string.Empty;
+                }
+            }
+            else
+                return string.Empty;
+        }
+
+        public static void SaveDebugCommandLineArgs(string args)
+        {
+            string filePath = XEditorConst.LaunchSettingsFilePath;
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    string json_str = File.ReadAllText(filePath, Encoding.UTF8);
+                    EditorLaunchSettingModel model = JsonUtility.FromJson<EditorLaunchSettingModel>(json_str);
+                    model.DebugCommandLineArgs = args;
+                    json_str = JsonUtility.ToJson(model);
+                    File.WriteAllText(filePath, json_str, Encoding.UTF8);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning("[TinaX.Core]" + (TinaXEditor.Utils.EditorGUIUtil.IsCmnHans
+                        ? "编辑器保存Debug命令行启动参数失败."
+                        : "Editor save debug command line args failed.")
+                        + "\n:" + e.Message);
+                }
+            }
+            else
+            {
+                try
+                {
+                    EditorLaunchSettingModel model = new EditorLaunchSettingModel();
+                    model.DebugCommandLineArgs = args;
+                    var json_str = JsonUtility.ToJson(model);
+                    File.WriteAllText(filePath, json_str, Encoding.UTF8);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning("[TinaX.Core]" + (TinaXEditor.Utils.EditorGUIUtil.IsCmnHans
+                        ? "编辑器保存Debug命令行启动参数失败."
+                        : "Editor save debug command line args failed.")
+                        + "\n:" + e.Message);
+                }
+            }
         }
 
     }

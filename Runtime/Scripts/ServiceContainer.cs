@@ -24,6 +24,8 @@ namespace TinaX.Container
             m_Core = core;
             CatApplication = new XCatApplication(m_Core);
             App.That = CatApplication;
+
+            CatApplication.Instance<IXCore>(core);
         }
 
         #region 构建和获取服务

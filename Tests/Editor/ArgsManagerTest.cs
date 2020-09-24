@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
+using TinaX;
 using TinaX.Internal;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -13,8 +15,15 @@ namespace Tests
         [Test]
         public void ArgsManagerTestSimplePasses()
         {
+            string sArg = "--name = Eriri --full-name = \"Sawamura Spencer Eriri\" --enable --CV= \"Oonishi Saori\"";
+            string[] args = ArgsUtil.ParseArgsText(sArg).ToArray();
             var mgr = new ArgsManager();
-            var args = new string[] { };
+            mgr.AddArgs(args);
+
+            Assert.AreEqual(mgr.GetValue("name"), "Eriri");
+            Assert.AreEqual(mgr.GetValue("full-name"), "Sawamura Spencer Eriri");
+            Assert.IsTrue(mgr.GetBool("enable"));
+            Assert.AreEqual(mgr.GetValue("CV"), "Oonishi Saori");
         }
 
         //// A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
