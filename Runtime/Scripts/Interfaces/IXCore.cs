@@ -22,6 +22,7 @@ namespace TinaX
         #endregion
 
         IServiceContainer Services { get; }
+        ICommandLineArgs CommandLineArgs { get; }
 
 
         /// <summary>
