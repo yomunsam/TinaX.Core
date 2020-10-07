@@ -64,6 +64,9 @@ namespace TinaX.Container
         IBindData BindBuiltInService<TBuiltInService, TService, TConcrete>() where TBuiltInService : IBuiltInService;
         IBindData BindBuiltInService<TBuiltInService, TConcrete>() where TBuiltInService : IBuiltInService;
 
+        object Instance(string service, object instance);
+        object Instance<TService>(object instance);
+        
         #endregion
 
         #region Unbind Services
@@ -88,5 +91,6 @@ namespace TinaX.Container
 
         string Type2ServiceName(Type type);
         string Type2ServiceName<TService>();
+        
     }
 }

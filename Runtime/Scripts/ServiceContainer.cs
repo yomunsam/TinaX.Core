@@ -203,6 +203,23 @@ namespace TinaX.Container
             return CatApplication.Singleton<TBuiltInService, TConcrete>();
         }
 
+        /// <summary>
+        /// 单例注册已生成的实例 | Singleton registration of generated instances
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public object Instance<TService>(object instance)
+            => CatApplication.Instance<TService>(instance);
+
+        /// <summary>
+        /// 单例注册已生成的实例 | Singleton registration of generated instances
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public object Instance(string service, object instance)
+            => CatApplication.Instance(service, instance);
 
         #endregion
 
