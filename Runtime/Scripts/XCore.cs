@@ -13,6 +13,8 @@ using UniRx;
 using TinaX.Container;
 using System.Text;
 using TinaX.Internal;
+using TinaX.Systems.Configuration.Internal;
+using TinaX.Systems.Configuration;
 
 namespace TinaX
 {
@@ -303,6 +305,16 @@ namespace TinaX
                 m_ArgsManager.AddArgs(debug_args);
             }
 #endif
+
+            #endregion
+
+            //内置统一配置接口
+            #region Configuration
+            m_ServiceContainer.Singleton<IConfiguration, Configuration>();
+            var conf = m_ServiceContainer.Get<IConfiguration>();
+
+            //将命令行配置提供者添加到配置管理器
+            conf.AddConfigurationProvider(new CommandLineConfigurationProvider(m_ArgsManager));
 
             #endregion
 
