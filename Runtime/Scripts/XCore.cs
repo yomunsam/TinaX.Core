@@ -15,6 +15,7 @@ using System.Text;
 using TinaX.Internal;
 using TinaX.Systems.Configuration.Internal;
 using TinaX.Systems.Configuration;
+using TinaX.Systems.Configuration.CommandLine;
 
 namespace TinaX
 {
@@ -74,6 +75,8 @@ namespace TinaX
         /// </summary>
         public ICommandLineArgs CommandLineArgs => m_ArgsManager;
 
+        public IConfigurationBuilder ConfigurationBuilder => m_ConfigurationBuilder;
+
         private bool m_Inited = false;
         //private CatLib.Application mCatApp;
 
@@ -99,6 +102,8 @@ namespace TinaX
         private IAppDomain m_IAppDomain;
 
         private ArgsManager m_ArgsManager;
+
+        private ConfigurationBuilder m_ConfigurationBuilder;
 
         public XCore()
         {
@@ -310,12 +315,10 @@ namespace TinaX
 
             //内置统一配置接口
             #region Configuration
-            m_ServiceContainer.Singleton<IConfiguration, Configuration>();
-            var conf = m_ServiceContainer.Get<IConfiguration>();
-
-            //将命令行配置提供者添加到配置管理器
-            conf.AddConfigurationProvider(new CommandLineConfigurationProvider(m_ArgsManager));
-
+            m_ConfigurationBuilder = new ConfigurationBuilder();
+            m_ConfigurationBuilder.Add(new CommandLineConfigurationSource(m_ArgsManager)); //CommandLine | 命令行配置源
+            
+            m_ServiceContainer.Instance<IConfigurationBuilder>(m_ConfigurationBuilder); //注册Builder到依赖注入容器
             #endregion
 
             //在Scene创建一个全局的base gameobject
@@ -411,6 +414,16 @@ namespace TinaX
                 item.OnInit(this);
 
             //------------------触发Start阶段----------------------------------------------------------------
+
+            //Build ConfigurationBuilder
+            #region Build ConfigurationBuilder
+            var configuration = await m_ConfigurationBuilder?.BuildAsync();
+
+            //Remove builder from DI
+            m_ServiceContainer.CatApplication.Release<IConfigurationBuilder>();
+            //Register ConfigurationRoot to DI
+            m_ServiceContainer.Instance<IConfiguration>(configuration);
+            #endregion
 
             //Invoke Services "Start"
             foreach (var p in m_XServiceProvidersList)
