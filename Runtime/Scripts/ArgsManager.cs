@@ -117,6 +117,10 @@ namespace TinaX.Internal
 
         public bool IsExistSingle(string name) => m_ArgsSingle.Contains(name);
 
+        public IDictionary<string, string> GetAllKeyValueArgs() => this.m_ArgsKeyValue;
+
+        public IList<string> GetAllSingleArgs() => this.m_ArgsSingle;
+
 
         public bool GetBool(string key)
         {
