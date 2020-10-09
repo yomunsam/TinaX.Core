@@ -49,5 +49,15 @@ namespace TinaX.Systems.Configuration.Internal
 
             return defaultValue;
         }
+
+        public IEnumerable<IConfigurationSection> GetChildren()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IConfigurationSection GetSection(string key)
+        {
+            int colon_index = key.IndexOf(':');
+        }
     }
 }
