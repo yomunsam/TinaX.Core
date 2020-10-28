@@ -44,8 +44,16 @@ namespace TinaX.Systems.Pipeline
             var context = new XPipelineContext<THandler>(handler);
             var origin_prev = _last;
             _last = context;
-            origin_prev.Next = context;
-            context.Prev = origin_prev;
+
+            if (origin_prev != null)
+            {
+                origin_prev.Next = context;
+                context.Prev = origin_prev;
+            }
+            if (_head == null)
+            {
+                _head = origin_prev != null ? origin_prev : _last;
+            }
             return context;
         }
 
