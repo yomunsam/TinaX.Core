@@ -36,6 +36,8 @@ namespace TinaX.Utils
                 foreach(var item in RegisteredDisposables)
                     item.Dispose();
             }
+
+            RegisteredDisposables.Clear();
         }
     }
 }
