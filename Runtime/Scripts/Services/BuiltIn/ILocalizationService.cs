@@ -10,5 +10,7 @@ namespace TinaX.Services
     public interface ILocalizationService : IBuiltInService
     {
         IEnumerable<SystemLanguage> GetCurrentLanguages();
+
+        string GetText(string key, string group, string defaultValue = null);
     }
 }
