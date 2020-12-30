@@ -1,6 +1,6 @@
 {
   "name": "io.nekonya.tinax.core",
-  "version": "6.6.19",
+  "version": "6.6.20",
   "displayName": "TinaX.Core",
   "description": "TinaX Framework.",
   "unity": "2019.4",
@@ -17,6 +17,6 @@
   "type": "library",
   "dependencies": {
     "com.neuecc.unirx": "7.1.0",
-    "com.cysharp.unitask":"2.0.36"
+    "com.cysharp.unitask":"2.0.37"
   }
 }
