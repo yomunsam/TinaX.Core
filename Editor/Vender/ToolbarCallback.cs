@@ -47,7 +47,7 @@ namespace UnityToolbarExtender
 			{
 				// Find toolbar
 				var toolbars = Resources.FindObjectsOfTypeAll(m_toolbarType);
-				m_currentToolbar = toolbars.Length > 0 ? (ScriptableObject)toolbars[0] : null;
+				m_currentToolbar = toolbars.Length > 0 ? (ScriptableObject) toolbars[0] : null;
 				if (m_currentToolbar != null)
 				{
 #if UNITY_2020_1_OR_NEWER
@@ -57,14 +57,14 @@ namespace UnityToolbarExtender
 					var visualTree = (VisualElement) m_viewVisualTree.GetValue(windowBackend, null);
 #else
 					// Get it's visual tree
-					var visualTree = (VisualElement)m_viewVisualTree.GetValue(m_currentToolbar, null);
+					var visualTree = (VisualElement) m_viewVisualTree.GetValue(m_currentToolbar, null);
 #endif
 
 					// Get first child which 'happens' to be toolbar IMGUIContainer
-					var container = (IMGUIContainer)visualTree[0];
+					var container = (IMGUIContainer) visualTree[0];
 
 					// (Re)attach handler
-					var handler = (Action)m_imguiContainerOnGui.GetValue(container);
+					var handler = (Action) m_imguiContainerOnGui.GetValue(container);
 					handler -= OnGUI;
 					handler += OnGUI;
 					m_imguiContainerOnGui.SetValue(container, handler);

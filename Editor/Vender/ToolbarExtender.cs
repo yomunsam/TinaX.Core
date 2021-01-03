@@ -18,18 +18,18 @@ namespace UnityToolbarExtender
 		static ToolbarExtender()
 		{
 			Type toolbarType = typeof(Editor).Assembly.GetType("UnityEditor.Toolbar");
-
+			
 #if UNITY_2019_1_OR_NEWER
 			string fieldName = "k_ToolCount";
 #else
 			string fieldName = "s_ShownToolIcons";
 #endif
-
+			
 			FieldInfo toolIcons = toolbarType.GetField(fieldName,
 				BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-
+			
 #if UNITY_2019_3_OR_NEWER
-			m_toolCount = toolIcons != null ? ((int)toolIcons.GetValue(null)) : 8;
+			m_toolCount = toolIcons != null ? ((int) toolIcons.GetValue(null)) : 8;
 #elif UNITY_2019_1_OR_NEWER
 			m_toolCount = toolIcons != null ? ((int) toolIcons.GetValue(null)) : 7;
 #elif UNITY_2018_1_OR_NEWER
@@ -37,7 +37,7 @@ namespace UnityToolbarExtender
 #else
 			m_toolCount = toolIcons != null ? ((Array) toolIcons.GetValue(null)).Length : 5;
 #endif
-
+	
 			ToolbarCallback.OnToolbarGUI -= OnGUI;
 			ToolbarCallback.OnToolbarGUI += OnGUI;
 		}
@@ -69,7 +69,7 @@ namespace UnityToolbarExtender
 			var screenWidth = EditorGUIUtility.currentViewWidth;
 
 			// Following calculations match code reflected from Toolbar.OldOnGUI()
-			float playButtonsPosition = Mathf.RoundToInt((screenWidth - playPauseStopWidth) / 2);
+			float playButtonsPosition = Mathf.RoundToInt ((screenWidth - playPauseStopWidth) / 2);
 
 			Rect leftRect = new Rect(0, 0, screenWidth, Screen.height);
 			leftRect.xMin += space; // Spacing left
