@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using TinaX.Systems.Pipeline;
 
 namespace TinaX.Tests.Core.Systems.Pipeline
 {
-    public interface IMeowHandler : IPipelineHandler<IMeowHandler>
+    public interface IMeowHandler
     {
         bool SayMeow();
     }
 
     public class MeowHandler : IMeowHandler
     {
-        public IMeowHandler Handler => this;
 
         public string Name = "";
 
@@ -44,14 +38,14 @@ namespace TinaX.Tests.Core.Systems.Pipeline
             TestContext.WriteLine("喵呜");
             pipeline.Start(handler =>
             {
-                return handler.Handler.SayMeow();
+                return handler.SayMeow();
             });
 
             TestContext.WriteLine("TENET");
 
             pipeline.StartReverse(handler =>
             {
-                return handler.Handler.SayMeow();
+                return handler.SayMeow();
             });
         }
     }
