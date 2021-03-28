@@ -8,9 +8,9 @@
 
 <!-- [![LICENSE](https://camo.githubusercontent.com/3867ce531c10be1c59fae9642d8feca417d39b58/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6963656e73652f636f6f6b6965592f596561726e696e672e737667)](https://github.com/yomunsam/TinaX/blob/master/LICENSE) -->
 
-TinaX是一个简洁、完整、愉快的开箱即用的Unity应用游戏开发框架， 它采用"Unity 包"的形式提供功能。
+[TinaX](https://github.com/yomunsam/TinaX)是一个简洁、完整、愉快的开箱即用的Unity应用游戏开发框架， 它采用"Unity 包"的形式提供功能。
 
-`TinaX.Core` 是TinaX的核心内容包.
+`TinaX.Core` 是[TinaX](https://github.com/yomunsam/TinaX)的核心内容包.
 
 - 框架核心
 - 控制反转容器 （IoC）
@@ -26,7 +26,7 @@ package name: `io.nekonya.tinax.core`
 
 ## 安装
 
-### 使用[OpenUPM](https://openupm.com/)安装
+### 推荐使用[OpenUPM](https://openupm.com/)安装
 
 ``` bash
 # Install openupm-cli if not installed.
@@ -39,64 +39,7 @@ openupm add io.nekonya.tinax.core
 
 <br>
 
-### 通过npm安装 (UPM)
-
-修改您的工程中的`Packages/manifest.json` 文件，并在文件的"dependencies"节点前添加如下内容：
-
-``` json
-"scopedRegistries": [
-    {
-        "name": "TinaX",
-        "url": "https://registry.npmjs.org",
-        "scopes": [
-            "io.nekonya"
-        ]
-    },
-    {
-        "name": "package.openupm.com",
-        "url": "https://package.openupm.com",
-        "scopes": [
-            "com.cysharp.unitask",
-            "com.neuecc.unirx"
-        ]
-    }
-],
-```
-
-如果在进行上述操作后，您仍然未能在"Unity Package Manager"窗口中找到TinaX的相关Packages，您也可以尝试刷新、重启编辑器，或手动添加如下配置到"dependencies":
-
-``` json
-"io.nekonya.tinax.core" : "6.6.3"
-```
-
-<br>
-
-### 通过Git方式安装(UPM)
-
-你可使用如下地址在Unity Package Manager窗口中安装本包： 
-
-```
-git://github.com/yomunsam/TinaX.Core.git
-```
-
-如果您想手动指定安装某个本本, 您可以使用 release tag, 例如 `#6.6.3`. 或访问Release页面了解细节: [https://github.com/yomunsam/TinaX.Core/releases](https://github.com/yomunsam/TinaX.Core/releases)
-
-如不指定版本，Unity将会安装当前git仓库中的最新版本，可能会造成兼容性错误。
-
-<br>
-
-### 特殊地区用户指引
-
-由于部分中文开发者居住和生活的地区较为特殊，可能无法以全世界大多数人相同的方式使用互联网。如果在安装时出现问题，可尝试使用如下方式解决：
-
-- 请尽可能努力以各种方式与全世界大多数人保持同样的网络环境。
-- 尝试使用[cnpm](https://developer.aliyun.com/mirror/NPM?from=tnpm)镜像,包括UPM方式和OpenUPM方式
-- 使用openupm时，您可按照[此处说明](https://github.com/openupm/openupm-cli#command-options)尝试使用第三方register 
-    - 需要说明的是，TinaX的第三方依赖，比如`UniRx`并没有发布到`npmjs.org`, 因此在cnpm中也是找不到它的。
-- 如果下载源码遇到困难，可以试试从TinaX在[Gitee的镜像](https://gitee.com/organizations/nekonyas/projects)下载
-- 可以在同一个项目中使用不同的方式安装处理不同的packages，如你可以使用"Gitee"、"cnpm"等渠道安装TinaX packages，而如果实在下载不下来第三方依赖（如"Unirx"）的话，直接给下载下来放在项目的Packages目录里也是可行的。（当然，把所有东西都一股脑扔进Packages目录也是可行的，不过这样可能升级的时候会不方便）
-
-
+请访问文档查看完整安装指引：[安装TinaX](https://tinax.corala.space/#/cmn-hans/tinax/install/install_tinax)
 
 <br><br>
 ------
