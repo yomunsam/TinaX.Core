@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -97,9 +97,13 @@ namespace TinaX
             {
                 if(h_n.TryGetValue(eventName,out var handlers))
                 {
-                    foreach(var handler in handlers)
+                    //foreach(var handler in handlers)
+                    //{
+                    //    handler.Invoke(param);
+                    //}
+                    for (var i = handlers.Count - 1; i >= 0; i--)
                     {
-                        handler.Invoke(param);
+                        handlers[i]?.Invoke(param);
                     }
                 }
             }
