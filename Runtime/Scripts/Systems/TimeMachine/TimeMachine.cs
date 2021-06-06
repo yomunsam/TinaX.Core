@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -339,28 +339,53 @@ namespace TinaX
 
         private void OnUpdate()
         {
-            foreach(var order in mListUpdateOrder)
+            //foreach(var order in mListUpdateOrder)
+            //{
+            //    foreach (var item in mDict_Update_Order_HashID_Action[order])
+            //        item.Value?.Invoke();
+            //}
+
+            for (var i = mListUpdateOrder.Count - 1; i >= 0; i--) 
             {
-                foreach (var item in mDict_Update_Order_HashID_Action[order])
-                    item.Value?.Invoke();
+                var item = mDict_Update_Order_HashID_Action[mListUpdateOrder[i]].GetEnumerator();
+                while (item.MoveNext())
+                {
+                    item.Current.Value?.Invoke();
+                }
             }
         }
 
         private void OnLateUpdate()
         {
-            foreach (var order in mList_LateUpdateOrder)
+            //foreach (var order in mList_LateUpdateOrder)
+            //{
+            //    foreach (var item in mDict_LateUpdate_Order_HashID_Action[order])
+            //        item.Value?.Invoke();
+            //}
+            for (var i = mList_LateUpdateOrder.Count - 1; i >= 0; i--)
             {
-                foreach (var item in mDict_LateUpdate_Order_HashID_Action[order])
-                    item.Value?.Invoke();
+                var item = mDict_LateUpdate_Order_HashID_Action[mList_LateUpdateOrder[i]].GetEnumerator();
+                while (item.MoveNext())
+                {
+                    item.Current.Value?.Invoke();
+                }
             }
         }
 
         private void OnFixedUpdate()
         {
-            foreach (var order in mList_FixedUpdateOrder)
+            //foreach (var order in mList_FixedUpdateOrder)
+            //{
+            //    foreach (var item in mDict_FixedUpdate_Order_HashID_Action[order])
+            //        item.Value?.Invoke();
+            //}
+            for(var i = mList_FixedUpdateOrder.Count -1; i >=0; i--)
             {
-                foreach (var item in mDict_FixedUpdate_Order_HashID_Action[order])
-                    item.Value?.Invoke();
+                var item = mDict_FixedUpdate_Order_HashID_Action[mList_FixedUpdateOrder[i]].GetEnumerator();
+                while (item.MoveNext())
+                {
+                    item.Current.Value?.Invoke();
+                }
             }
         }
 
