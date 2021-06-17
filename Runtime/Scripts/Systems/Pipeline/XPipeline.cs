@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace TinaX.Systems.Pipeline
 {
-    public class XPipeline<THandler>
+    public class XPipeline<THandler> where THandler : class
     {
+        public delegate bool InsertSelector(THandler handler);
+
         private XPipelineContext<THandler> _head;
         private XPipelineContext<THandler> _last;
 
@@ -15,7 +17,7 @@ namespace TinaX.Systems.Pipeline
         {
         }
 
-        
+
 
         public XPipelineContext<THandler> AddFirst(THandler handler)
         {
@@ -23,7 +25,7 @@ namespace TinaX.Systems.Pipeline
             var _origin_first = _head;
             context.Next = _origin_first;
             _head = context;
-            if(_origin_first != null)
+            if (_origin_first != null)
             {
                 _origin_first.Prev = _head;
                 if (_last == null)
@@ -37,7 +39,7 @@ namespace TinaX.Systems.Pipeline
             return context;
         }
 
-        public XPipelineContext<THandler> AddLast(THandler handler) 
+        public XPipelineContext<THandler> AddLast(THandler handler)
         {
             var context = new XPipelineContext<THandler>(handler);
             var origin_prev = _last;
@@ -53,6 +55,83 @@ namespace TinaX.Systems.Pipeline
                 _head = origin_prev != null ? origin_prev : _last;
             }
             return context;
+        }
+
+        public void InsertNext(THandler target, THandler next)
+        {
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+            if (next == null)
+                throw new ArgumentNullException(nameof(next));
+            if (_head != null)
+            {
+                DoInsertNextRecursion(ref target, ref next, _head);
+            }
+        }
+
+        public void InsertNext(InsertSelector insertSelector, THandler next)
+        {
+            if (insertSelector == null)
+                throw new ArgumentNullException(nameof(insertSelector));
+            if (next == null)
+                throw new ArgumentNullException(nameof(next));
+
+            if(_head != null)
+            {
+                DoInsertNextRecursion(ref insertSelector, ref next, _head);
+            }
+        }
+
+        private void DoInsertNextRecursion(ref THandler target, ref THandler next, XPipelineContext<THandler> current)
+        {
+            if(current.Handler == target)
+            {
+                var next_context = new XPipelineContext<THandler>(next);
+                var origin_next = current.Next;
+                current.Next = next_context;
+                next_context.Prev = current;
+                next_context.Next = origin_next;
+
+                if (origin_next != null)
+                {
+                    origin_next.Prev = next_context;
+                }
+
+                if (_last == current)
+                {
+                    _last = next_context;
+                }
+            }
+            else if(current.Next != null)
+            {
+                DoInsertNextRecursion(ref target, ref next, current.Next);
+            }
+        }
+
+        private void DoInsertNextRecursion(ref InsertSelector insertSelector, ref THandler next, XPipelineContext<THandler> current)
+        {
+            if (insertSelector(current.Handler))
+            {
+                var next_context = new XPipelineContext<THandler>(next);
+                var origin_next = current.Next;
+                current.Next = next_context;
+                next_context.Prev = current;
+                next_context.Next = origin_next;
+
+                if(origin_next != null)
+                {
+                    origin_next.Prev = next_context;
+                }
+
+                if (_last == current)
+                {
+                    _last = next_context;
+                }
+            }
+            else if (current.Next != null)
+            {
+                DoInsertNextRecursion(ref insertSelector, ref next, current.Next);
+            }
         }
 
 
