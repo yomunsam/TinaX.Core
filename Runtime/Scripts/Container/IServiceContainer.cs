@@ -1,6 +1,7 @@
 using System;
+using CatLib.Container;
 using TinaX.Container.Internal;
-using TinaX.Services.Builtin;
+using TinaX.Services.Builtin.Base;
 
 namespace TinaX.Container
 {
@@ -20,14 +21,17 @@ namespace TinaX.Container
 
 
         #region Add Services
-        IServiceContainer Singleton<TService, TConcrete>();
-        IServiceContainer Singleton<TService>();
+        IBindData Singleton<TService, TConcrete>();
+        IBindData Singleton<TService>();
         bool SingletonIf<TService>();
         bool SingletonIf<TService, TConcrete>();
 
-        IServiceContainer Bind<TService, TConcrete>();
-        IServiceContainer Bind<TService>();
-        IServiceContainer Bind(string serviceName, Type type, bool isStatic);
+        object Singleton(string service, object instance);
+        object Singleton<TService>(object instance);
+
+        IBindData Bind<TService, TConcrete>();
+        IBindData Bind<TService>();
+        IBindData Bind(string serviceName, Type type, bool isStatic);
 
         bool BindIf<TService, TConcrete>();
         bool BindIf<TService>();
@@ -35,10 +39,10 @@ namespace TinaX.Container
 
 
         
-        [Obsolete]
+        [Obsolete("Use Singleton(string, object)")]
         object Instance(string service, object instance);
 
-        [Obsolete]
+        [Obsolete("Use Singleton<TService>(instance)")]
         object Instance<TService>(object instance);
 
 
@@ -47,5 +51,10 @@ namespace TinaX.Container
 
         IServiceContainer BindBuiltinService<TBuiltInService, TService, TConcrete>() where TBuiltInService : IBuiltinServiceBase;
         IServiceContainer BindBuiltInService<TBuiltInService, TConcrete>() where TBuiltInService : IBuiltinServiceBase;
+
+        void Unbind(string serviceName);
+        void Unbind<TService>();
+        void Unbind(Type type);
+        
     }
 }

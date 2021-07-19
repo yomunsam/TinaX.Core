@@ -1,3 +1,4 @@
+using TinaX.Catlib;
 using TinaX.Container;
 using UnityEngine;
 
@@ -5,6 +6,12 @@ namespace TinaX
 {
     public class XCore : IXCore
     {
+        private readonly ServiceContainer m_ServiceContainer;
+        public XCore()
+        {
+            m_ServiceContainer = new ServiceContainer(this);
+        }
+
         #region Builds
 
         #endregion
@@ -43,6 +50,10 @@ namespace TinaX
 
         public bool IsRunning { get; private set; }
 
+        #endregion
+
+        #region ServiceContainer
+        public IServiceContainer Services => m_ServiceContainer;
         #endregion
 
     }

@@ -1,9 +1,7 @@
 using System;
-using CatLib;
 using CatLib.Container;
 using TinaX.Container;
-using TinaX.Services.Builtin;
-using Application = CatLib.Application;
+using TinaX.Services.Builtin.Base;
 
 namespace TinaX.Catlib
 {
@@ -19,7 +17,7 @@ namespace TinaX.Catlib
             CatApp.Instance<IXCore>(core);
         }
 
-        public Application CatApp { get;}
+        public XCatApplication CatApp { get;}
 
 
 
@@ -79,20 +77,14 @@ namespace TinaX.Catlib
 
         #endregion
 
-        public IServiceContainer Bind<TService, TConcrete>()
-        {
-            throw new NotImplementedException();
-        }
+        public IBindData Bind<TService, TConcrete>()
+            => CatApp.Bind<TService, TConcrete>();
 
-        public IServiceContainer Bind<TService>()
-        {
-            throw new NotImplementedException();
-        }
+        public IBindData Bind<TService>()
+            => CatApp.Bind<TService>();
 
-        public IServiceContainer Bind(string serviceName, Type type, bool isStatic)
-        {
-            throw new NotImplementedException();
-        }
+        public IBindData Bind(string serviceName, Type type, bool isStatic)
+            => CatApp.Bind(serviceName, type, isStatic);
 
         public IServiceContainer BindBuiltinService<TBuiltInService, TService, TConcrete>() where TBuiltInService : IBuiltinServiceBase
         {
@@ -119,27 +111,20 @@ namespace TinaX.Catlib
             throw new NotImplementedException();
         }
 
-        
+
 
         public object Instance(string service, object instance)
-        {
-            throw new NotImplementedException();
-        }
+            => CatApp.Instance(service, instance);
 
         public object Instance<TService>(object instance)
-        {
-            throw new NotImplementedException();
-        }
+            => CatApp.Instance<TService>(instance);
 
-        public IServiceContainer Singleton<TService, TConcrete>()
-        {
-            throw new NotImplementedException();
-        }
+        public IBindData Singleton<TService, TConcrete>()
+            => CatApp.Singleton<TService, TConcrete>();
 
-        public IServiceContainer Singleton<TService>()
-        {
-            throw new NotImplementedException();
-        }
+        public IBindData Singleton<TService>()
+            => CatApp.Singleton<TService>();
+
 
         public bool SingletonIf<TService>()
         {
@@ -151,7 +136,14 @@ namespace TinaX.Catlib
             throw new NotImplementedException();
         }
 
-        
+
+        public object Singleton(string service, object instance)
+            => CatApp.Instance(service, instance);
+
+        public object Singleton<TService>(object instance)
+            => CatApp.Instance<TService>(instance);
+
+
 
         public bool TryGetBuildinService<TBuiltinService>(out TBuiltinService service) where TBuiltinService : IBuiltinServiceBase
         {
@@ -166,6 +158,22 @@ namespace TinaX.Catlib
         public bool TryGetBuildinService(string serviceName, out object service)
         {
             throw new NotImplementedException();
+        }
+
+
+        public void Unbind(string serviceName)
+        {
+            CatApp.Unbind(serviceName);
+        }
+
+        public void Unbind<TService>()
+        {
+            CatApp.Unbind<TService>();
+        }
+
+        public void Unbind(Type type)
+        {
+            CatApp.Unbind(CatApp.GetServiceName(type));
         }
 
     }

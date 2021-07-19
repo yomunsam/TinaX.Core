@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 using CatLib.Container;
-using TinaX.Packages.io.nekonya.tinax.core.Runtime.Scripts.Container.Internal;
+using TinaX.Container;
 using CatApplication = CatLib.Application;
 
 namespace TinaX.Catlib
@@ -15,15 +15,19 @@ namespace TinaX.Catlib
 
         protected override string GetPropertyNeedsService(PropertyInfo propertyInfo)
         {
-            if(this.CanMake<IGetServiceName>())
-            {
-                return this.Make<IGetServiceName>().GetServiceName(propertyInfo.PropertyType);
-            }
-            return base.GetPropertyNeedsService(propertyInfo);
+            return GetServiceName(propertyInfo.PropertyType);
         }
 
 
-
+        public virtual string GetServiceName(Type type)
+        {
+            if(this.CanMake<IGetServiceName>())
+            {
+                if (this.Make<IGetServiceName>().TryGetServiceName(type, out string name))
+                    return name;
+            }
+            return Type2Service(type);
+        }
 
     }
 }

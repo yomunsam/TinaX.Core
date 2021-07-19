@@ -1,4 +1,4 @@
-namespace TinaX.Services.Builtin
+namespace TinaX.Services.Builtin.Base
 {
     public interface IBuiltinServiceBase
     {
