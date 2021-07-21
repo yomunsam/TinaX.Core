@@ -1,13 +1,27 @@
+/*
+ * This file is part of the "TinaX Framework".
+ * https://github.com/yomunsam/TinaX
+ *
+ * (c) Nekonya Studio <yomunsam@nekonya.io>
+ * https://nekonya.io
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using TinaX.Behaviours.Internal;
 using TinaX.Catlib;
 using TinaX.Container;
 using TinaX.Core.Consts;
 using TinaX.Module;
 using TinaX.Modules;
 using TinaX.Modules.Internal;
+using TinaX.Services;
 using UnityEngine;
 
 namespace TinaX
@@ -16,6 +30,7 @@ namespace TinaX
     {
         private readonly ServiceContainer m_ServiceContainer;
         private readonly ModulesManager m_ModulesManager;
+
 
         public XCore()
         {
@@ -27,11 +42,12 @@ namespace TinaX
         /// 启动XCore用的Task
         /// </summary>
         private UniTask? m_RunTask;
-
+        private XBootstrapManager m_XBootstrapManager;
 
         #region Builds
 
-
+        public bool EnableIXBootstrap { get; set; } = true;
+         
         #endregion
 
         #region Instances
@@ -84,6 +100,20 @@ namespace TinaX
 
         #endregion
 
+        #region AppDomains
+
+        public object CreateInstance(Type type, params object[] args)
+        {
+            if(Services.TryGet<IAppDomain>(out var domain))
+            {
+                if (domain.TryCreateInstance(type, out var _result, args))
+                    return _result;
+            }
+            return Activator.CreateInstance(type, args);
+        }
+
+        #endregion
+
         #region Modules
         public IXCore AddModule(IModuleProvider moduleProvider)
         {
@@ -120,6 +150,13 @@ namespace TinaX
 
             //统一配置接口
 
+            //IXBootstrap
+            var enable_ixbootstrap = this.EnableIXBootstrap;
+            if (enable_ixbootstrap)
+            {
+                m_XBootstrapManager = new XBootstrapManager();
+            }
+
             //模块 - 启动
             m_ModulesManager.Sort(); //排序一次
 
@@ -151,6 +188,16 @@ namespace TinaX
             while (module_enumerator.MoveNext())
             {
                 module_enumerator.Current.ConfigureServices(m_ServiceContainer);
+            }
+
+            //Invoke IXBootstrap "Init"
+            if(enable_ixbootstrap && m_XBootstrapManager != null)
+            {
+                var xbs_enumerator = m_XBootstrapManager.XBootstraps.GetEnumerator();
+                while (xbs_enumerator.MoveNext())
+                {
+                    xbs_enumerator.Current.OnInit(this);
+                }
             }
 
             //模块 Start
@@ -192,7 +239,19 @@ namespace TinaX
 
             Debug.Log("[TinaX] Framework startup finish.");
             IsRunning = true;
+
+            //Invoke XBootstrap "Start"
+            if (enable_ixbootstrap && m_XBootstrapManager != null)
+            {
+                var xbs_enumerator = m_XBootstrapManager.XBootstraps.GetEnumerator();
+                while (xbs_enumerator.MoveNext())
+                {
+                    xbs_enumerator.Current.OnStart(this);
+                }
+            }
+
             m_RunTask = UniTask.CompletedTask;
+            Debug.Log("[TinaX] App startup finish.");
         }
 
 

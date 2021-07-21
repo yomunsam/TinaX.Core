@@ -23,8 +23,8 @@ namespace TinaX.Container
         #region Add Services
         IBindData Singleton<TService, TConcrete>();
         IBindData Singleton<TService>();
-        bool SingletonIf<TService>();
-        bool SingletonIf<TService, TConcrete>();
+        bool SingletonIf<TService>(out IBindData bindData);
+        bool SingletonIf<TService, TConcrete>(out IBindData bindData);
 
         object Singleton(string service, object instance);
         object Singleton<TService>(object instance);

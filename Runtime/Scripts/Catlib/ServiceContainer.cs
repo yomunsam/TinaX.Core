@@ -126,15 +126,11 @@ namespace TinaX.Catlib
             => CatApp.Singleton<TService>();
 
 
-        public bool SingletonIf<TService>()
-        {
-            throw new NotImplementedException();
-        }
+        public bool SingletonIf<TService>(out IBindData bindData)
+            => CatApp.SingletonIf<TService>(out bindData);
 
-        public bool SingletonIf<TService, TConcrete>()
-        {
-            throw new NotImplementedException();
-        }
+        public bool SingletonIf<TService, TConcrete>(out IBindData bindData)
+            => CatApp.SingletonIf<TService, TConcrete>(out bindData);
 
 
         public object Singleton(string service, object instance)

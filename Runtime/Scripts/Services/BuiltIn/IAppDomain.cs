@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-using System.Collections.Generic;
-using UnityEngine;
+using System;
+using TinaX.Services.Builtin.Base;
 
 namespace TinaX.Services
 {
-    public interface ILocalizationService
+    public interface IAppDomain : IBuiltinServiceBase
     {
-        IEnumerable<SystemLanguage> GetCurrentLanguages();
-        string GetText(string key, string group, string defaultValue = null);
+        bool TryCreateInstance(Type type, out object result, object[] args);
+        bool TryCreateInstanceAndInject(Type type, out object result, object[] args);
     }
 }
