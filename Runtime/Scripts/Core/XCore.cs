@@ -161,7 +161,7 @@ namespace TinaX
             m_ModulesManager.Sort(); //排序一次
 
             var module_enumerator = m_ModulesManager.Providers.GetEnumerator();
-            var init_task_list = new List<UniTask<ModuleBehaviourResult>>();
+            var init_task_list = new List<UniTask<ModuleBehaviourResult>>(m_ModulesManager.Providers.Count);
             while (module_enumerator.MoveNext())
             {
                 init_task_list.Add(module_enumerator.Current.OnInit(m_ServiceContainer, cancellationToken));
