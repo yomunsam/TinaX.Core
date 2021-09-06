@@ -46,7 +46,10 @@ namespace TinaX
 
         #region Builds
 
-        public bool EnableIXBootstrap { get; set; } = true;
+        /// <summary>
+        /// Reflect and register all <see cref="IXBootstrap"/> interfaces when startup
+        /// </summary>
+        public bool ReflectIXBootstrap { get; set; } = false;
          
         #endregion
 
@@ -73,7 +76,7 @@ namespace TinaX
         public static IXCore CreateDefault()
         {
             var core = new XCore();
-
+            core.ReflectIXBootstrap = true;
             return core;
         }
 
@@ -151,7 +154,7 @@ namespace TinaX
             //统一配置接口
 
             //IXBootstrap
-            var enable_ixbootstrap = this.EnableIXBootstrap;
+            var enable_ixbootstrap = this.ReflectIXBootstrap;
             if (enable_ixbootstrap)
             {
                 m_XBootstrapManager = new XBootstrapManager();

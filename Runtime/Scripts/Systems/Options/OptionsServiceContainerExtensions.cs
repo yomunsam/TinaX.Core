@@ -43,7 +43,8 @@ namespace TinaX.Options
                 configureOptions.Invoke((TOptions)opt);
             }, null);
             var generic_options = new Options<TOptions>(options);
-            services.Instance<IOptions<TOptions>>(generic_options);
+            //services.Instance<IOptions<TOptions>>(generic_options);
+            services.Singleton<IOptions<TOptions>>(generic_options);
             return services;
         }
 

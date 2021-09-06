@@ -28,7 +28,7 @@ namespace TinaX.Modules.Internal
 
             if (!m_OrderProviders.ContainsKey(order))
                 m_OrderProviders.Add(order, new List<IModuleProvider>());
-            if (m_OrderProviders[order].Contains(provider))
+            if (!m_OrderProviders[order].Contains(provider))
                 m_OrderProviders[order].Add(provider);
         }
 
