@@ -7,7 +7,7 @@ namespace TinaX.Core.Utils
 {
     public static class ConfigAssetUtil
     {
-        public static string ConfigAssetsEditorPath => $"Assets/Resources/";
+        //public const string ConfigAssetsEditorPath = @"Assets/Resources/";
 
         /// <summary>
         /// 从默认存放配置资产的文件夹中加载配置
@@ -46,6 +46,8 @@ namespace TinaX.Core.Utils
             return asset as T;
         }
 
+
+
         /// <summary>
         /// 获取在TinaX默认存放配置资产的文件夹中的某个资产的Resources类的加载路径.
         /// 例如传入"myConf", 返回"TinaX/Configurations/myConf"
@@ -56,7 +58,6 @@ namespace TinaX.Core.Utils
             => loadPath.StartsWith("/")
                 ? $"{TinaXConst.DefaultConfigAssetsFolderPath}{loadPath}"
                 : $"{TinaXConst.DefaultConfigAssetsFolderPath}/{loadPath}";
-
 
     }
 }
