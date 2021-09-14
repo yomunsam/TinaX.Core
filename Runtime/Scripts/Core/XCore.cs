@@ -18,6 +18,7 @@ using TinaX.Behaviours.Internal;
 using TinaX.Catlib;
 using TinaX.Container;
 using TinaX.Core.Consts;
+using TinaX.Exceptions;
 using TinaX.Module;
 using TinaX.Modules;
 using TinaX.Modules.Internal;
@@ -223,17 +224,25 @@ namespace TinaX
                 }
                 if(start_task_list.Count > 0)
                 {
-                    var start_result = await UniTask.WhenAll(start_task_list);
-                    var err_results = start_result.Where(r => r.IsError).ToArray();
-                    if (err_results.Length > 0)
+                    try
                     {
-                        Debug.LogErrorFormat("[{0}]Some exceptions were thrown when starting the modules", nameof(XCore));
-                        foreach (var err in err_results)
+                        var start_result = await UniTask.WhenAll(start_task_list);
+                        var err_results = start_result.Where(r => r.IsError).ToArray();
+                        if (err_results.Length > 0)
                         {
-                            Debug.LogErrorFormat("[Module:{0}]{1}", err.ModuleName, err.Exception.Message);
+                            Debug.LogErrorFormat("[{0}]Some exceptions were thrown when starting the modules", nameof(XCore));
+                            foreach (var err in err_results)
+                            {
+                                Debug.LogErrorFormat("[Module:{0}]{1}", err.ModuleName, err.Exception.Message);
+                            }
+                            m_RunTask = null;
+                            return;
                         }
-                        m_RunTask = null;
-                        return;
+                    }
+                    catch(XException ex)
+                    {
+                        Debug.LogErrorFormat("Start Modules Exception: [0]{1}", ex.ModuleName, ex.Message);
+                        Debug.LogException(ex);
                     }
                 }
             }
