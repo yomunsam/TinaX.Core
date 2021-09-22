@@ -1,7 +1,18 @@
+/*
+ * This file is part of the "TinaX Framework".
+ * https://github.com/yomunsam/TinaX
+ *
+ * (c) Nekonya Studio <yomunsam@nekonya.io>
+ * https://nekonya.io
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 using System;
 using System.Collections.Generic;
 using TinaX.Services;
-using UnityEngine;
+using UObject = UnityEngine.Object;
 
 namespace TinaX.Core.ConfigAssets.Pipelines
 {
@@ -39,19 +50,6 @@ namespace TinaX.Core.ConfigAssets.Pipelines
         /// <summary>
         /// 加载结果
         /// </summary>
-        public UnityEngine.Object LoadedAsset { get; set; }
+        public UObject LoadedAsset { get; set; }
     }
-
-    //public class LoadConfigAssetPayload<TAsset> : LoadConfigAssetPayload where TAsset : ScriptableObject
-    //{
-    //    public LoadConfigAssetPayload()
-    //    {
-    //        ConfigAssetType = typeof(TAsset);
-    //    }
-
-    //    public TAsset GetLoadedAsset()
-    //    {
-    //        return LoadedAsset as TAsset;
-    //    }
-    //}
 }

@@ -10,9 +10,10 @@
  */
 using System;
 using System.Threading;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using TinaX.Exceptions;
 using TinaX.Services.Builtin.Base;
+using UObject = UnityEngine.Object;
 
 namespace TinaX.Services
 {
@@ -20,15 +21,17 @@ namespace TinaX.Services
     {
         #region VFS IO
 
-        T Load<T>(string assetPath) where T : UnityEngine.Object;
+        T Load<T>(string assetPath) where T : UObject;
 
-        UnityEngine.Object Load(string assetPath, Type type);
+        UObject Load(string assetPath, Type type);
 
-        Task<T> LoadAsync<T>(string assetPath, CancellationToken cancellationToken = default) where T : UnityEngine.Object;
+        UniTask<T> LoadAsync<T>(string assetPath, CancellationToken cancellationToken = default) where T : UObject;
 
-        void LoadAsync(string assetPath, Type type, Action<UnityEngine.Object, XException> callback);
+        UniTask<UObject> LoadAsync(string assetPath, Type type, CancellationToken cancellationToken = default);
 
-        void Release(UnityEngine.Object asset);
+        void LoadAsync(string assetPath, Type type, Action<UObject, XException> callback);
+
+        void Release(UObject asset);
         #endregion
     }
 }

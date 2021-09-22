@@ -18,6 +18,7 @@ using TinaX.Behaviours.Internal;
 using TinaX.Catlib;
 using TinaX.Container;
 using TinaX.Core.Consts;
+using TinaX.Core.Serivces;
 using TinaX.Exceptions;
 using TinaX.Module;
 using TinaX.Modules;
@@ -37,6 +38,8 @@ namespace TinaX
         {
             m_ServiceContainer = new ServiceContainer(this);
             m_ModulesManager = new ModulesManager();
+
+            CoreConfigureServices.ConfigureServices(m_ServiceContainer, this); //注册TinaX.Core包的服务
         }
 
         /// <summary>

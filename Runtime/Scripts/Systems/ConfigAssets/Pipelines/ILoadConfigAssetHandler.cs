@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace TinaX.Core.ConfigAssets.Pipelines
 {
     /// <summary>
@@ -15,4 +17,5 @@ namespace TinaX.Core.ConfigAssets.Pipelines
         /// <returns>若返回false则中断pipeline流程</returns>
         bool LoadConfigAsset(ref LoadConfigAssetPayload payload, ILoadConfigAssetHandler next);
     }
+    
 }

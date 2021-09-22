@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 namespace TinaX.Systems.Pipeline
 {
@@ -189,7 +190,7 @@ namespace TinaX.Systems.Pipeline
 
         #region Async Start
 
-        public Task StartAsync(Func<THandler, Task<bool>> callback)
+        public UniTask StartAsync(Func<THandler, UniTask<bool>> callback)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
@@ -197,10 +198,10 @@ namespace TinaX.Systems.Pipeline
             if (_head != null)
                 return DoPipelineAsync(_head, callback);
             else
-                return Task.CompletedTask;
+                return UniTask.CompletedTask;
         }
 
-        private async Task DoPipelineAsync(XPipelineContext<THandler> context, Func<THandler, Task<bool>> callback)
+        private async UniTask DoPipelineAsync(XPipelineContext<THandler> context, Func<THandler, UniTask<bool>> callback)
         {
             if (context != null && context.Handler != null)
             {
@@ -215,7 +216,7 @@ namespace TinaX.Systems.Pipeline
         #endregion
 
         #region Async Start with nedxt param
-        public Task StartAsync(Func<THandler, THandler, Task<bool>> callback) //第二个THandler参数是指代上下文中的下一个
+        public UniTask StartAsync(Func<THandler, THandler, UniTask<bool>> callback) //第二个THandler参数是指代上下文中的下一个
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
@@ -223,10 +224,10 @@ namespace TinaX.Systems.Pipeline
             if (_head != null)
                 return DoPipelineAsync(_head, callback);
             else
-                return Task.CompletedTask;
+                return UniTask.CompletedTask;
         }
 
-        private async Task DoPipelineAsync(XPipelineContext<THandler> context, Func<THandler, THandler, Task<bool>> callback)
+        private async UniTask DoPipelineAsync(XPipelineContext<THandler> context, Func<THandler, THandler, UniTask<bool>> callback)
         {
             if (context != null && context.Handler != null)
             {
