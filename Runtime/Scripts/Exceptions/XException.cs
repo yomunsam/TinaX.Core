@@ -18,8 +18,8 @@ namespace TinaX.Exceptions
         /// <summary>
         /// 是某个功能模块的异常
         /// </summary>
-        public bool ModuleException { get; protected set; } = false;
-        public string ModuleName { get; protected set; } = string.Empty;
+        public bool ModuleException { get; set; } = false;
+        public string ModuleName { get; set; } = string.Empty;
         public int ErrorCode { get; protected set; }
         public XException(string msg) : base(msg) { }
         public XException(string msg, int errorCode) : base(msg) { ErrorCode = errorCode; }
