@@ -160,8 +160,9 @@ namespace TinaX.Services.ConfigAssets
                     return true;
 #if TINAX_CONFIG_NO_RESOURCES
                 Debug.LogErrorFormat("[0]Will load objects via the Resources static class, which is not expected.", nameof(ConfigAssetService));
-#endif
+#else
                 payload.LoadedAsset = Resources.Load(payload.ResourcesLoadPath, payload.AssetType);
+#endif
                 return payload.LoadedAsset == null; //如果加载到了什么，就中断加载流程。
             });
         }
@@ -247,8 +248,9 @@ namespace TinaX.Services.ConfigAssets
                     return true;
 #if TINAX_CONFIG_NO_RESOURCES
                 Debug.LogErrorFormat("[0]Will load objects via the Resources static class, which is not expected.", nameof(ConfigAssetService));
-#endif
+#else
                 payload.LoadedAsset = await Resources.LoadAsync(payload.ResourcesLoadPath, payload.AssetType).WithCancellation(cancellationToken);
+#endif
 
                 return payload.LoadedAsset == null; //如果加载到了什么，就中断加载流程。
             });
