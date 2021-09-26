@@ -38,7 +38,7 @@ namespace TinaXEditor.Core
 #if TINAX_DEV
             Debug.LogFormat("[EditorConfigAsset] 加载配置资产:[{0}] {1}", typeof(T).Name, final_path);
 #endif
-            return AssetDatabase.LoadAssetAtPath<T>(loadPath);
+            return AssetDatabase.LoadAssetAtPath<T>(final_path);
         }
 
 
