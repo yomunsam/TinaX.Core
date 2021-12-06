@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace TinaX.Helper.String
+namespace TinaX.Core.Helper.String
 {
     public static class StringHelper
     {

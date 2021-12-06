@@ -8,8 +8,8 @@
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
-using TinaX.Helper.String;
-using TinaX.Utils.Encry;
+using TinaX.Core.Helper.String;
+using TinaX.Core.Utils.Encry;
 
 namespace TinaX
 {

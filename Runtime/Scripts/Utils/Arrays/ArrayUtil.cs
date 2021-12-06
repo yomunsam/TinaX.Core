@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace TinaX.Utils.Arrays
+namespace TinaX.Core.Utils.Arrays
 {
     public static class ArrayUtil
     {

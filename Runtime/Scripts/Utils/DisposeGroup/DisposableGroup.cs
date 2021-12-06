@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TinaX.Utils
+namespace TinaX.Core.Utils
 {
 #pragma warning disable CA1063 // Implement IDisposable Correctly
     public class DisposableGroup : IDisposable

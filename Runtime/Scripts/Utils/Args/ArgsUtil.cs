@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TinaX.Utils.Args
+namespace TinaX.Core.Utils.Args
 {
     public static class ArgsUtil
     {

@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace TinaX.Utils.Encry
+namespace TinaX.Core.Utils.Encry
 {
     public static class EncryUtil
     {
