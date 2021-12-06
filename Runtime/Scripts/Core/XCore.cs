@@ -17,6 +17,8 @@ using Cysharp.Threading.Tasks;
 using TinaX.Behaviours.Internal;
 using TinaX.Catlib;
 using TinaX.Container;
+using TinaX.Core.Behaviours;
+using TinaX.Core.Behaviours.Internal;
 using TinaX.Core.Consts;
 using TinaX.Core.Serivces;
 using TinaX.Exceptions;
@@ -32,12 +34,13 @@ namespace TinaX
     {
         private readonly ServiceContainer m_ServiceContainer;
         private readonly ModulesManager m_ModulesManager;
-
+        private readonly XCoreBehaviourManager m_BehaviourManager;
 
         public XCore()
         {
             m_ServiceContainer = new ServiceContainer(this);
             m_ModulesManager = new ModulesManager();
+            m_BehaviourManager = new XCoreBehaviourManager();
 
             CoreConfigureServices.ConfigureServices(m_ServiceContainer, this); //注册TinaX.Core包的服务
         }
@@ -131,7 +134,10 @@ namespace TinaX
         #endregion
 
 
+
         #region Behaviour
+
+        public IBehaviourManager Behaviour => m_BehaviourManager;
 
         public UniTask RunAsync(CancellationToken cancellationToken = default)
         {
@@ -171,7 +177,9 @@ namespace TinaX
             var init_task_list = new List<UniTask<ModuleBehaviourResult>>(m_ModulesManager.Providers.Count);
             while (module_enumerator.MoveNext())
             {
-                init_task_list.Add(module_enumerator.Current.OnInit(m_ServiceContainer, cancellationToken));
+                module_enumerator.Current.ConfigureBehaviours(m_BehaviourManager, m_ServiceContainer); //注册行为
+
+                init_task_list.Add(module_enumerator.Current.OnInitAsync(m_ServiceContainer, cancellationToken));
             }
             if(init_task_list.Count > 0)
             {
@@ -207,6 +215,9 @@ namespace TinaX
                 }
             }
 
+            //XCore Behaviour Awake
+            await m_BehaviourManager.InvokeAwakeAsync();
+
             //模块 Start
             /*
              * 模块有严格的启动顺序要求，因此在TinaX 6.x的时候，会依次等待所有异步方法
@@ -222,7 +233,7 @@ namespace TinaX
                 var orderModule_enumerator = m_ModulesManager.OrderProviders[order_index[i]].GetEnumerator();
                 while (orderModule_enumerator.MoveNext())
                 {
-                    start_task_list.Add(orderModule_enumerator.Current.OnStart(m_ServiceContainer, cancellationToken));
+                    start_task_list.Add(orderModule_enumerator.Current.OnStartAsync(m_ServiceContainer, cancellationToken));
 
                 }
                 if(start_task_list.Count > 0)
@@ -264,6 +275,9 @@ namespace TinaX
                     xbs_enumerator.Current.OnStart(this);
                 }
             }
+
+            //XCore Behaviour Start
+            await m_BehaviourManager.InvokeStartAsync();
 
             m_RunTask = UniTask.CompletedTask;
             Debug.Log("[TinaX] App startup finish.");
