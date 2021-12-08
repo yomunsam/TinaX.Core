@@ -1,6 +1,7 @@
 using System;
 using CatLib.Container;
 using TinaX.Container.Internal;
+using TinaX.Core.Container;
 using TinaX.Services.Builtin.Base;
 
 namespace TinaX.Container
@@ -54,5 +55,13 @@ namespace TinaX.Container
         void Unbind<TService>();
         void Unbind(Type type);
         string GetServiceName(Type type);
+
+        #region 其他
+        /// <summary>
+        /// 注册实例创建器
+        /// </summary>
+        /// <param name="creator"></param>
+        void RegisterInstanceCreator(IInstanceCreator creator);
+        #endregion
     }
 }

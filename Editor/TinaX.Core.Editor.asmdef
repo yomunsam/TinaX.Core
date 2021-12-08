@@ -1,5 +1,6 @@
 {
     "name": "TinaX.Core.Editor",
+    "rootNamespace": "TinaXEditor.Core",
     "references": [
         "GUID:4e58fd8b44ff4c14f917ce28647bad94"
     ],

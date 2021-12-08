@@ -41,6 +41,11 @@ namespace TinaX.Core.Helper.LogColor
         private static readonly string _Color_Primary_In_Dark_16;
         private static readonly string _Color_Primary_In_Light_16;
 
+        private static readonly Color _Color_Success_In_Dark;
+        private static readonly Color _Color_Success_In_Light;
+        private static readonly string _Color_Success_In_Dark_16;
+        private static readonly string _Color_Success_In_Light_16;
+
 
         static LogColorHelper()
         {
@@ -53,6 +58,11 @@ namespace TinaX.Core.Helper.LogColor
             _Color_Primary_In_Light = new Color(31f / 255f, 31f / 255f, 247f / 255f, 1);
             _Color_Primary_In_Dark_16 = ColorUtility.ToHtmlStringRGBA(_Color_Primary_In_Dark);
             _Color_Primary_In_Light_16 = ColorUtility.ToHtmlStringRGBA(_Color_Primary_In_Light);
+
+            _Color_Success_In_Dark = new Color(101f / 255f, 201f / 255f, 0, 1);
+            _Color_Success_In_Light = new Color(18f / 255f, 144f / 255f, 0, 1);
+            _Color_Success_In_Dark_16 = ColorUtility.ToHtmlStringRGBA(_Color_Success_In_Dark);
+            _Color_Success_In_Light_16 = ColorUtility.ToHtmlStringRGBA(_Color_Success_In_Light);
         }
 
         /// <summary>
@@ -85,6 +95,23 @@ namespace TinaX.Core.Helper.LogColor
                 return _Color_Primary_In_Dark;
 #else
                 return _Color_Primary_In_Light;
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Success
+        /// </summary>
+        public static Color Color_Success
+        {
+            get
+            {
+#if UNITY_EDITOR
+                return EditorGUIUtility.isProSkin ? _Color_Success_In_Dark : _Color_Success_In_Light;
+#elif !UNITY_EDITOR && TINAX_RUNTIME_LOG_DARK
+                return _Color_Success_In_Dark;
+#else
+                return _Color_Success_In_Light;
 #endif
             }
         }
@@ -123,6 +150,23 @@ namespace TinaX.Core.Helper.LogColor
             }
         }
 
+        /// <summary>
+        /// Success （16进制）
+        /// </summary>
+        public static string Color_Success_16
+        {
+            get
+            {
+#if UNITY_EDITOR
+                return EditorGUIUtility.isProSkin ? _Color_Success_In_Dark_16 : _Color_Success_In_Light_16;
+#elif !UNITY_EDITOR && TINAX_RUNTIME_LOG_DARK
+                return _Color_Success_In_Dark_16;
+#else
+                return _Color_Success_In_Light_16;
+#endif
+            }
+        }
+
 
         public static string NormalLog(string source)
         {
@@ -144,6 +188,15 @@ namespace TinaX.Core.Helper.LogColor
 #endif
         }
 
+        public static string SuccessLog(string source)
+        {
+#if !UNITY_EDITOR && TINAX_RUNTIME_LOG_NOCOLOR
+            //不处理颜色
+            return source;
+#else
+            return $"<color=#{Color_Success_16}>{source}</color>";
+#endif
+        }
 
     }
 }

@@ -20,6 +20,7 @@ using TinaX.Container;
 using TinaX.Core.Behaviours;
 using TinaX.Core.Behaviours.Internal;
 using TinaX.Core.Consts;
+using TinaX.Core.Helper.String;
 using TinaX.Core.Serivces;
 using TinaX.Exceptions;
 using TinaX.Module;
@@ -115,11 +116,6 @@ namespace TinaX
 
         public object CreateInstance(Type type, params object[] args)
         {
-            if(Services.TryGet<IAppDomain>(out var domain))
-            {
-                if (domain.TryCreateInstance(type, out var _result, args))
-                    return _result;
-            }
             return Activator.CreateInstance(type, args);
         }
 

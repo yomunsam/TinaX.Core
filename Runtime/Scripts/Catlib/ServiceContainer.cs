@@ -1,6 +1,7 @@
 using System;
 using CatLib.Container;
 using TinaX.Container;
+using TinaX.Core.Container;
 using TinaX.Services.Builtin.Base;
 
 namespace TinaX.Catlib
@@ -168,6 +169,20 @@ namespace TinaX.Catlib
 
         #endregion
 
+        #region 创建实例相关
+        
+
+        /// <summary>
+        /// 注册实例创建器
+        /// </summary>
+        /// <param name="creator"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        public void RegisterInstanceCreator(IInstanceCreator creator)
+        {
+            CatApp.InstanceCreator = creator;
+        }
+        #endregion
+
 
         public bool TryGetBuildinService<TBuiltinService>(out TBuiltinService service) where TBuiltinService : IBuiltinServiceBase
         {
@@ -184,8 +199,6 @@ namespace TinaX.Catlib
             throw new NotImplementedException();
         }
 
-
         
-
     }
 }

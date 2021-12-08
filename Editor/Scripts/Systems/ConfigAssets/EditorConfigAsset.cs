@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -41,6 +42,27 @@ namespace TinaXEditor.Core
             return AssetDatabase.LoadAssetAtPath<T>(final_path);
         }
 
+        public static T CreateConfigIfNotExists<T>(string loadPath) where T : ScriptableObject
+        {
+            if (string.IsNullOrEmpty(loadPath))
+                throw new ArgumentNullException(nameof(loadPath));
+            AssetDatabase.ReleaseCachedFileHandles();
+
+            var final_path = GetResourcesLoadPathFromDefaultConfigFolder(loadPath);
+            var asset = AssetDatabase.LoadAssetAtPath<T>(final_path);
+            if (asset == null)
+            {
+                var dir = Path.GetDirectoryName(final_path);
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+
+                var instance = ScriptableObject.CreateInstance<T>();
+                AssetDatabase.CreateAsset(instance, final_path);
+                return instance;
+            }
+            else
+                return asset;
+        }
 
         /// <summary>
         /// 获取在TinaX默认存放配置资产的文件夹中的某个资产的Resources类的加载路径.
