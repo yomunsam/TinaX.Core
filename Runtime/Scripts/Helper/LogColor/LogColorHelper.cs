@@ -45,12 +45,12 @@ namespace TinaX.Core.Helper.LogColor
         static LogColorHelper()
         {
             _Color_Normal_In_Dark = new Color(196f / 255f, 196f / 255f, 196f / 255f, 1);
-            _Color_Normal_In_Light = new Color(55f / 255f, 55f / 255f, 55f / 255f, 1);
+            _Color_Normal_In_Light = new Color(25f / 255f, 25f / 255f, 25f / 255f, 1);
             _Color_Normal_In_Dark_16 = ColorUtility.ToHtmlStringRGBA(_Color_Normal_In_Dark);
             _Color_Normal_In_Light_16 = ColorUtility.ToHtmlStringRGBA(_Color_Normal_In_Light);
 
-            _Color_Primary_In_Dark = new Color(48f / 255f, 128f / 255f, 206f / 255f, 1);
-            _Color_Primary_In_Light = new Color(42f / 255f, 110f / 255f, 192f / 255f, 1);
+            _Color_Primary_In_Dark = new Color(48f / 255f, 232f / 255f, 206f / 255f, 1);
+            _Color_Primary_In_Light = new Color(31f / 255f, 31f / 255f, 247f / 255f, 1);
             _Color_Primary_In_Dark_16 = ColorUtility.ToHtmlStringRGBA(_Color_Primary_In_Dark);
             _Color_Primary_In_Light_16 = ColorUtility.ToHtmlStringRGBA(_Color_Primary_In_Light);
         }
