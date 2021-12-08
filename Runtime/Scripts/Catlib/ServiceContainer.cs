@@ -77,6 +77,8 @@ namespace TinaX.Catlib
 
         #endregion
 
+        #region 注册服务到容器
+
         public IBindData Bind<TService, TConcrete>()
             => CatApp.Bind<TService, TConcrete>();
 
@@ -140,6 +142,32 @@ namespace TinaX.Catlib
             => CatApp.Instance<TService>(instance);
 
 
+        #endregion
+
+        #region 从容器移除服务
+        public void Unbind(string serviceName)
+        {
+            CatApp.Unbind(serviceName);
+        }
+
+        public void Unbind<TService>()
+        {
+            CatApp.Unbind<TService>();
+        }
+
+        public void Unbind(Type type)
+        {
+            CatApp.Unbind(CatApp.GetServiceName(type));
+        }
+
+        #endregion
+
+        #region 其他查询
+        public string GetServiceName(Type type)
+            => CatApp.GetServiceName(type);
+
+        #endregion
+
 
         public bool TryGetBuildinService<TBuiltinService>(out TBuiltinService service) where TBuiltinService : IBuiltinServiceBase
         {
@@ -157,20 +185,7 @@ namespace TinaX.Catlib
         }
 
 
-        public void Unbind(string serviceName)
-        {
-            CatApp.Unbind(serviceName);
-        }
-
-        public void Unbind<TService>()
-        {
-            CatApp.Unbind<TService>();
-        }
-
-        public void Unbind(Type type)
-        {
-            CatApp.Unbind(CatApp.GetServiceName(type));
-        }
+        
 
     }
 }

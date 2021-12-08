@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 
 namespace TinaX.Core.Behaviours.Internal
@@ -56,7 +57,7 @@ namespace TinaX.Core.Behaviours.Internal
             => RegisterStart(startBehaviour);
 
 
-        public async UniTask InvokeAwakeAsync()
+        public async UniTask InvokeAwakeAsync(CancellationToken cancellationToken = default)
         {
             var behaviour_group = m_AwakeBehaviours.GroupBy(b => b.AwakeOrder).OrderBy(b => b.Key);
             var group_Enumerator = behaviour_group.GetEnumerator();
@@ -70,7 +71,7 @@ namespace TinaX.Core.Behaviours.Internal
                 {
                     if(behaviour_Enumerator.Current is IAwakeAsync)
                     {
-                        tasks.Add((behaviour_Enumerator.Current as IAwakeAsync).AwakeAsync());
+                        tasks.Add((behaviour_Enumerator.Current as IAwakeAsync).AwakeAsync(cancellationToken));
                     }
                     else if(behaviour_Enumerator.Current is IAwake)
                     {
@@ -87,7 +88,7 @@ namespace TinaX.Core.Behaviours.Internal
             m_AwakeBehaviours.Clear();
         }
 
-        public async UniTask InvokeStartAsync()
+        public async UniTask InvokeStartAsync(CancellationToken cancellationToken = default)
         {
             var behaviour_group = m_StartBehaviours.GroupBy(b => b.StartOrder).OrderBy(b => b.Key);
             var group_Enumerator = behaviour_group.GetEnumerator();
@@ -101,7 +102,7 @@ namespace TinaX.Core.Behaviours.Internal
                 {
                     if (behaviour_Enumerator.Current is IStartAsync)
                     {
-                        tasks.Add((behaviour_Enumerator.Current as IStartAsync).StartAsync());
+                        tasks.Add((behaviour_Enumerator.Current as IStartAsync).StartAsync(cancellationToken));
                     }
                     else if (behaviour_Enumerator.Current is IStart)
                     {

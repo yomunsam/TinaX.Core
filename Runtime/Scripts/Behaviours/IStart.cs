@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace TinaX.Core.Behaviours
 {
@@ -9,7 +10,7 @@ namespace TinaX.Core.Behaviours
 
     public interface IStartAsync : IStartBehaviour
     {
-        UniTask StartAsync();
+        UniTask StartAsync(CancellationToken cancellationToken = default);
     }
 
     public interface IStartBehaviour

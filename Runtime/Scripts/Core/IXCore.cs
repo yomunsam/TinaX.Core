@@ -20,6 +20,10 @@ namespace TinaX
 {
     public interface IXCore
     {
+        #region Build
+        bool ReflectIXBootstrap { get; set; }
+        #endregion
+
         #region Informations
         string FrameworkVersionName { get; }
         #endregion
@@ -47,6 +51,7 @@ namespace TinaX
         IBehaviourManager Behaviour { get; }
 
         UniTask RunAsync(CancellationToken cancellationToken = default);
+        void RunAsync(Action onFinish, Action<Exception> onError = null, CancellationToken cancellationToken = default);
         #endregion
 
     }

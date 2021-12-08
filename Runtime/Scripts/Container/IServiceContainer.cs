@@ -11,8 +11,8 @@ namespace TinaX.Container
     /// </summary>
     public interface IServiceContainer : IGetServices
     {
-        #region Get Buildin Services
 
+        #region Get Buildin Services
         bool TryGetBuildinService<TBuiltinService>(out TBuiltinService service) where TBuiltinService : IBuiltinServiceBase;
         bool TryGetBuildinService(Type type, out object service);
         bool TryGetBuildinService(string serviceName, out object service);
@@ -45,8 +45,6 @@ namespace TinaX.Container
         [Obsolete("Use Singleton<TService>(instance)")]
         object Instance<TService>(object instance);
 
-
-
         #endregion
 
         IServiceContainer BindBuiltinService<TBuiltInService, TService, TConcrete>() where TBuiltInService : IBuiltinServiceBase;
@@ -55,6 +53,6 @@ namespace TinaX.Container
         void Unbind(string serviceName);
         void Unbind<TService>();
         void Unbind(Type type);
-        
+        string GetServiceName(Type type);
     }
 }

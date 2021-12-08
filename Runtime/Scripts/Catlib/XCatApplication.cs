@@ -18,16 +18,8 @@ namespace TinaX.Catlib
             return GetServiceName(propertyInfo.PropertyType);
         }
 
-
         public virtual string GetServiceName(Type type)
-        {
-            if(this.CanMake<IGetServiceName>())
-            {
-                if (this.Make<IGetServiceName>().TryGetServiceName(type, out string name))
-                    return name;
-            }
-            return Type2Service(type);
-        }
+            => Type2Service(type);
 
     }
 }

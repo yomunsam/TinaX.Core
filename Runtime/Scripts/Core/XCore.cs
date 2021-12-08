@@ -26,6 +26,7 @@ using TinaX.Module;
 using TinaX.Modules;
 using TinaX.Modules.Internal;
 using TinaX.Services;
+using UniRx;
 using UnityEngine;
 
 namespace TinaX
@@ -147,12 +148,20 @@ namespace TinaX
                 {
                     if(m_RunTask == null)
                     {
-                        m_RunTask = DoRunAsync().Preserve();
+                        m_RunTask = DoRunAsync(cancellationToken).Preserve();
                     }
                 }
             }
 
             return m_RunTask.Value;
+        }
+
+        public void RunAsync(Action onFinish, Action<Exception> onError = null, CancellationToken cancellationToken = default)
+        {
+            this.RunAsync(cancellationToken)
+                .ToObservable()
+                .SubscribeOnMainThread()
+                .Subscribe(u => onFinish?.Invoke(), e => onError?.Invoke(e));
         }
 
         private async UniTask DoRunAsync(CancellationToken cancellationToken = default)
@@ -265,6 +274,14 @@ namespace TinaX
 
             Debug.Log("[TinaX] Framework startup finish.");
             IsRunning = true;
+            if (MainInstance == null)
+            {
+                lock (_lock_obj)
+                {
+                    if(MainInstance == null)
+                        MainInstance = this;
+                }
+            }
 
             //Invoke XBootstrap "Start"
             if (enable_ixbootstrap && m_XBootstrapManager != null)
