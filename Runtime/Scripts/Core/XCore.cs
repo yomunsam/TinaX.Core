@@ -17,6 +17,7 @@ using Cysharp.Threading.Tasks;
 using TinaX.Behaviours.Internal;
 using TinaX.Catlib;
 using TinaX.Container;
+using TinaX.Core.Activator;
 using TinaX.Core.Behaviours;
 using TinaX.Core.Behaviours.Internal;
 using TinaX.Core.Consts;
@@ -37,12 +38,14 @@ namespace TinaX
         private readonly ServiceContainer m_ServiceContainer;
         private readonly ModulesManager m_ModulesManager;
         private readonly XCoreBehaviourManager m_BehaviourManager;
+        private readonly XActivator m_Activator;
 
         public XCore()
         {
             m_ServiceContainer = new ServiceContainer(this);
             m_ModulesManager = new ModulesManager();
             m_BehaviourManager = new XCoreBehaviourManager();
+            m_Activator = new XActivator();
 
             CoreConfigureServices.ConfigureServices(m_ServiceContainer, this); //注册TinaX.Core包的服务
         }
@@ -108,17 +111,13 @@ namespace TinaX
         #region ServiceContainer
         public IServiceContainer Services => m_ServiceContainer;
 
-
-
         #endregion
 
         #region AppDomains
+        public XActivator Activator => m_Activator;
 
         public object CreateInstance(Type type, params object[] args)
-        {
-            return Activator.CreateInstance(type, args);
-        }
-
+            => m_Activator.CreateInstance(type, args);
         #endregion
 
         #region Modules
@@ -270,12 +269,12 @@ namespace TinaX
 
             Debug.Log("[TinaX] Framework startup finish.");
             IsRunning = true;
-            if (MainInstance == null)
+            if (_MainInstance == null)
             {
                 lock (_lock_obj)
                 {
-                    if(MainInstance == null)
-                        MainInstance = this;
+                    if(_MainInstance == null)
+                        _MainInstance = this;
                 }
             }
 

@@ -13,6 +13,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using TinaX.Container;
+using TinaX.Core.Activator;
 using TinaX.Core.Behaviours;
 using TinaX.Module;
 
@@ -49,6 +50,7 @@ namespace TinaX
         #region Behaviour
 
         IBehaviourManager Behaviour { get; }
+        XActivator Activator { get; }
 
         UniTask RunAsync(CancellationToken cancellationToken = default);
         void RunAsync(Action onFinish, Action<Exception> onError = null, CancellationToken cancellationToken = default);

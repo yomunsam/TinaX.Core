@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using CatLib.Container;
 using TinaX.Container;
 using TinaX.Core.Container;
@@ -10,10 +11,12 @@ namespace TinaX.Catlib
     {
         private readonly XCore m_Core;
 
+        private readonly List<IServiceInjector> m_ServiceInjects = new List<IServiceInjector>();
+
         public ServiceContainer(XCore core)
         {
             m_Core = core;
-            CatApp = new XCatApplication();
+            CatApp = new XCatApplication(core, this);
 
             CatApp.Instance<IXCore>(core);
         }
@@ -169,19 +172,6 @@ namespace TinaX.Catlib
 
         #endregion
 
-        #region 创建实例相关
-        
-
-        /// <summary>
-        /// 注册实例创建器
-        /// </summary>
-        /// <param name="creator"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        public void RegisterInstanceCreator(IInstanceCreator creator)
-        {
-            CatApp.InstanceCreator = creator;
-        }
-        #endregion
 
 
         public bool TryGetBuildinService<TBuiltinService>(out TBuiltinService service) where TBuiltinService : IBuiltinServiceBase
@@ -199,6 +189,43 @@ namespace TinaX.Catlib
             throw new NotImplementedException();
         }
 
-        
+        #region 服务注入器的外部支持扩展
+
+        public void RegisterServiceInjector(IServiceInjector injector)
+        {
+            if(injector == null)
+                throw new ArgumentNullException(nameof(injector));
+            if(!m_ServiceInjects.Contains(injector))
+                m_ServiceInjects.Add(injector);
+        }
+
+        public void RemoveServiceInjector(IServiceInjector injector)
+        {
+            if (injector == null)
+                throw new ArgumentNullException(nameof(injector));
+            if (m_ServiceInjects.Contains(injector))
+                m_ServiceInjects.Remove(injector);
+        }
+
+        /// <summary>
+        /// 尝试帮助Catlib实现Attribute属性注入
+        /// </summary>
+        /// <param name="makeServiceBindData"></param>
+        /// <param name="makeServiceInstance"></param>
+        /// <returns></returns>
+        public bool TryServiceAttributeInject(ref Bindable makeServiceBindData, ref object makeServiceInstance)
+        {
+            if(m_ServiceInjects.Count > 0)
+            {
+                for(int i = 0; i < m_ServiceInjects.Count; i++)
+                {
+                    if (m_ServiceInjects[i].TryServiceAttributeInject(ref makeServiceBindData, ref makeServiceInstance, this))
+                        return true;
+                }
+            }
+            return false;
+        }
+        #endregion
+
     }
 }

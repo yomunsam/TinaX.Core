@@ -56,12 +56,9 @@ namespace TinaX.Container
         void Unbind(Type type);
         string GetServiceName(Type type);
 
-        #region 其他
-        /// <summary>
-        /// 注册实例创建器
-        /// </summary>
-        /// <param name="creator"></param>
-        void RegisterInstanceCreator(IInstanceCreator creator);
+        #region 高级功能
+        void RegisterServiceInjector(IServiceInjector injector);
+        void RemoveServiceInjector(IServiceInjector injector);
         #endregion
     }
 }
