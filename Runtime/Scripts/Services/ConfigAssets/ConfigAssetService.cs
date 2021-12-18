@@ -82,7 +82,7 @@ namespace TinaX.Services.ConfigAssets
         private void LoadConfigAssetPipelineConfigure(ref XPipeline<ILoadConfigAssetHandler> pipeline)
         {
             //准备 从资产服务接口加载资产
-            pipeline.Use(LoadConfigAssetHandlerNameConst.ReadyLoadFromAssetService, (ref LoadConfigAssetPayload payload, ILoadConfigAssetHandler next) =>
+            pipeline.Use(LoadConfigAssetHandlerNameConsts.ReadyLoadFromAssetService, (ref LoadConfigAssetPayload payload, ILoadConfigAssetHandler next) =>
             {
                 if (!payload.LoadFormAssetService)
                     return true;
@@ -109,7 +109,7 @@ namespace TinaX.Services.ConfigAssets
             });
 
             //从内置资产服务中加载
-            pipeline.Use(LoadConfigAssetHandlerNameConst.LoadFromAssetService, (ref LoadConfigAssetPayload payload, ILoadConfigAssetHandler next) =>
+            pipeline.Use(LoadConfigAssetHandlerNameConsts.LoadFromAssetService, (ref LoadConfigAssetPayload payload, ILoadConfigAssetHandler next) =>
             {
                 if (!payload.LoadFormAssetService)
                     return true;
@@ -141,7 +141,7 @@ namespace TinaX.Services.ConfigAssets
             });
 
             //准备 从Unity的Resources类中加载资产
-            pipeline.Use(LoadConfigAssetHandlerNameConst.ReadyLoadFromResources, (ref LoadConfigAssetPayload payload, ILoadConfigAssetHandler next) =>
+            pipeline.Use(LoadConfigAssetHandlerNameConsts.ReadyLoadFromResources, (ref LoadConfigAssetPayload payload, ILoadConfigAssetHandler next) =>
             {
 #if TINAX_CONFIG_NO_RESOURCES
                 payload.LoadFromResources = false;
@@ -154,7 +154,7 @@ namespace TinaX.Services.ConfigAssets
                 return true;
             });
 
-            pipeline.Use(LoadConfigAssetHandlerNameConst.ReadyLoadFromResources, (ref LoadConfigAssetPayload payload, ILoadConfigAssetHandler next) =>
+            pipeline.Use(LoadConfigAssetHandlerNameConsts.ReadyLoadFromResources, (ref LoadConfigAssetPayload payload, ILoadConfigAssetHandler next) =>
             {
                 if (!payload.LoadFromResources)
                     return true;
@@ -170,7 +170,7 @@ namespace TinaX.Services.ConfigAssets
         private void LoadConfigAssetAsyncPipelineConfigure(ref XPipeline<ILoadConfigAssetAsyncHandler> pipeline)
         {
             //准备 从资产服务接口加载资产
-            pipeline.Use(LoadConfigAssetHandlerNameConst.ReadyLoadFromAssetService, (LoadConfigAssetPayload payload, ILoadConfigAssetAsyncHandler next, CancellationToken cancellationToken) =>
+            pipeline.Use(LoadConfigAssetHandlerNameConsts.ReadyLoadFromAssetService, (LoadConfigAssetPayload payload, ILoadConfigAssetAsyncHandler next, CancellationToken cancellationToken) =>
             {
                 if (!payload.LoadFormAssetService)
                     return UniTask.FromResult(true);
@@ -197,7 +197,7 @@ namespace TinaX.Services.ConfigAssets
             });
 
             //从内置资产服务中加载
-            pipeline.Use(LoadConfigAssetHandlerNameConst.LoadFromAssetService, async (LoadConfigAssetPayload payload, ILoadConfigAssetAsyncHandler next, CancellationToken cancellationToken) =>
+            pipeline.Use(LoadConfigAssetHandlerNameConsts.LoadFromAssetService, async (LoadConfigAssetPayload payload, ILoadConfigAssetAsyncHandler next, CancellationToken cancellationToken) =>
             {
                 if (!payload.LoadFormAssetService)
                     return true;
@@ -229,7 +229,7 @@ namespace TinaX.Services.ConfigAssets
             });
 
             //准备 从Unity的Resources类中加载资产
-            pipeline.Use(LoadConfigAssetHandlerNameConst.ReadyLoadFromResources, (LoadConfigAssetPayload payload, ILoadConfigAssetAsyncHandler next, CancellationToken cancellationToken) =>
+            pipeline.Use(LoadConfigAssetHandlerNameConsts.ReadyLoadFromResources, (LoadConfigAssetPayload payload, ILoadConfigAssetAsyncHandler next, CancellationToken cancellationToken) =>
             {
 #if TINAX_CONFIG_NO_RESOURCES
                 payload.LoadFromResources = false;
@@ -242,7 +242,7 @@ namespace TinaX.Services.ConfigAssets
                 return UniTask.FromResult(true);
             });
 
-            pipeline.Use(LoadConfigAssetHandlerNameConst.ReadyLoadFromResources, async (LoadConfigAssetPayload payload, ILoadConfigAssetAsyncHandler next, CancellationToken cancellationToken) =>
+            pipeline.Use(LoadConfigAssetHandlerNameConsts.ReadyLoadFromResources, async (LoadConfigAssetPayload payload, ILoadConfigAssetAsyncHandler next, CancellationToken cancellationToken) =>
             {
                 if (!payload.LoadFromResources)
                     return true;

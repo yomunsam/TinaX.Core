@@ -18,5 +18,14 @@ namespace TinaXEditor.Core.Utils.Localization
                 Application.systemLanguage == SystemLanguage.ChineseTraditional;
 #endif
         }
+
+        public static bool IsJapanese()
+        {
+#if TINAX_EDITOR_ENGLISH
+            return false; //强制为false
+#else
+            return Application.systemLanguage == SystemLanguage.Japanese;
+#endif
+        }
     }
 }

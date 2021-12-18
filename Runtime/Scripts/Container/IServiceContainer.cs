@@ -36,7 +36,7 @@ namespace TinaX.Container
 
         bool BindIf<TService, TConcrete>();
         bool BindIf<TService>();
-        bool BindIf(string serviceName, Type concreate, bool isStatic);
+        bool BindIf(string serviceName, Type concreate, bool isStatic, out IBindData bindData);
 
 
         
@@ -54,7 +54,7 @@ namespace TinaX.Container
         void Unbind(string serviceName);
         void Unbind<TService>();
         void Unbind(Type type);
-        string GetServiceName(Type type);
+        
 
         #region 高级功能
         void RegisterServiceInjector(IServiceInjector injector);

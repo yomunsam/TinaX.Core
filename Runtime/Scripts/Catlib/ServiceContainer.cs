@@ -112,10 +112,8 @@ namespace TinaX.Catlib
             throw new NotImplementedException();
         }
 
-        public bool BindIf(string serviceName, Type concreate, bool isStatic)
-        {
-            throw new NotImplementedException();
-        }
+        public bool BindIf(string serviceName, Type concreate, bool isStatic, out IBindData bindData)
+            => CatApp.BindIf(serviceName, concreate, isStatic, out bindData);
 
 
 

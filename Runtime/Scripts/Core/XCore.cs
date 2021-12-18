@@ -23,6 +23,7 @@ using TinaX.Core.Behaviours.Internal;
 using TinaX.Core.Consts;
 using TinaX.Core.Helper.String;
 using TinaX.Core.Serivces;
+using TinaX.Core.Utils;
 using TinaX.Exceptions;
 using TinaX.Module;
 using TinaX.Modules;
@@ -39,6 +40,7 @@ namespace TinaX
         private readonly ModulesManager m_ModulesManager;
         private readonly XCoreBehaviourManager m_BehaviourManager;
         private readonly XActivator m_Activator;
+        private readonly bool m_IsHans;
 
         public XCore()
         {
@@ -46,7 +48,7 @@ namespace TinaX
             m_ModulesManager = new ModulesManager();
             m_BehaviourManager = new XCoreBehaviourManager();
             m_Activator = new XActivator();
-
+            m_IsHans = LocalizationUtil.IsHans();
             CoreConfigureServices.ConfigureServices(m_ServiceContainer, this); //注册TinaX.Core包的服务
         }
 
@@ -267,7 +269,10 @@ namespace TinaX
 
             //------------------------------------------------------------------------------------------------
 
-            Debug.Log("[TinaX] Framework startup finish.");
+            if (m_IsHans)
+                Debug.Log("[TinaX] 框架启动完成");
+            else
+                Debug.Log("[TinaX] Framework startup finish.");
             IsRunning = true;
             if (_MainInstance == null)
             {

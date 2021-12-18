@@ -28,5 +28,7 @@ namespace TinaX.Container.Internal
         bool TryGet(string serviceName, out object service, params object[] userParams);
 
         #endregion
+
+        string GetServiceName(Type type);
     }
 }
