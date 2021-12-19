@@ -199,7 +199,7 @@ namespace TinaX
                         Debug.LogErrorFormat("[Module:{0}]{1}", err.ModuleName, err.Exception.Message);
                     }
                     m_RunTask = null;
-                    return;
+                    throw err_results[0].Exception; //抛出第一个异常
                 }
                 
             }
@@ -262,7 +262,8 @@ namespace TinaX
                     catch(XException ex)
                     {
                         Debug.LogErrorFormat("Start Modules Exception: [0]{1}", ex.ModuleName, ex.Message);
-                        Debug.LogException(ex);
+                        //Debug.LogException(ex);
+                        throw ex; //抛出异常
                     }
                 }
             }
