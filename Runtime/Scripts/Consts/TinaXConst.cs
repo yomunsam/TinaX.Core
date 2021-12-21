@@ -5,6 +5,8 @@ namespace TinaX.Core.Consts
         public const string Framework_VersionName = "7.x";
 
         public const string FrameworkEventGroupName = "TinaX";
-        
+
+        public const string FrameworkBaseGameObjectName = "TinaX";
+
     }
 }
