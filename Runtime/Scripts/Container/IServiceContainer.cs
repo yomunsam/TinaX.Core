@@ -2,10 +2,10 @@ using System;
 using CatLib.Container;
 using TinaX.Container.Internal;
 using TinaX.Core.Container;
-using TinaX.Services.Builtin.Base;
 
 namespace TinaX.Container
 {
+#nullable enable
     /// <summary>
     /// Service container
     /// 服务容器
@@ -13,29 +13,35 @@ namespace TinaX.Container
     public interface IServiceContainer : IGetServices
     {
 
-        #region Get Buildin Services
-        bool TryGetBuildinService<TBuiltinService>(out TBuiltinService service) where TBuiltinService : IBuiltinServiceBase;
-        bool TryGetBuildinService(Type type, out object service);
-        bool TryGetBuildinService(string serviceName, out object service);
-
-        #endregion
 
 
         #region Add Services
-        IBindData Singleton<TService, TConcrete>();
+        IBindData Singleton<TService, TConcrete>()
+            where TService : class
+            where TConcrete : class, TService;
+
         IBindData Singleton<TService>();
+
         bool SingletonIf<TService>(out IBindData bindData);
-        bool SingletonIf<TService, TConcrete>(out IBindData bindData);
+        bool SingletonIf<TService, TConcrete>(out IBindData bindData)
+            where TService : class
+            where TConcrete: class, TService;
 
         object Singleton(string service, object instance);
         object Singleton<TService>(object instance);
 
-        IBindData Bind<TService, TConcrete>();
+        IBindData Bind<TService, TConcrete>()
+            where TService : class
+            where TConcrete : class, TService;
+
         IBindData Bind<TService>();
         IBindData Bind(string serviceName, Type type, bool isStatic);
 
-        bool BindIf<TService, TConcrete>();
-        bool BindIf<TService>();
+        bool BindIf<TService, TConcrete>(out IBindData bindData)
+            where TService : class
+            where TConcrete : class, TService;
+
+        bool BindIf<TService>(out IBindData bindData);
         bool BindIf(string serviceName, Type concreate, bool isStatic, out IBindData bindData);
 
 
@@ -48,17 +54,22 @@ namespace TinaX.Container
 
         #endregion
 
-        IServiceContainer BindBuiltinService<TBuiltInService, TService, TConcrete>() where TBuiltInService : IBuiltinServiceBase;
-        IServiceContainer BindBuiltInService<TBuiltInService, TConcrete>() where TBuiltInService : IBuiltinServiceBase;
+        
 
         void Unbind(string serviceName);
         void Unbind<TService>();
         void Unbind(Type type);
-        
+
+        #region 周边功能
+        object CreateInstance(Type type, params object?[] userParams);
+        void Inject(object sourceObject);
+        #endregion
 
         #region 高级功能
-        void RegisterServiceInjector(IServiceInjector injector);
-        void RemoveServiceInjector(IServiceInjector injector);
+        void RegisterReflectionProvider(IReflectionProvider provider);
+        void RemoveReflectionProvider(IReflectionProvider provider);
+        
         #endregion
     }
+#nullable restore
 }

@@ -1,10 +1,9 @@
 using System;
 using System.Reflection;
 using CatLib.Container;
-using UnityEngine;
 using CatApplication = CatLib.Application;
 
-namespace TinaX.Catlib
+namespace TinaX.Container
 {
     public class XCatApplication : CatApplication
     {
@@ -52,17 +51,6 @@ namespace TinaX.Catlib
             return base.GetParamNeedsService(baseParam);
         }
 
-        protected override void AttributeInject(Bindable makeServiceBindData, object makeServiceInstance)
-        {
-            if (makeServiceInstance == null)
-                return;
-            //Debug.Log($"[{nameof(XCatApplication)}]属性注入被调用:{makeServiceBindData.Service}  -- instance:{makeServiceInstance.GetType().FullName}");
-            if (m_ServiceContainer.TryServiceAttributeInject(ref makeServiceBindData, ref makeServiceInstance))
-            {
-                return;
-            }
-            base.AttributeInject(makeServiceBindData, makeServiceInstance);
-        }
 
         protected override object ResloveAttrClass(Bindable makeServiceBindData, string service, PropertyInfo baseParam)
         {
@@ -75,5 +63,44 @@ namespace TinaX.Catlib
         public virtual string GetServiceName(Type type)
             => Type2Service(type);
 
+        /// <summary>
+        /// 帮助容器获取类型
+        /// </summary>
+        /// <param name="sourceObject"></param>
+        /// <returns></returns>
+        protected override Type GetType(ref object sourceObject)
+        {
+            if (m_ServiceContainer.TryGetType(ref sourceObject, out var type))
+                return type;
+            else
+                return base.GetType(ref sourceObject);
+        }
+
+        /// <summary>
+        /// 检查给定的属性是否可以被依赖注入
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        protected override bool CanPropertyInject(PropertyInfo property)
+        {
+            var b = m_ServiceContainer.CanInjected(ref property);
+            if(b.HasValue)
+                return b.Value;
+
+            return property.CanWrite && property.IsDefined(typeof(TinaX.InjectAttribute), true);
+        }
+
+        protected override bool CanProjectInjectSkip(PropertyInfo property)
+        {
+            var b = m_ServiceContainer.CanInjectedSkip(ref property);
+            if (b.HasValue)
+                return b.Value;
+
+            var attribute = property.GetCustomAttribute<TinaX.InjectAttribute>();
+            if (attribute != null)
+                return attribute.Nullable;
+            else
+                return true;
+        }
     }
 }
