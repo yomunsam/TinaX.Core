@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using CatLib.Container;
-using TinaX.Core.Container;
 
 namespace TinaX.Container
 {
@@ -10,7 +8,6 @@ namespace TinaX.Container
     public class ServiceContainer : IServiceContainer
     {
         private readonly XCore m_Core;
-        private readonly List<IReflectionProvider> m_TypeProviders = new List<IReflectionProvider>();
         private readonly Type m_InjectAttributeType;
 
         public ServiceContainer(XCore core)
@@ -19,12 +16,13 @@ namespace TinaX.Container
             CatApp = new XCatApplication(core, this);
 
             CatApp.Instance<IXCore>(core);
+            CatApp.Instance<IServiceContainer>(this);
             m_InjectAttributeType = typeof(TinaX.InjectAttribute);
         }
 
         public XCatApplication CatApp { get;}
 
-
+        public IXCore XCore => m_Core;
 
 
         #region 构建获取服务
@@ -200,7 +198,7 @@ namespace TinaX.Container
         /// <param name="sourceObject"></param>
         public void Inject(object sourceObject)
         {
-            if (!TryGetType(ref sourceObject, out Type? sourceType))
+            if (!m_Core.ReflectionProviderManager.TryGetType(ref sourceObject, out Type? sourceType))
             {
                 sourceType = sourceObject.GetType();
             }
@@ -213,13 +211,9 @@ namespace TinaX.Container
                     PropertyInfo property = properties[i];
 
                     //需要注入？
-                    bool? b_inject = CanInjected(ref property);
-                    if(!b_inject.HasValue)
-                    {
-                        b_inject = property.CanWrite && property.IsDefined(m_InjectAttributeType, true);
-                    }
+                    bool b_inject = property.CanWrite && property.IsDefined(m_InjectAttributeType, true);
 
-                    if (!b_inject.Value)
+                    if (!b_inject)
                         continue;
 
                     if (property.PropertyType.IsValueType) //如果是值类型，直接跳过
@@ -233,13 +227,9 @@ namespace TinaX.Container
                         continue;
                     }
 
-                    bool? b_skip = CanInjectedSkip(ref property);
-                    if(!b_skip.HasValue)
-                    {
-                        var attribute = property.GetCustomAttribute<TinaX.InjectAttribute>();
-                        if (attribute == null || attribute.Nullable)
-                            continue;
-                    }
+                    var attribute = property.GetCustomAttribute<TinaX.InjectAttribute>();
+                    if (attribute == null || attribute.Nullable)
+                        continue;
 
                     //错误
                     throw new Exception($"Service not found {property.PropertyType}"); //抛异常
@@ -249,71 +239,7 @@ namespace TinaX.Container
 
         #endregion
 
-        #region 服务注入器的外部支持扩展
-
-
-        /// <summary>
-        /// 注册类型提供者
-        /// </summary>
-        /// <param name="provider"></param>
-        public void RegisterReflectionProvider(IReflectionProvider provider)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-            if (!m_TypeProviders.Contains(provider))
-                m_TypeProviders.Add(provider);
-        }
-
-
-        public void RemoveReflectionProvider(IReflectionProvider provider)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-            if (m_TypeProviders.Contains(provider))
-                m_TypeProviders.Remove(provider);
-        }
         
-        /// <summary>
-        /// CatLib Application调用这个方法来尝试获取类型
-        /// </summary>
-        /// <param name="sourceObject"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public bool TryGetType(ref object sourceObject, out Type? type)
-        {
-            for(int i = 0; i < m_TypeProviders.Count; i++)
-            {
-                if (m_TypeProviders[i].TryGetType(ref sourceObject, out type))
-                    return true;
-            }
-
-            type = default;
-            return false;
-        }
-
-        public bool? CanInjected(ref PropertyInfo property)
-        {
-            for (int i = 0; i < m_TypeProviders.Count; i++)
-            {
-                var b = m_TypeProviders[i].CanInjected(ref property);
-                if (b.HasValue)
-                    return b;
-            }
-            return null;
-        }
-
-        public bool? CanInjectedSkip(ref PropertyInfo property)
-        {
-            for (int i = 0; i < m_TypeProviders.Count; i++)
-            {
-                var b = m_TypeProviders[i].CanInjectedSkip(ref property);
-                if (b.HasValue)
-                    return b;
-            }
-            return null;
-        }
-
-        #endregion
 
     }
 #nullable restore

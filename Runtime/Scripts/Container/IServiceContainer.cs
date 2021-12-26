@@ -1,7 +1,6 @@
 using System;
 using CatLib.Container;
 using TinaX.Container.Internal;
-using TinaX.Core.Container;
 
 namespace TinaX.Container
 {
@@ -12,7 +11,7 @@ namespace TinaX.Container
     /// </summary>
     public interface IServiceContainer : IGetServices
     {
-
+        IXCore XCore { get; }
 
 
         #region Add Services
@@ -54,8 +53,6 @@ namespace TinaX.Container
 
         #endregion
 
-        
-
         void Unbind(string serviceName);
         void Unbind<TService>();
         void Unbind(Type type);
@@ -65,11 +62,7 @@ namespace TinaX.Container
         void Inject(object sourceObject);
         #endregion
 
-        #region 高级功能
-        void RegisterReflectionProvider(IReflectionProvider provider);
-        void RemoveReflectionProvider(IReflectionProvider provider);
-        
-        #endregion
+
     }
 #nullable restore
 }

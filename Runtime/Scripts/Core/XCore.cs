@@ -20,6 +20,7 @@ using TinaX.Core.Activator;
 using TinaX.Core.Behaviours;
 using TinaX.Core.Behaviours.Internal;
 using TinaX.Core.Consts;
+using TinaX.Core.ReflectionProvider;
 using TinaX.Core.Serivces;
 using TinaX.Core.Utils;
 using TinaX.Exceptions;
@@ -37,6 +38,7 @@ namespace TinaX
         private readonly ModulesManager m_ModulesManager;
         private readonly XCoreBehaviourManager m_BehaviourManager;
         private readonly XActivator m_Activator;
+        private readonly ReflectionProviderManager m_ReflectionProviderManager;
         private readonly bool m_IsHans;
 
         public XCore()
@@ -45,6 +47,7 @@ namespace TinaX
             m_ModulesManager = new ModulesManager();
             m_BehaviourManager = new XCoreBehaviourManager();
             m_Activator = new XActivator();
+            m_ReflectionProviderManager = new ReflectionProviderManager();
             m_IsHans = LocalizationUtil.IsHans();
             CoreConfigureServices.ConfigureServices(m_ServiceContainer, this); //注册TinaX.Core包的服务
         }
@@ -91,6 +94,10 @@ namespace TinaX
             return core;
         }
 
+        #endregion
+
+        #region Reflection
+        public ReflectionProviderManager ReflectionProviderManager => m_ReflectionProviderManager;
         #endregion
 
 

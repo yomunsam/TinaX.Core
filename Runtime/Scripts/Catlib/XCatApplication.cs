@@ -70,7 +70,7 @@ namespace TinaX.Container
         /// <returns></returns>
         protected override Type GetType(ref object sourceObject)
         {
-            if (m_ServiceContainer.TryGetType(ref sourceObject, out var type))
+            if (m_Core.ReflectionProviderManager.TryGetType(ref sourceObject, out var type))
                 return type;
             else
                 return base.GetType(ref sourceObject);
@@ -83,19 +83,11 @@ namespace TinaX.Container
         /// <returns></returns>
         protected override bool CanPropertyInject(PropertyInfo property)
         {
-            var b = m_ServiceContainer.CanInjected(ref property);
-            if(b.HasValue)
-                return b.Value;
-
             return property.CanWrite && property.IsDefined(typeof(TinaX.InjectAttribute), true);
         }
 
         protected override bool CanProjectInjectSkip(PropertyInfo property)
         {
-            var b = m_ServiceContainer.CanInjectedSkip(ref property);
-            if (b.HasValue)
-                return b.Value;
-
             var attribute = property.GetCustomAttribute<TinaX.InjectAttribute>();
             if (attribute != null)
                 return attribute.Nullable;

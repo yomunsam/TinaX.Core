@@ -15,12 +15,18 @@ using Cysharp.Threading.Tasks;
 using TinaX.Container;
 using TinaX.Core.Activator;
 using TinaX.Core.Behaviours;
+using TinaX.Core.ReflectionProvider;
 using TinaX.Module;
 
 namespace TinaX
 {
     public interface IXCore
     {
+
+        IBehaviourManager Behaviour { get; }
+        XActivator Activator { get; }
+        ReflectionProviderManager ReflectionProviderManager { get; }
+
         #region Build
         bool ReflectIXBootstrap { get; set; }
         #endregion
@@ -49,8 +55,7 @@ namespace TinaX
 
         #region Behaviour
 
-        IBehaviourManager Behaviour { get; }
-        XActivator Activator { get; }
+        
 
         UniTask RunAsync(CancellationToken cancellationToken = default);
         void RunAsync(Action onFinish, Action<Exception> onError = null, CancellationToken cancellationToken = default);
