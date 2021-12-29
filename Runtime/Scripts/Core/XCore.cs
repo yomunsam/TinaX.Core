@@ -98,6 +98,15 @@ namespace TinaX
 
         #region Reflection
         public ReflectionProviderManager ReflectionProviderManager => m_ReflectionProviderManager;
+
+        public Type GetObjectType(object sourceObject)
+        {
+            if (m_ReflectionProviderManager.TryGetType(ref sourceObject, out var type))
+                return type;
+            else
+                return sourceObject.GetType();
+        }
+
         #endregion
 
 

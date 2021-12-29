@@ -51,11 +51,12 @@ namespace TinaX
 
         #region AppDomains
         object CreateInstance(Type type, params object[] args);
+        Type GetObjectType(object sourceObject);
         #endregion
 
         #region Behaviour
 
-        
+
 
         UniTask RunAsync(CancellationToken cancellationToken = default);
         void RunAsync(Action onFinish, Action<Exception> onError = null, CancellationToken cancellationToken = default);
