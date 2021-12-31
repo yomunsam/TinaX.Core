@@ -163,6 +163,17 @@ namespace TinaX.Container
         public string GetServiceName(Type type)
             => CatApp.GetServiceName(type);
 
+        /// <summary>
+        /// 可否获取服务
+        /// </summary>
+        /// <param name="serviceName"></param>
+        /// <returns></returns>
+        public bool CanGet(string serviceName)
+            => CatApp.CanMake(serviceName);
+        
+        public bool CanGet<TService>() where TService : class
+            => CatApp.CanMake<TService>();
+
         #endregion
 
 

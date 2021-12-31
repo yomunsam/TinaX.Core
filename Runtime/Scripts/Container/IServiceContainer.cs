@@ -57,9 +57,24 @@ namespace TinaX.Container
         void Unbind<TService>();
         void Unbind(Type type);
 
+        /// <summary>
+        /// 可否获取服务
+        /// </summary>
+        /// <param name="serviceName"></param>
+        /// <returns></returns>
+        bool CanGet(string serviceName);
+
+        /// <summary>
+        /// 可否获取服务
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <returns></returns>
+        bool CanGet<TService>() where TService : class;
+
         #region 周边功能
         object CreateInstance(Type type, params object?[] userParams);
         void Inject(object sourceObject);
+        
         #endregion
 
 
