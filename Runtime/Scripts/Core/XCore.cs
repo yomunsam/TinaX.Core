@@ -27,7 +27,6 @@ using TinaX.Exceptions;
 using TinaX.Module;
 using TinaX.Modules;
 using TinaX.Modules.Internal;
-using UniRx;
 using UnityEngine;
 
 namespace TinaX
@@ -166,12 +165,17 @@ namespace TinaX
             return m_RunTask.Value;
         }
 
-        public void RunAsync(Action onFinish, Action<Exception> onError = null, CancellationToken cancellationToken = default)
+        public async void RunAsync(Action onFinish, Action<Exception> onError = null, CancellationToken cancellationToken = default)
         {
-            this.RunAsync(cancellationToken)
-                .ToObservable()
-                .SubscribeOnMainThread()
-                .Subscribe(u => onFinish?.Invoke(), e => onError?.Invoke(e));
+            try
+            {
+                await RunAsync(cancellationToken);
+                onFinish?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                onError?.Invoke(ex);
+            }
         }
 
         private async UniTask DoRunAsync(CancellationToken cancellationToken = default)
