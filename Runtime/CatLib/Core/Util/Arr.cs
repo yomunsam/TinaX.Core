@@ -27,9 +27,7 @@ namespace CatLib.Util
         /// <typeparam name="T">The type of array.</typeparam>
         /// <param name="sources">The specified array.</param>
         /// <returns>Returns an merged array.</returns>
-#pragma warning disable S2368
         public static T[] Merge<T>(params T[][] sources)
-#pragma warning restore S2368
         {
             if (sources == null || sources.Length <= 0)
             {
@@ -111,9 +109,11 @@ namespace CatLib.Util
                     continue;
                 }
 
-                var temporary = requested[i];
-                requested[i] = requested[index];
-                requested[index] = temporary;
+                (requested[index], requested[i]) = (requested[i], requested[index]);
+
+                //var temporary = requested[i];
+                //requested[i] = requested[index];
+                //requested[index] = temporary;
             }
 
             return requested;
@@ -422,7 +422,7 @@ namespace CatLib.Util
         /// <returns>Returns the length of the new array.</returns>
         public static int Push<T>(ref T[] sources, params T[] elements)
         {
-            sources = sources ?? Array.Empty<T>();
+            sources ??= Array.Empty<T>();
             if (elements == null || elements.Length <= 0)
             {
                 return sources.Length;
@@ -521,7 +521,7 @@ namespace CatLib.Util
         /// <returns>Returns the length of the new array.</returns>
         public static int Unshift<T>(ref T[] sources, params T[] elements)
         {
-            sources = sources ?? Array.Empty<T>();
+            sources ??= Array.Empty<T>();
             if (elements == null || elements.Length <= 0)
             {
                 return sources.Length;
@@ -755,7 +755,7 @@ namespace CatLib.Util
         {
             Guard.Requires<ArgumentNullException>(predicate != null, $"Must set a {predicate}.");
 
-            sources = sources ?? Array.Empty<T>();
+            sources ??= Array.Empty<T>();
 
             for (var index = 0; index < sources.Length; index++)
             {

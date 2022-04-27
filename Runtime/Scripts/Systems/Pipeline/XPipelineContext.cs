@@ -1,23 +1,22 @@
+#nullable enable
 namespace TinaX.Systems.Pipeline
 {
     public class XPipelineContext<THandler> where THandler : class
     {
-        //private IPipelineHandler<THandler> _handler;
-        //public virtual IPipelineHandler<THandler> PipelineHandler => _handler;
 
-        private THandler _handler;
-        public virtual THandler Handler => _handler;
-
-        public XPipelineContext<THandler> Next { get; internal set; }
-        public XPipelineContext<THandler> Prev { get; internal set; }
-
-        
+        private readonly THandler m_Handler;
 
         public XPipelineContext(THandler handler)
         {
-            _handler = handler;
+            m_Handler = handler;
             Next = null;
             Prev = null;
         }
+
+        public virtual THandler Handler => m_Handler;
+
+        public XPipelineContext<THandler>? Next { get; internal set; }
+        public XPipelineContext<THandler>? Prev { get; internal set; }
+
     }
 }

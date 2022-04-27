@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 
 namespace TinaX.Systems.Pipeline
@@ -53,7 +52,7 @@ namespace TinaX.Systems.Pipeline
             }
             if (_head == null)
             {
-                _head = origin_prev != null ? origin_prev : _last;
+                _head = origin_prev ?? _last;
             }
             return context;
         }

@@ -136,7 +136,6 @@ namespace CatLib.Container
         }
     }
 
-#pragma warning disable SA1402
 
     /// <inheritdoc />
     public abstract class Bindable<TReturn> : Bindable, IBindable<TReturn>

@@ -790,11 +790,11 @@ namespace CatLib.Container
 
                 // When the container finds that the developer uses object or object[] as
                 // the dependency parameter type, we try to compact inject the user parameters.
-                param = param ?? GetCompactInjectUserParams(baseParam, ref userParams);
+                param ??= GetCompactInjectUserParams(baseParam, ref userParams);
 
                 // Select the appropriate parameters from the user parameters and inject
                 // them in the relative order.
-                param = param ?? GetDependenciesFromUserParams(baseParam, ref userParams);
+                param ??= GetDependenciesFromUserParams(baseParam, ref userParams);
 
                 string needService = null;
 
@@ -924,9 +924,7 @@ namespace CatLib.Container
                         result = Make(Type2Service(conversionType), result);
                         return true;
                     }
-#pragma warning disable CA1031
                     catch (SException)
-#pragma warning restore CA1031
                     {
                         // ignored
                         // when throw exception then stop inject
@@ -939,9 +937,7 @@ namespace CatLib.Container
                     return true;
                 }
             }
-#pragma warning disable CA1031
             catch (SException)
-#pragma warning restore CA1031
             {
                 // ignored
                 // when throw exception then stop inject
@@ -1456,7 +1452,6 @@ namespace CatLib.Container
                 {
                     return GetDependencies(makeServiceBindData, constructor.GetParameters(), userParams);
                 }
-#pragma warning disable CA1031
                 catch (SException ex)
                 {
                     if (exceptionDispatchInfo == null)
@@ -1464,7 +1459,6 @@ namespace CatLib.Container
                         exceptionDispatchInfo = ExceptionDispatchInfo.Capture(ex);
                     }
                 }
-#pragma warning restore CA1031
             }
 
             exceptionDispatchInfo?.Throw();
@@ -1611,9 +1605,7 @@ namespace CatLib.Container
             {
                 return CreateInstance(makeServiceType, userParams);
             }
-#pragma warning disable CA1031
             catch (SException ex)
-#pragma warning restore CA1031
             {
                 throw MakeBuildFaildException(makeServiceBindData.Service, makeServiceType, ex);
             }
@@ -1715,7 +1707,7 @@ namespace CatLib.Container
             }
 
             var bind = GetBind(service);
-            instance = instance ?? Make(service);
+            instance ??= Make(service);
 
             for (var index = 0; index < callbacks.Count; index++)
             {

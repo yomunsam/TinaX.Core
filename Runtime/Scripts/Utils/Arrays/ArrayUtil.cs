@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Linq;
 
@@ -12,9 +13,9 @@ namespace TinaX.Core.Utils.Arrays
         /// <param name="arr1"></param>
         /// <param name="arr2"></param>
         /// <returns></returns>
-        public static T[] Combine<T>(T[] arr1, T[] arr2) //代码参考CatLib: https://github.com/CatLib/Core/blob/2.0/src/CatLib.Core/Util/Arr.cs
+        public static T[] Combine<T>(T[]? arr1, T[] arr2) //代码参考CatLib: https://github.com/CatLib/Core/blob/2.0/src/CatLib.Core/Util/Arr.cs
         {
-            arr1 = arr1 ?? Array.Empty<T>();
+            arr1 ??= Array.Empty<T>();
             if (arr2 == null || arr2.Length <= 0)
                 return arr1;
 
@@ -30,9 +31,9 @@ namespace TinaX.Core.Utils.Arrays
         /// <param name="arr1"></param>
         /// <param name="arr2"></param>
         /// <returns></returns>
-        public static void Combine<T>(ref T[] arr1, T[] arr2) //代码参考CatLib: https://github.com/CatLib/Core/blob/2.0/src/CatLib.Core/Util/Arr.cs
+        public static void Combine<T>(ref T[]? arr1, T[] arr2) //代码参考CatLib: https://github.com/CatLib/Core/blob/2.0/src/CatLib.Core/Util/Arr.cs
         {
-            arr1 = arr1 ?? Array.Empty<T>();
+            arr1 ??= Array.Empty<T>();
             if (arr2 == null || arr2.Length <= 0)
                 return;
 
