@@ -15,21 +15,22 @@ using TinaX.Exceptions;
 using TinaX.Services.Builtin.Base;
 using UObject = UnityEngine.Object;
 
+#nullable enable
 namespace TinaX.Services
 {
     public interface IAssetService : IBuiltinServiceBase
     {
         #region VFS IO
 
-        T Load<T>(string assetPath) where T : UObject;
+        T? Load<T>(string assetPath) where T : UObject;
 
-        UObject Load(string assetPath, Type type);
+        UObject? Load(string assetPath, Type type);
 
-        UniTask<T> LoadAsync<T>(string assetPath, CancellationToken cancellationToken = default) where T : UObject;
+        UniTask<T?> LoadAsync<T>(string assetPath, CancellationToken cancellationToken = default) where T : UObject;
 
-        UniTask<UObject> LoadAsync(string assetPath, Type type, CancellationToken cancellationToken = default);
+        UniTask<UObject?> LoadAsync(string assetPath, Type type, CancellationToken cancellationToken = default);
 
-        void LoadAsync(string assetPath, Type type, Action<UObject, XException> callback);
+        void LoadAsync(string assetPath, Type type, Action<UObject?, XException?> callback);
 
         void Release(UObject asset);
         #endregion
